@@ -3,7 +3,7 @@
 **Team Members**
 | Name:           | Student ID | GitHub Username: |
 |-----------------|------------|------------------|
-| Alex Luangxay   | 40278361   | AlexLuangxay     |
+|                 |            |                  |
 | Anthony Ly      | 40282737   | Anthony-201-Ly   |
 | Derek Gallagher | 40272688   | Derick12345678   |
 |                 |            |                  |
