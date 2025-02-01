@@ -1,15 +1,15 @@
 # SOEN341-GAVADAS
 
 **Team Members**
-| Name:         | Student ID | GitHub Username: |
-|---------------|------------|------------------|
-| Alex Luangxay | 40278361   | AlexLuangxay     |
-|               |            |                  |
-|               |            |                  |
-|               |            |                  |
-|               |            |                  |
-|               |            |                  |
-|               |            |                  |
+| Name:           | Student ID | GitHub Username: |
+|-----------------|------------|------------------|
+|                 |            |                  |
+| Derek Gallagher | 40272688   | Derick12345678   |
+|                 |            |                  |
+|                 |            |                  |
+|                 |            |                  |
+|                 |            |                  |
+|                 |            |                  |
 
 
 
@@ -30,5 +30,11 @@ _Libraries:_
 _Host Server:_
 - Oracle Cloud
 
-**Objectives**
+**Objectives** 
+
 The objective of the project is to develop a communication platform for seamless interactions between users, similar to Discord. the platform will be implemented to have team collaboration features, private messaging between users, and sharing media and files.
+
+**Core Features**
+  - Text channels to allow group communications
+  - Direct messaging system between different users
+  - Admin & member role system
