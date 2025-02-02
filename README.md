@@ -7,7 +7,7 @@
 | Anthony Ly      | 40282737   | Anthony-201-Ly   |
 | Derek Gallagher | 40272688   | Derick12345678   |
 |                 |            |                  |
-|                 |            |                  |
+| Valerie Nguyen  | 40284261   | valerie-nguyen   |
 |                 |            |                  |
 |                 |            |                  |
 
