@@ -5,7 +5,7 @@
 |---------------|------------|------------------|
 | Alex Luangxay | 40278361   | AlexLuangxay     |
 | Anthony Ly    | 40282737   | Anthony-201-Ly   |
-|               |            |                  |
+| Simon Bernier | 40280792   | simonbern        |
 |               |            |                  |
 |               |            |                  |
 |               |            |                  |
