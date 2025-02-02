@@ -1,4 +1,4 @@
-# SOEN341-GAVADAS
+# SOEN341-GAVDAGS
 
 **Team Members**
 | Name:           | Student ID | GitHub Username: |
