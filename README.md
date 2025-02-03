@@ -8,7 +8,7 @@
 | Derek Gallagher | 40272688   | Derick12345678   |
 |Gavin Chock-Chiong| 40278642  | Grvin388         |
 | Valerie Nguyen  | 40284261   | valerie-nguyen   |
-|                 |            |                  |
+| Simon Bernier   | 40280792   | simonbern        |
 | Gur Lal         | 40284042   | Gur-Lal          |
 
 **Objectives**
