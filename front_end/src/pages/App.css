@@ -1,0 +1,23 @@
+.App {
+  width: 100vw;  
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #eafffd;
+  color: black;
+  border: 1px solid #c9f0ff;
+  border-top-left-radius: 1%;
+  display: flex;
+  justify-content: center;
+}
+
+.MessagesContainer {
+  width: 65vw;  
+  height: 75vh;
+  font-family: Arial, sans-serif;
+  background-color: #efeff0;
+  border: 1px solid #c9f0ff;
+  border-radius: 2%;
+  display: flex;
+  justify-content: center;
+  margin-top: 200px; /* Adjust this value as needed */
+}
