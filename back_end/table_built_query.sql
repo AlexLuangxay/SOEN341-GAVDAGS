@@ -1,67 +1,59 @@
--- Create users table
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+/* Table for users */
+CREATE TABLE User (
+    user_id SERIAL,
+    user_name VARCHAR(25) DEFAULT 'Anon',
+    user_bio TEXT,
+    user_icon INT,
+    PRIMARY KEY (user_id)
+)
+
+/* Table for guild */
+CREATE TABLE Guild (
+    guild_id SERIAL,
+    guild_name VARCHAR(25) DEFAULT 'Guild',
+    PRIMARY KEY(guild_id)
 );
 
+/* Table for channels */
+CREATE TABLE Channel (
+    channel_id SERIAL,
+    channel_name VARCHAR(25) DEFAULT 'Channel',
+    PRIMARY KEY (channel_id)
+)
 
--- Create channels table
-CREATE TABLE channels (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
-    description TEXT,
-    create_by INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (create_by) REFERENCES users(id) ON DELETE CASCADE
-);
-
-
--- Create channel_users table
-CREATE TABLE channel_user (
-    id SERIAL PRIMARY KEY,
-    channel_id INT NOT NULL,
-    user_id INT NOT NULL,
-    role VARCHAR(20) CHECK (role IN ('admin', 'moderator', 'member')),
-    UNIQUE(channel_id, user_id),
-    FOREIGN KEY (channel_id) REFERENCES channels(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
-
--- Create channel_messages table
-CREATE TABLE channel_messages (
-    id SERIAL PRIMARY KEY,
-    channel_id INT NOT NULL,
+/* Table for messages */
+CREATE TABLE Message (
+    message_id SERIAL,
     sender_id INT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (channel_id) REFERENCES channels(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    PRIMARY KEY (message_id)
+)
+
+/* Table for members */
+CREATE TABLE Member (
+    guild_id INT,
+    user_id INT,
+    admin_status BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id),
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+    PRIMARY KEY (guild_id, user_id)
 );
 
-
--- Create dms table
-CREATE TABLE dms (
-    id SERIAL PRIMARY KEY,
-    user1 INT NOT NULL,
-    user2 INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user1, user2),
-    FOREIGN KEY (user1) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (user2) REFERENCES users(id) ON DELETE CASCADE
+/* Table for group has channels */
+CREATE TABLE GuildHasChannel (
+    guild_id INT,
+    channel_id INT,
+    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id),
+    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id),
+    PRIMARY KEY (guild_id, channel_id)
 );
 
-
--- Create dm_messages table
-CREATE TABLE dm_messages (
-    id SERIAL PRIMARY KEY,
-    dm_id INT NOT NULL,
-    sender_id INT NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (dm_id) REFERENCES dms(id) ON DELETE CASCADE,
-    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+/* Table for channel has messages */
+CREATE TABLE ChannelHasMessages (
+    channel_id INT,
+    message_id INT,
+    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id),
+    FOREIGN KEY (message_id) REFERENCES Message(message_id),
+    PRIMARY KEY (channel_id, message_id)
 );
