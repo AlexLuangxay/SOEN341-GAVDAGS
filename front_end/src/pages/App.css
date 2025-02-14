@@ -1,0 +1,64 @@
+.App {
+  width: 100vw;
+  height: 100vh;
+  background-color: #23395B;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #23395B;
+  color: white;
+}
+
+.top-bar button{
+  background-color: #8EA8C3;
+}
+
+.main-container {
+  display: flex;
+  width: 90%;
+  height: 80vh;
+  margin-top: 10px;
+}
+
+.left-sidebar {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-container {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.right-sidebar {
+  width: 20%;
+  padding: 10px;
+}
+
+.MessagesContainer {
+  width: 90%;
+  height: 60vh;
+  background-color: #efeff0;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+}
+
+.MessageBar {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
