@@ -1,13 +1,14 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import join_room, leave_room, send, emit, SocketIO
+from flask_cors import CORS
 import random
 from string import ascii_uppercase
 #from routes.api import api_bp
-#import os
+import os
 #import oracledb
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-#load_dotenv()
+load_dotenv()
 
 #DB_USER = os.getenv("DB_USER")
 #DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -18,9 +19,26 @@ from string import ascii_uppercase
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "GAVDAGS"
-socketIO = SocketIO(app)
+CORS(app)
+socketIO = SocketIO(app, cors_allowed_origins="*")
 
-rooms = {}
+@socketIO.on("connect") 
+def connect():
+    print(f"User connected {request.sid}")
+
+@socketIO.on("message")
+def handle_message(msg):
+    print("Message: " + msg)
+    send(msg, broadcast=True)
+
+@socketIO.on("disconnect")
+def disconnect():
+    print(f"User disconnected {request.sid}")
+
+if __name__ == "__main__":
+    socketIO.run(app,debug=True)
+    
+""" rooms = {}
 
 def generate_unique_code(length):
     while True: 
@@ -107,7 +125,5 @@ def disconnect():
             del rooms[room]
 
     send({"name": name, "message": "has left the room"}, to=room)
-    print(f"{name} has left room {room}")
+    print(f"{name} has left room {room}") """
 
-if __name__ == "__main__":
-    socketIO.run(app,debug=True)
