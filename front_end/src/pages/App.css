@@ -68,7 +68,35 @@ h1{
   height:90%;
   background-color: white;
   width: 100%;
+  overflow-y: scroll;
 }
+
+/* Style the vertical scrollbar itself for elements with className="chat-window" */
+.chat-window::-webkit-scrollbar {
+  width: 10px;  /* width of vertical scrollbars */
+}
+
+/* Style the track for the vertical scrollbar of elements with className="chat-window" */
+.chat-window::-webkit-scrollbar-track {
+  background: #333; /* dark grey track */
+}
+
+/* Style the thumb for the vertical scrollbar of elements with className="chat-window" */
+.chat-window::-webkit-scrollbar-thumb {
+  background: #ADD8E6; /* light blue, resembling white-blue */
+}
+
+/* Style the thumb when hovered for the vertical scrollbar of elements with className="chat-window" */
+.chat-window::-webkit-scrollbar-thumb:hover {
+  background: #82CAFA; /* slightly darker shade of blue when hovered */
+}
+
+/* Firefox-specific styles for the vertical scrollbar of elements with className="chat-window" */
+.chat-window {
+  scrollbar-color: #ADD8E6 #333; /* thumb and track color for vertical scrollbar */
+  scrollbar-width: thin; /* applies to vertical scrollbar as 'auto', 'thin', or 'none' */
+}
+
 
 .chat-container {
   width: 80%;
