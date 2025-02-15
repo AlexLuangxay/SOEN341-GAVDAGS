@@ -8,6 +8,27 @@
   align-items: center;
 }
 
+/**EVERYTHING RELATED TO THE TOP BAR**/
+
+.top-left-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 20px;
+}
+
+.top-right-buttons{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  height: 50%;
+  padding-right: 40px;
+}
+
+.top-bar button{
+  background-color: #8EA8C3;
+}
+
 .top-bar {
   width: 100%;
   display: flex;
@@ -17,33 +38,54 @@
   color: white;
 }
 
-.top-bar button{
-  background-color: #8EA8C3;
+h1{
+  color:#8EA8C3;
 }
 
-.main-container {
-  display: flex;
-  width: 90%;
-  height: 80vh;
-  margin-top: 10px;
-}
-
+/**EVERYTHING RELATED TO THE LEFT SIDE BAR**/
 .left-sidebar {
   width: 20%;
   display: flex;
   flex-direction: column;
+  padding-left: 20px;
+}
+
+.left-sidebar h2{
+  color: #406E8E;
+}
+
+.left-sidebar button{
+  background-color: transparent;
+  color: #8EA8C3;
+}
+
+.left-sidebar button:hover {
+  background-color: #8EA8C3; 
+  color: black; 
+}
+/**EVERYTHING RELATED TO THE MIDDLE SECTION**/
+.chat-window{
+  height:90%;
+  background-color: white;
+  width: 100%;
 }
 
 .chat-container {
-  width: 60%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.right-sidebar {
-  width: 20%;
-  padding: 10px;
+#dot, #paperclip{
+  height: 20px;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  margin-top: 10px;
+  width: 100%;
 }
 
 .MessagesContainer {
@@ -61,4 +103,68 @@
   display: flex;
   justify-content: center;
   margin-top: 10px;
+}
+
+.message-bar {
+  display: flex;
+  align-items: center;
+  background-color: #8EA8C3;
+  padding: 10px;
+  border-radius: 20px;
+  gap: 10px;
+  width: 80%;
+}
+
+.message-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: black;
+  outline: none;
+}
+
+.message-input::placeholder{
+  color: black;
+}
+
+/**EVERYTHING RELATED TO THE RIGHT SIDE BAR**/
+
+.right-sidebar {
+  width: 20%;
+  padding: 20px;
+  padding-top:0px;
+}
+
+.user-sidebar {
+  padding: 16px;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  background-color: #8EA8C3;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-role {
+  font-size: 12px;
+  color: black;
 }
