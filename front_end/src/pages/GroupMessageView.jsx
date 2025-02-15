@@ -1,5 +1,3 @@
-//We need to change this to add routing
-
 import React from "react";
 import "./App.css";
 import ChatWindow from "../components/ChatWindow";
@@ -11,7 +9,7 @@ import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import ChatName from "../components/ChatName";
 
-function App() {
+function GroupMessageView() {
   return (
     <div className="App">
       <header className="top-bar">
@@ -36,4 +34,4 @@ function App() {
   );
 }
 
-export default App;
+export default GroupMessageView;
