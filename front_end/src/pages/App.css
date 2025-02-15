@@ -168,3 +168,19 @@ h1{
   font-size: 12px;
   color: black;
 }
+
+.trash-icon{
+  width: 20px; height:20px;
+}
+.top-right-buttons button{
+  background-color: transparent;
+  color: #8EA8C3;
+  display: grid;
+  place-items: center; 
+  width: 30%;  /* Adjust as needed */
+  height: auto; /* Adjust as needed */
+}
+
+.top-right-buttons button:hover {
+  background-color: black; 
+}
