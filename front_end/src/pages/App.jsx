@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import io from 'socket.io-client'
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import "./App.css";
 import ChatWindow from "../components/ChatWindow";
 import Groups from "../components/Groups";
@@ -12,18 +12,22 @@ import TopRightButtons from "../components/TopRightButtons";
 const socket = io('http://localhost:5000')
 
 function App() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([])
 
   useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server")
+    })
+
     socket.on("message", (msg) => {
-      setMessages((prevMessages) => [...prevMessages, msg]);
-    });
+      setMessages((prevMessages) => [...prevMessages, msg])
+    })
 
     return () => {
-      socket.off("message");
-    };
-  }, []);
-  
+      socket.off("message")
+    }
+  }, [])
+
   return (
     <div className="App">
       <header className="top-bar">
@@ -37,7 +41,7 @@ function App() {
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages} />
-          <MessageBar />
+          <MessageBar socket={socket} />
         </main>
         <aside className="right-sidebar">
           <UserSidebar />

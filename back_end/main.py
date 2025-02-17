@@ -22,14 +22,31 @@ app.config["SECRET_KEY"] = "GAVDAGS"
 CORS(app)
 socketIO = SocketIO(app, cors_allowed_origins="*")
 
+users = {}
+
 @socketIO.on("connect") 
 def connect():
     print(f"User connected {request.sid}")
 
 @socketIO.on("message")
-def handle_message(msg):
-    print("Message: " + msg)
-    send(msg, broadcast=True)
+def handle_message(data):
+    sender_session_id = request.sid
+    recipient_session_id = users.get(data['username'])
+    if recipient_session_id:
+        message = data['message']
+        print(f"Message from {sender_session_id} to {data['username']}: {message}")
+        # Send message to recipient
+        emit("message", message, room=recipient_session_id)
+        # Send message to sender
+        emit("message", message, room=sender_session_id)
+    else:
+        print(f"Recipient {data['username']} not found")
+
+@socketIO.on("username")
+def receive_username(username):
+    users[username] = request.sid
+    print(f"User added: {username} with SID: {request.sid}")
+    print(f"Current users dict: {users}")
 
 @socketIO.on("disconnect")
 def disconnect():
