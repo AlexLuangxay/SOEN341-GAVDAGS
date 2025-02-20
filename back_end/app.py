@@ -15,8 +15,20 @@ oracledb.init_oracle_client(config_dir=WALLET_PATH)
 
 app = Flask(__name__)
 
+db = oracledb.connect(
+    user=DB_USER,
+    password=DB_PASSWORD,
+    dsn=DB_DSN
+)
 
-
+@app.route('/user/groups/<int:user_id>', methods=['GET'])
+def get_user_groups(user_id):
+    cursor = db.cursor()
+    
+    query = """
+    SELECT group_id, group_name
+    
+    """
 
 
 
