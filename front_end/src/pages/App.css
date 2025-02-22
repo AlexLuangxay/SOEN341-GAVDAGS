@@ -66,9 +66,11 @@ h1{
 /**EVERYTHING RELATED TO THE MIDDLE SECTION**/
 .chat-window{
   height:90%;
-  background-color:#8ea8c391;
+  background-color:#23395B;
   width: 100%;
   overflow-y: scroll;
+  border-right: 1px solid #8EA8C3;  
+  border-left: 1px solid  #8EA8C3;
 
 }
 
@@ -242,4 +244,36 @@ h1{
 
 .group-icon{
   width: 40px; height:40px;
+}
+
+.groups h2 {
+  position: relative;
+  display: inline-block; 
+}
+
+.groups h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: -90%;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
+.channels h2 {
+  position: relative;
+  display: inline-block; 
+}
+
+.channels h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: -90%;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
 }
