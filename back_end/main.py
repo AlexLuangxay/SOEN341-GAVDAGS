@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import join_room, leave_room, send, emit, SocketIO
 from flask_cors import CORS
-import random
-from string import ascii_uppercase
+from datetime import datetime
 #from routes.api import api_bp
 import os
 #import oracledb
@@ -31,14 +30,26 @@ def connect():
 @socketIO.on("message")
 def handle_message(data):
     sender_session_id = request.sid
-    recipient_session_id = users.get(data['username'])
+    sender_username = None
+
+    for user, sid in users.items():
+        if sid == sender_session_id:
+            sender_username = user
+            break
+
+    if sender_username:
+        recipient_session_id = users.get(data['username'])
+        message_data = {
+            'username': sender_username,
+            'text' : data['message'],
+            'timestamp' : datetime.now().strftime('%Y-%m-%d %I:%M %p')
+        }
+    
     if recipient_session_id:
-        message = data['message']
-        print(f"Message from {sender_session_id} to {data['username']}: {message}")
         # Send message to recipient
-        emit("message", message, room=recipient_session_id)
+        emit("message", message_data, room=recipient_session_id)
         # Send message to sender
-        emit("message", message, room=sender_session_id)
+        emit("message", message_data, room=sender_session_id)
     else:
         print(f"Recipient {data['username']} not found")
 

@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Message = ({text}) => {
+const Message = ({ username, text, timestamp }) => {
   return (
-    <div className="message">
-      {text}
+    <div className='message'>
+      <strong className='username'>{username}</strong> <span className='timestamp'>{timestamp}</span>
+      <br />
+      <div className='text'>{text}</div>
     </div>
   );
 };
 
-export default Message
+export default Message;
