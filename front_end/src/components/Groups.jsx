@@ -1,13 +1,17 @@
 import React from "react";
 
 const Groups = () => {
+  const groups = ["Group 1", "Group 2", "Group 3", "Group 4"]; 
+
   return (
     <div className="groups">
-      <h3>Groups</h3>
+      <h2>Groups</h2>
       <ul>
-        <li>Group 1</li>
-        <li>Group 2</li>
-        <li>Group 3</li>
+        {groups.map((group, index) => (
+          <li key={index}>
+            <button>{group}</button>
+          </li>
+        ))}
       </ul>
     </div>
   );

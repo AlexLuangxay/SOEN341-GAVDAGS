@@ -16,28 +16,26 @@ const MessageBar = ({ socket }) => { // Receive socket as a prop
   return (
     <div className="message-bar">
       <input
-        type="text"
-        value={username}
+        type="text" value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Enter Username"
       />
-      <button onClick={sendUsername}>Send</button>
+      <button onClick={sendUsername}>Enter</button>
 
       <input
-        type="text"
-        value={recipient}
+        type="text" value={recipient}
         onChange={(e) => setRecipient(e.target.value)}
         placeholder="Enter Recipient"
       />
 
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+      <img id="dot" src="circle.png" alt="User Avatar" />
+      <input className="message-input" type="text"
+        value={message} onChange={(e) => setMessage(e.target.value)}
         placeholder="Message here"
       />
+      <img id="paperclip" src="paperclip.png" alt="User Avatar" />
       <button onClick={sendMessage}>Send</button>
-    </div>
+      </div>
   );
 };
 

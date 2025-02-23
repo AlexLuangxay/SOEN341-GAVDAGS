@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import React from "react";
 import "./App.css";
 import ChatWindow from "../components/ChatWindow";
 import Groups from "../components/Groups";
@@ -10,25 +9,7 @@ import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import ChatName from "../components/ChatName";
 
-const socket = io('http://localhost:5000')
-
-function App() {
-  const [messages, setMessages] = useState([])
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to server")
-    })
-
-    socket.on("message", (msg) => {
-      setMessages((prevMessages) => [...prevMessages, msg])
-    })
-
-    return () => {
-      socket.off("message")
-    }
-  }, [])
-
+function PrivateMessageView() {
   return (
     <div className="App">
       <header className="top-bar">
@@ -38,12 +19,11 @@ function App() {
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
-          <Groups />
-          <Channels />
+          <People />
         </aside>
         <main className="chat-container">
-          <ChatWindow messages={messages} />
-          <MessageBar socket={socket} />
+          <ChatWindow />
+          <MessageBar />
         </main>
         <aside className="right-sidebar">
           <UserSidebar />
@@ -53,4 +33,4 @@ function App() {
   );
 }
 
-export default App
+export default PrivateMessageView;//TO BE DONE!!

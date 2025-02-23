@@ -1,13 +1,18 @@
 import React from "react";
 
 const Channels = () => {
+  const channels = ["Channel 1", "Channel 2", "Channel 3", "Channel 4"]; 
+  //I'm assuming this will be dynamically added ^^^
+
   return (
     <div className="channels">
-      <h3>Channels</h3>
+      <h2>Channels</h2>
       <ul>
-        <li>Channel 1</li>
-        <li>Channel 2</li>
-        <li>Channel 3</li>
+        {channels.map((channel, index) => (
+          <li key={index}>
+            <button>{channel}</button>
+          </li>
+        ))}
       </ul>
     </div>
   );
