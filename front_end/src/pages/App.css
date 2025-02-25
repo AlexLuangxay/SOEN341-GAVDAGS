@@ -66,12 +66,15 @@ h1{
 /**EVERYTHING RELATED TO THE MIDDLE SECTION**/
 .chat-window{
   height:90%;
-  background-color:#23395B;
+  background-color:#325486; 
   width: 100%;
   overflow-y: scroll;
-  border-right: 1px solid #8EA8C3;  
-  border-left: 1px solid  #8EA8C3;
-
+  border-style: solid; 
+  border-radius: 1%; 
+  border-color: #8EA8C3; 
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
 }
 
 /* Style the vertical scrollbar itself for elements with className="chat-window" */
@@ -157,19 +160,16 @@ h1{
   opacity: 1; 
 }
 
-
-.message-input {
+.message {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 16px;
-  color: black;
+  color: white;
   outline: none;
+  text-align: justify;
+  padding: 2%;
 }
 
-.message-input::placeholder{
-  color: black;
-}
 
 /**EVERYTHING RELATED TO THE RIGHT SIDE BAR**/
 
@@ -260,6 +260,11 @@ h1{
   right: -90%;
   bottom: -5px; /* Adjusts the distance from the text to the underline */
   border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
+.groups .selected {
+  background-color: #325486;
+  color:#82CAFA;
 }
 
 .channels h2 {

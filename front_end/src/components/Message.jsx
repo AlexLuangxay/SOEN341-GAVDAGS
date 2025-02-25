@@ -4,8 +4,9 @@ const Message = ({ text, user, timestamp }) => {
   const messageClass = user === 'Current' ? 'message current-user' : 'message';
   return (
     <div className={messageClass}>
-      {text} <br />
-      <small>{timestamp}</small>
+      <span>{user}</span> <small>{timestamp}</small>
+      <br />
+      {text} 
     </div>
   );
 };
