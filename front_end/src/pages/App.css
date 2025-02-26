@@ -1,0 +1,284 @@
+.App {
+  width: 100vw;
+  height: 100vh;
+  background-color: #23395B;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/**EVERYTHING RELATED TO THE TOP BAR**/
+
+.top-left-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 100px;
+}
+
+.top-right-buttons{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  height: 50%;
+  padding-right: 40px;
+}
+
+.top-bar button{
+  background-color: #8EA8C3;
+}
+
+.top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #23395B;
+  color: white;
+}
+
+h1{
+  color:#8EA8C3;
+}
+
+/**EVERYTHING RELATED TO THE LEFT SIDE BAR**/
+.left-sidebar {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+}
+
+.left-sidebar h2{
+  color: #406E8E;
+}
+
+.left-sidebar button{
+  background-color: transparent;
+  color: #8EA8C3;
+}
+
+.left-sidebar button:hover {
+  background-color: #8EA8C3; 
+  color: black; 
+}
+/**EVERYTHING RELATED TO THE MIDDLE SECTION**/
+.chat-window{
+  height:90%;
+  background-color:#325486; 
+  width: 100%;
+  overflow-y: scroll;
+  border-style: solid; 
+  border-radius: 1%; 
+  border-color: #8EA8C3; 
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+/* Style the vertical scrollbar itself for elements with className="chat-window" */
+.chat-window::-webkit-scrollbar {
+  width: 10px;  /* width of vertical scrollbars */
+}
+
+/* Style the track for the vertical scrollbar of elements with className="chat-window" */
+.chat-window::-webkit-scrollbar-track {
+  background: #333; /* dark grey track */
+}
+
+/* Style the thumb for the vertical scrollbar of elements with className="chat-window" */
+.chat-window::-webkit-scrollbar-thumb {
+  background: #ADD8E6; /* light blue, resembling white-blue */
+}
+
+/* Style the thumb when hovered for the vertical scrollbar of elements with className="chat-window" */
+.chat-window::-webkit-scrollbar-thumb:hover {
+  background: #82CAFA; /* slightly darker shade of blue when hovered */
+}
+
+/* Firefox-specific styles for the vertical scrollbar of elements with className="chat-window" */
+.chat-window {
+  scrollbar-color: #ADD8E6 #333; /* thumb and track color for vertical scrollbar */
+  scrollbar-width: thin; /* applies to vertical scrollbar as 'auto', 'thin', or 'none' */
+}
+
+
+.chat-container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#dot, #paperclip{
+  height: 20px;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.MessagesContainer {
+  width: 90%;
+  height: 60vh;
+  background-color: #efeff0;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+}
+
+.MessageBar {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.message-bar {
+  display: flex;
+  align-items: center;
+  background-color: rgb(31, 31, 31);
+  color: #ADD8E6;
+  text-decoration-color: #ADD8E6;
+  padding: 10px;
+  border-radius: 20px;
+  gap: 10px;
+  width: 80%;
+}
+
+.message-bar input, .message-bar textarea {
+  color: #ADD8E6; 
+}
+
+.message-bar input::placeholder, .message-bar textarea::placeholder {
+  color: #ADD8E6; 
+  opacity: 1; 
+}
+
+.message {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: white;
+  outline: none;
+  text-align: justify;
+  padding: 2%;
+}
+
+
+/**EVERYTHING RELATED TO THE RIGHT SIDE BAR**/
+
+.right-sidebar {
+  width: 20%;
+  padding: 20px;
+  padding-top:0px;
+}
+
+.user-sidebar {
+  padding: 16px;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  background-color: #8EA8C3;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-role {
+  font-size: 12px;
+  color: black;
+}
+
+.trash-icon{
+  width: 20px; height:20px;
+}
+.top-right-buttons button{
+  background-color: transparent;
+  color: #8EA8C3;
+  display: grid;
+  place-items: center; 
+  width: 70px;  /* Adjust as needed */
+  height: auto; /* Adjust as needed */
+}
+
+.top-right-buttons button:hover {
+  background-color: black; 
+}
+
+
+.top-left-buttons button{
+  background-color: transparent;
+  color: #8EA8C3;
+  display: grid;
+  place-items: center; 
+  width: 100px;  /* Adjust as needed */
+  height: auto; /* Adjust as needed */
+}
+
+.top-left-buttons button:hover {
+  background-color: black; 
+}
+
+.group-icon{
+  width: 40px; height:40px;
+}
+
+.groups h2 {
+  position: relative;
+  display: inline-block; 
+}
+
+.groups h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: -90%;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
+.groups .selected {
+  background-color: #325486;
+  color:#82CAFA;
+}
+
+.channels h2 {
+  position: relative;
+  display: inline-block; 
+}
+
+.channels h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: -90%;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
