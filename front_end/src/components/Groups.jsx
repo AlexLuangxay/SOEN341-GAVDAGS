@@ -53,37 +53,41 @@ const Groups = ( {socket} ) => {
     console.log("Current Room Set:", group);
   };
 
-
   return (
 
     <div className="groups">
-      
-      {/* FRONT END MODIFY CODE HERE! */}
-      <input
-        type="text" value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter Username"
-      />
-      <button onClick={sendUsername}>Enter </button>
-
+      <h2>Username</h2>
+      <div className="groups-btn"></div>
+        <div className="input-container">
+          <input
+            className="input" type="text" value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter Username"
+          />
+          <button className="enter-btn" onClick={sendUsername}>Enter</button>
+        </div>
+        
       <h2>Groups</h2>
-      <ul>
-        {groups.map((group, index) => (
-          <li key={index}>
-            <button onClick={() => setRoom(group)}
-              className={selectedGroup === group ? "selected" : ""}
-              >{group}
-            </button>
-          </li>
-        ))}
-      </ul>
 
       <div className="join">
-        <input type="text" placeholder="Room Code" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
-        <button onClick={sendJoinCode} type="submit" name="join">Join a room</button>
+        <input type="text" placeholder="Room Code" class="input" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
+        <div className="button-container">
+          <button onClick={sendJoinCode} type="submit" className="groups-btn" name="join">Join</button>
+          <button onClick={sendCreateSignal} name="create" className="groups-btn">Create</button>
+        </div>
       </div>
-      <button onClick={sendCreateSignal} name="create" className="create-btn" >Create a room</button>
-      {/* // // // // // // // // // // */}
+      <div className="groups-list-container">
+        <ul>
+          {groups.map((group, index) => (
+            <li key={index}>
+              <button onClick={() => setRoom(group)}
+                className={selectedGroup === group ? "selected" : ""}
+                >{group}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ import MessageBar from "../components/MessageBar";
 import UserSidebar from "../components/UserSidebar";
 import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
-import ChatName from "../components/ChatName";
+import GroupChatName from "../components/GroupChatName";
 
 const socket = io('http://localhost:5000');
 
@@ -42,7 +42,7 @@ function App() {
     <div className="App">
       <header className="top-bar">
         <TopLeftButtons />
-        <ChatName />
+        <GroupChatName />
         <TopRightButtons />
       </header>
       <div className="main-container">

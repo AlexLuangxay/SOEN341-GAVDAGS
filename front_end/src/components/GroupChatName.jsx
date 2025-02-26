@@ -5,7 +5,7 @@ const GroupChatName = () => {
     const groupName = "Group 1";
   
     return (
-        <div ClassName="groupChatName">
+        <div className="groupChatName">
             <h1>{groupName}</h1>
             <h2>{chatName}</h2>
         </div>
