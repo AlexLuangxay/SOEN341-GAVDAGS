@@ -14,7 +14,7 @@ const MessageBar = ( {socket} ) => {
 
   return (
     <div className="message-bar">
-      <img id="dot" src="circle.png" alt="User Avatar" />
+      <img id="dot" src="circle.png" />
       <input type="text" placeholder="Message here" className="message-input" value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => {
@@ -22,8 +22,10 @@ const MessageBar = ( {socket} ) => {
             sendMessage();
           }
       }}/>
-      <img id="paperclip" src="paperclip.png" alt="User Avatar" />
-      <button onClick={sendMessage}>Send</button> {/* Added send button  */}
+      <img id="paperclip" src="paperclip.png"/>
+      <button className="send-button" onClick={sendMessage}>
+      <img id="send" src="message.png" alt="Send Message" />
+      </button>
     </div>
   );
 };
