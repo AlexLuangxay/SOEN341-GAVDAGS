@@ -1,67 +1,75 @@
--- Create users table
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+create table users (
+   user_id      int primary key,
+   username     varchar(255) not null,
+   email        varchar(255) unique not null,
+   password     text not null,
+   bio          text,
+   created_date timestamp default current_timestamp
 );
 
-
--- Create channels table
-CREATE TABLE channels (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
-    description TEXT,
-    create_by INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (create_by) REFERENCES users(id) ON DELETE CASCADE
+create table groups (
+   group_id     int primary key,
+   name         varchar(255) not null,
+   creator_id   int,
+   created_date timestamp default current_timestamp,
+   foreign key ( creator_id )
+      references users ( user_id )
 );
 
-
--- Create channel_users table
-CREATE TABLE channel_user (
-    id SERIAL PRIMARY KEY,
-    channel_id INT NOT NULL,
-    user_id INT NOT NULL,
-    role VARCHAR(20) CHECK (role IN ('admin', 'moderator', 'member')),
-    UNIQUE(channel_id, user_id),
-    FOREIGN KEY (channel_id) REFERENCES channels(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+create table group_users (
+   id       int primary key,
+   user_id  int,
+   group_id int,
+   role     varchar(10) check ( role in ( 'admin',
+                                      'member' ) ),
+   foreign key ( user_id )
+      references users ( user_id ),
+   foreign key ( group_id )
+      references groups ( group_id )
 );
 
-
--- Create channel_messages table
-CREATE TABLE channel_messages (
-    id SERIAL PRIMARY KEY,
-    channel_id INT NOT NULL,
-    sender_id INT NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (channel_id) REFERENCES channels(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+create table channels (
+   id           int primary key,
+   name         varchar(255) not null,
+   group_id     int,
+   created_date timestamp default current_timestamp,
+   foreign key ( group_id )
+      references groups ( group_id )
 );
 
-
--- Create dms table
-CREATE TABLE dms (
-    id SERIAL PRIMARY KEY,
-    user1 INT NOT NULL,
-    user2 INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user1, user2),
-    FOREIGN KEY (user1) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (user2) REFERENCES users(id) ON DELETE CASCADE
+create table channel_user (
+   id         int primary key,
+   user_id    int,
+   channel_id int,
+   foreign key ( user_id )
+      references users ( user_id ),
+   foreign key ( channel_id )
+      references channels ( id )
 );
 
+create table dm (
+   id           int primary key,
+   user1_id     int,
+   user2_id     int,
+   created_date timestamp default current_timestamp,
+   foreign key ( user1_id )
+      references users ( user_id ),
+   foreign key ( user2_id )
+      references users ( user_id )
+);
 
--- Create dm_messages table
-CREATE TABLE dm_messages (
-    id SERIAL PRIMARY KEY,
-    dm_id INT NOT NULL,
-    sender_id INT NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (dm_id) REFERENCES dms(id) ON DELETE CASCADE,
-    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+create table messages (
+   id         int primary key,
+   sender_id  int,
+   channel_id int null,
+   dm_id      int null,
+   content    text not null,
+   created_at timestamp default current_timestamp,
+   deleted    boolean default false,
+   foreign key ( sender_id )
+      references users ( user_id ),
+   foreign key ( channel_id )
+      references channels ( id ),
+   foreign key ( dm_id )
+      references dm ( id )
 );
