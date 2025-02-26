@@ -37,7 +37,7 @@ create table channels (
       references groups ( group_id )
 );
 
-create table channel_user (
+create table channel_users (
    id         int primary key,
    user_id    int,
    channel_id int,
@@ -61,15 +61,26 @@ create table dm (
 create table messages (
    id         int primary key,
    sender_id  int,
-   channel_id int null,
-   dm_id      int null,
+   is_dm boolean,
    content    text not null,
    created_at timestamp default current_timestamp,
    deleted    boolean default false,
    foreign key ( sender_id )
       references users ( user_id ),
+);
+
+ create table channel_messages (
+   id         int primary key,
+   message_id int,
+   channel_id int,
    foreign key ( channel_id )
       references channels ( id ),
+ )
+
+ create table dm_messages (
+   id         int primary key,
+   message_id int,
+   dm_id      int,
    foreign key ( dm_id )
       references dm ( id )
-);
+ )
