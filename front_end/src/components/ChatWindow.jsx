@@ -9,7 +9,7 @@ const ChatWindow = () => {
   ];
 
   return (
-    <div className="chat-window">
+    <div className="chat-window" >
       {messages.map(msg => (
         <Message key={msg.id} text={msg.text} user={msg.user} timestamp={msg.timestamp} />
       ))}
