@@ -32,6 +32,7 @@ VALUES
     (3, 'Test Raiden', '2025-02-26 14:10:00'),
     (1, 'Test Hitori', '2025-02-26 14:15:00');
     (1, 'Test Nijika', '2025-02-26 14:16:00');
+    (1, 'Test DM Anthony to Gur', '2025-02-26 14:20:00');
 
 INSERT INTO Members (group_id, user_id, admin_status)
 VALUES
@@ -56,3 +57,7 @@ VALUES
     (2, 3),
     (3, 4),
     (4, 5);
+
+INSERT INTO DirectHasMessages (direct_id, message_id)
+VALUES
+    (1, 6);
