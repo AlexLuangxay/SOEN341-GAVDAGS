@@ -25,8 +25,8 @@ CREATE TABLE Channels (
 /* Table for direct 1 to 1 conversations */
 CREATE TABLE Directs (
     direct_id SERIAL,
-    user_1 INT,
-    user_2 INT,
+    user_1 BIGINT UNSIGNED NOT NULL,
+    user_2 BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (user_1) REFERENCES Users(user_id),
     FOREIGN KEY (user_2) REFERENCES Users(user_id),
     PRIMARY KEY (direct_id)
@@ -43,8 +43,8 @@ CREATE TABLE Messages (
 
 /* Table for members */
 CREATE TABLE Members (
-    group_id INT,
-    user_id INT,
+    group_id BIGINT UNSIGNED NOT NULL,
+    user_id BIGINT UNSIGNED NOT NULL,
     admin_status BOOLEAN DEFAULT 0, /* 0 for False, 1 for True */
     FOREIGN KEY (group_id) REFERENCES Groups(group_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
@@ -53,8 +53,8 @@ CREATE TABLE Members (
 
 /* Table for group has channels */
 CREATE TABLE GroupHasChannel (
-    group_id INT,
-    channel_id INT,
+    group_id BIGINT UNSIGNED NOT NULL,
+    channel_id BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (group_id) REFERENCES Groups(group_id),
     FOREIGN KEY (channel_id) REFERENCES Channels(channel_id),
     PRIMARY KEY (group_id, channel_id)
@@ -62,17 +62,17 @@ CREATE TABLE GroupHasChannel (
 
 /* Table for channel has messages */
 CREATE TABLE ChannelHasMessages (
-    channel_id INT,
-    message_id INT,
+    channel_id BIGINT UNSIGNED NOT NULL,
+    message_id BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (channel_id) REFERENCES Channels(channel_id),
     FOREIGN KEY (message_id) REFERENCES Messages(message_id),
     PRIMARY KEY (channel_id, message_id)
 );
 
-/* Table for channel has messages */
+/* Table for direct has messages */
 CREATE TABLE DirectHasMessages (
-    direct_id INT,
-    message_id INT,
+    direct_id BIGINT UNSIGNED NOT NULL,
+    message_id BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (direct_id) REFERENCES Directs(direct_id),
     FOREIGN KEY (message_id) REFERENCES Messages(message_id),
     PRIMARY KEY (direct_id, message_id)
