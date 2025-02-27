@@ -9,13 +9,15 @@ VALUES
 INSERT INTO Groups (group_name)
 VALUES
     ('Spearhead Squadron');
+    ('Kessoku Band');
 
 /* Default channels */
 INSERT INTO Channels (channel_name)
 VALUES
     ('Shin'),
     ('Raiden'),
-    ('Anju');
+    ('Hitori'),
+    ('Nijika');
 
 INSERT INTO Directs (user_1, user_2)
 VALUES
@@ -25,13 +27,32 @@ VALUES
 
 INSERT INTO Messages (sender_id, content, created_at)
 VALUES
-    (1, 'Yahallo!', '2025-02-26 14:00:00'),
-    (2, 'Hello', '2025-02-26 14:05:00'),
-    (3, 'Hi', '2025-02-26 14:10:00'),
-    (2, 'Bye', '2025-02-26 14:15:00');
+    (1, 'Test Shin', '2025-02-26 14:00:00'),
+    (2, 'Test Shin', '2025-02-26 14:05:00'),
+    (3, 'Test Raiden', '2025-02-26 14:10:00'),
+    (1, 'Test Hitori', '2025-02-26 14:15:00');
+    (1, 'Test Nijika', '2025-02-26 14:16:00');
 
 INSERT INTO Members (group_id, user_id, admin_status)
 VALUES
     (1, 1, 0),
     (1, 2, 1),
     (1, 3, 0);
+    (2, 1, 1),
+    (2, 2, 1),
+    (2, 3, 1);
+
+INSERT INTO GroupHasChannel (group_id, channel_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (2, 3),
+    (2, 4);
+
+INSERT INTO ChannelHasMessages (channel_id, message_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (2, 3),
+    (3, 4),
+    (4, 5);
