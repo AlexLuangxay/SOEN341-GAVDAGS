@@ -8,7 +8,7 @@ VALUES
 /* Default groups */
 INSERT INTO Groups (group_name)
 VALUES
-    ('Spearhead Squadron');
+    ('Spearhead Squadron'),
     ('Kessoku Band');
 
 /* Default channels */
@@ -30,18 +30,19 @@ VALUES
     (1, 'Test Shin', '2025-02-26 14:00:00'),
     (2, 'Test Shin', '2025-02-26 14:05:00'),
     (3, 'Test Raiden', '2025-02-26 14:10:00'),
-    (1, 'Test Hitori', '2025-02-26 14:15:00');
-    (1, 'Test Nijika', '2025-02-26 14:16:00');
+    (1, 'Test Hitori', '2025-02-26 14:15:00'),
+    (1, 'Test Nijika', '2025-02-26 14:16:00'),
     (1, 'Test DM Anthony to Gur', '2025-02-26 14:20:00');
 
 INSERT INTO Members (group_id, user_id, admin_status)
 VALUES
     (1, 1, 0),
     (1, 2, 1),
-    (1, 3, 0);
+    (1, 3, 0),
     (2, 1, 1),
     (2, 2, 1),
-    (2, 3, 1);
+    (2, 3, 1)
+ON DUPLICATE KEY UPDATE admin_status = VALUES(admin_status);
 
 INSERT INTO GroupHasChannel (group_id, channel_id)
 VALUES
