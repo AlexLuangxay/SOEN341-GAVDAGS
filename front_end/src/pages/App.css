@@ -289,7 +289,7 @@ h1{
   width: 20%;
   padding: 20px;
   padding-top: 0px;
-  overflow-y: hidden; /* Prevents overflow on right sidebar */
+  overflow-y: hidden;
 }
 
 .user-sidebar {
@@ -324,4 +324,62 @@ h1{
   font-size: 12px;
   color: black;
 }
-/* xxx  */
+/*SignUp and Login page styling*/
+
+.signup-container, .login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #23395B;
+}
+.signup-box, .login-box {
+  background-color: #8EA8C3;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+.signup-box h2, .login-box h2{
+  color: #23395B;
+}
+
+.signup-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.input1 {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #161925;
+  background-color: #ffffff;
+  color:black;
+}
+
+.signup-button, .login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #23395B;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.signup-button:hover, .login-button:hover {
+  background-color: #406E8E;
+}
+
+.switch-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.switch-text a {
+  color: #23395B;
+  text-decoration: underline;
+}

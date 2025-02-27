@@ -1,11 +1,19 @@
 import React from "react";
-import chatIcon from "../../public/chat-icon.png"
-import groupIcon from "../../public/groups-icon.png"
+import { useNavigate } from "react-router-dom";
+import chatIcon from "../../public/chat-icon.png";
+import groupIcon from "../../public/groups-icon.png";
+
 const TopLeftButtons = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="top-left-buttons">
-      <button><img src = {chatIcon} alt = "chat Icon" className = "group-icon"/></button>
-      <button><img src = {groupIcon} alt = "group Icon" className = "group-icon"/></button>
+      <button onClick={() => navigate("/privatemessage")}>
+        <img src={chatIcon} alt="Chat Icon" className="group-icon" />
+      </button>
+      <button onClick={() => navigate("/")}>
+        <img src={groupIcon} alt="Group Icon" className="group-icon" />
+      </button>
     </div>
   );
 };

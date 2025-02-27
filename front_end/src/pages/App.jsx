@@ -1,61 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import "./App.css";
-import ChatWindow from "../components/ChatWindow";
-import People from "../components/People";
-import Channels from "../components/Channels";
-import MessageBar from "../components/MessageBar";
-import UserSidebar from "../components/UserSidebar";
-import TopLeftButtons from "../components/TopLeftButtons";
-import TopRightButtons from "../components/TopRightButtons";
-import ChatName from "../components/ChatName";
-
-const socket = io('http://localhost:5000');
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import GroupMessageView from './GroupMessageView.jsx';
+import PrivateMessageView from './PrivateMessageView.jsx';
+import Login from './Login.jsx';
+import Signup from './Signup.jsx';
 
 function App() {
-  const [messages, setMessages] = useState([]);
-  
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to WebSocket server"); // Debugging log
-    });
-  
-    socket.on("disconnect", () => {
-      console.log("Disconnected from WebSocket server"); // Debugging log
-    });
-
-    socket.on("messageReceived", (data) => {
-      console.log("Socket connected:", socket.connected);
-      console.log("New message received:", data); // Debugging log
-      setMessages((prevMessages) => [...prevMessages, data])
-  })
-
-  return () => {
-    socket.off("messageReceived");
-  }
-
-  }, []); 
-
   return (
-    <div className="App">
-      <header className="top-bar">
-        <TopLeftButtons />
-        <ChatName />
-        <TopRightButtons />
-      </header>
-      <div className="main-container">
-        <aside className="left-sidebar">
-          <People socket={socket}/>
-        </aside>
-        <main className="chat-container">
-          <ChatWindow messages={messages}/>
-          <MessageBar socket={socket}/>
-        </main>
-        <aside className="right-sidebar">
-          <UserSidebar />
-        </aside>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<GroupMessageView />} />
+      <Route path="/privatemessage" element={<PrivateMessageView />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+    </Routes>
   );
 }
 
