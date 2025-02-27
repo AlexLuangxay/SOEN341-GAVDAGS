@@ -1,12 +1,12 @@
 /* Default users */
-INSERT INTO Client (user_name, user_password, user_bio)
+INSERT INTO Client (client_username, client_password, client_bio)
 VALUES
     ('Anthony', 'anthony', '(≧▽≦)'),
     ('Gur','gur', 'HIM'),
     ('Derek', 'derek', 'Gur''s bestie <3');
 
 /* Default groups */
-INSERT INTO Guild (group_name)
+INSERT INTO Guild (guild_name)
 VALUES
     ('Spearhead Squadron'),
     ('Kessoku Band');
@@ -19,7 +19,7 @@ VALUES
     ('Hitori'),
     ('Nijika');
 
-INSERT INTO Whisper (user_1, user_2)
+INSERT INTO Whisper (client_1, client_2)
 VALUES
     (1, 2),
     (1, 3),
@@ -34,7 +34,7 @@ VALUES
     (1, 'Test Nijika', '2025-02-26 14:16:00'),
     (1, 'Test DM Anthony to Gur', '2025-02-26 14:20:00');
 
-INSERT INTO GuildHasMember (group_id, user_id, admin_status)
+INSERT INTO GuildHasMember (guild_id, client_id, admin_status)
 VALUES
     (1, 1, 0),
     (1, 2, 1),
@@ -43,14 +43,14 @@ VALUES
     (2, 2, 1),
     (2, 3, 1);
 
-INSERT INTO GuildHasChannel (group_id, channel_id)
+INSERT INTO GuildHasChannel (guild_id, channel_id)
 VALUES
     (1, 1),
     (1, 2),
     (2, 3),
     (2, 4);
 
-INSERT INTO ChannelHasLetter (channel_id, message_id)
+INSERT INTO ChannelHasLetter (channel_id, letter_id)
 VALUES
     (1, 1),
     (1, 2),
@@ -58,6 +58,6 @@ VALUES
     (3, 4),
     (4, 5);
 
-INSERT INTO WhisperHasLetter (direct_id, message_id)
+INSERT INTO WhisperHasLetter (whisper_id, letter_id)
 VALUES
     (1, 6);
