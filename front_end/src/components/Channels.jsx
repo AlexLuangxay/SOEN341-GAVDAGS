@@ -4,9 +4,10 @@ const Channels = () => {
   const channels = ["Channel 1", "Channel 2", "Channel 3", "Channel 4"]; 
   //I'm assuming this will be dynamically added ^^^
 
-  return (
+  return ( 
     <div className="channels">
       <h2>Channels</h2>
+      <div className="channels-list-container"> 
       <ul>
         {channels.map((channel, index) => (
           <li key={index}>
@@ -14,7 +15,9 @@ const Channels = () => {
           </li>
         ))}
       </ul>
+      </div>
     </div>
+
   );
 };
 

@@ -1,41 +1,32 @@
-import React, { useState } from "react"
-const MessageBar = ({ socket }) => { // Receive socket as a prop
-  const [message, setMessage] = useState("")
-  const [username, setUsername] = useState("")
-  const [recipient, setRecipient] = useState("")
+import React, { useState } from "react";
 
-  const sendUsername = () => {
-    socket.emit("username", username)
-  }
+const MessageBar = ( {socket} ) => {
+  const [message, setMessage] = useState("")
 
   const sendMessage = () => {
-    socket.emit("message", { username: recipient, message })
-    setMessage("")
+    if (message.trim() !== "") {
+      const roomCode = localStorage.getItem("room"); // Store & retrieve the room code
+      socket.emit("sendMessage", { room: roomCode, message });
+      console.log("Sending message:", message, "to room:", roomCode);
+      setMessage(""); // Clear the input field after sending
+    }
   }
 
   return (
     <div className="message-bar">
-      <input
-        type="text" value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter Username"
-      />
-      <button onClick={sendUsername}>Enter</button>
-
-      <input
-        type="text" value={recipient}
-        onChange={(e) => setRecipient(e.target.value)}
-        placeholder="Enter Recipient"
-      />
-
-      <img id="dot" src="circle.png" alt="User Avatar" />
-      <input className="message-input" type="text"
-        value={message} onChange={(e) => setMessage(e.target.value)}
-        placeholder="Message here"
-      />
-      <img id="paperclip" src="paperclip.png" alt="User Avatar" />
-      <button onClick={sendMessage}>Send</button>
-      </div>
+      <img id="dot" src="circle.png" />
+      <input type="text" placeholder="Message here" className="message-input" value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+      }}/>
+      <img id="paperclip" src="paperclip.png"/>
+      <button className="send-button" onClick={sendMessage}>
+      <img id="send" src="message.png" alt="Send Message" />
+      </button>
+    </div>
   );
 };
 

@@ -6,27 +6,49 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
+}
+.main-container{
+  background-color: #23395B;
+  flex:1;
 }
 
 /**EVERYTHING RELATED TO THE TOP BAR**/
 
-.top-left-buttons {
+.groupChatName {
   display: flex;
-  flex-direction: row;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 10px;
+  color:#8EA8C3;
+}
+
+.group-icon, .trash-icon{
+  width: 40px; height:40px;
 }
 
 .top-right-buttons{
   display: flex;
   flex-direction: row;
-  gap: 8px;
-  height: 50%;
+  gap: 0px;
   padding-right: 40px;
 }
-
-.top-bar button{
-  background-color: #8EA8C3;
+.top-left-buttons {
+  display: flex;
+  gap: 0px;
+  margin-left: 10px;
+}
+.top-right-buttons button{
+  background-color: transparent;
+  display: grid;
+  place-items: center;
+  height:50%;
+  margin-top: 5%;
+}
+.top-left-buttons button{
+  background-color: transparent;
+  display: grid;
+  place-items: center; 
+  margin-top: 10%;
+  height:50%;
 }
 
 .top-bar {
@@ -38,69 +60,150 @@
   color: white;
 }
 
+h1{
+  color:#8EA8C3;
+}
+
 /**EVERYTHING RELATED TO THE LEFT SIDE BAR**/
 .left-sidebar {
   width: 20%;
   display: flex;
   flex-direction: column;
   padding-left: 20px;
+  overflow-y: hidden;
 }
 
 .left-sidebar h2{
   color: #406E8E;
 }
 
+.button-container {
+  display: flex; 
+  gap: 10px;
+  justify-content: left;
+}
+.enter-btn{
+  width: 50%;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: left;
+  width: 65%;
+}
+
+.input{
+  background-color: #8EA8C3;
+  color: black;
+  border-radius: 6px;
+  height: 35px;
+  border-color: #161925;
+}
+.input::placeholder{
+  color: black;
+}
+
+.groups h2 {
+  position: relative;
+  display: inline-block; 
+}
+
+.groups h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: -90%;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
+.channels h2 {
+  position: relative;
+  display: inline-block; 
+}
+
+.channels h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: -90%;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
 .left-sidebar button{
   background-color: transparent;
   color: #8EA8C3;
 }
-
 .left-sidebar button:hover {
   background-color: #8EA8C3; 
   color: black; 
 }
+
+.groups-btn {
+  display:flex;
+}
+
+.groups-list-container {
+  max-height: 100px; 
+  overflow-y: auto; 
+  padding: 5px;
+}
+.groups-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+.groups-list-container::-webkit-scrollbar-thumb {
+  background-color: #8EA8C3;
+  border-radius: 4px;
+}
+
+.channels-list-container {
+  max-height: 100px; 
+  overflow-y: auto; 
+  padding: 5px;
+}
+.channels-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+.channels-list-container::-webkit-scrollbar-thumb {
+  background-color: #8EA8C3;
+  border-radius: 4px;
+}
+
 /**EVERYTHING RELATED TO THE MIDDLE SECTION**/
-
-/* Style the vertical scrollbar itself for elements with className="chat-window" */
-.chat-window::-webkit-scrollbar {
-  width: 10px;  /* width of vertical scrollbars */
-}
-
-/* Style the track for the vertical scrollbar of elements with className="chat-window" */
-.chat-window::-webkit-scrollbar-track {
-  background: #333; /* dark grey track */
-}
-
-/* Style the thumb for the vertical scrollbar of elements with className="chat-window" */
-.chat-window::-webkit-scrollbar-thumb {
-  background: #ADD8E6; /* light blue, resembling white-blue */
-}
-
-/* Style the thumb when hovered for the vertical scrollbar of elements with className="chat-window" */
-.chat-window::-webkit-scrollbar-thumb:hover {
-  background: #82CAFA; /* slightly darker shade of blue when hovered */
-}
-
-/* Firefox-specific styles for the vertical scrollbar of elements with className="chat-window" */
-.chat-window {
+.chat-window{
+  height:80vh;
+  background-color: #23395B; 
   width: 100%;
-  height: 100%;
-  scrollbar-color: #ADD8E6 #333; /* thumb and track color for vertical scrollbar */
-  scrollbar-width: thin; /* applies to vertical scrollbar as 'auto', 'thin', or 'none' */
-  overflow-y: scroll;
-  border-right: 1px solid #8EA8C3;  
-  border-left: 1px solid  #8EA8C3;
+  overflow-y: auto; 
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid #8EA8C3;
+  border-right: 2px solid #8EA8C3; 
+}
+
+.chat-window::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-window::-webkit-scrollbar-thumb {
+  background-color: #8EA8C3;
+  border-radius: 4px;
 }
 
 .chat-container {
-  width: 70%;
-  height: 80vh;
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#dot, #paperclip{
+#dot, #paperclip, #send{
   height: 20px;
 }
 
@@ -111,45 +214,82 @@
   width: 100%;
 }
 
+.MessagesContainer {
+  width: 90%;
+  height: auto; /* Let the container adjust based on content */
+  background-color: #efeff0;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Aligns messages to start */
+  padding: 10px;
+  flex: 1; /* Allow it to grow within the space */
+}
+
+.MessageBar {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 .message-bar {
   display: flex;
   align-items: center;
-  background-color: rgb(31, 31, 31);
-  color: #ADD8E6;
-  text-decoration-color: #ADD8E6;
+  background-color: #8EA8C3;
   padding: 10px;
   border-radius: 20px;
   gap: 10px;
   width: 80%;
-  
 }
 
-.message-bar input, .message-bar textarea {
-  color: #ADD8E6; 
+.message-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: black;
+  outline: none;
 }
 
-.message-bar input::placeholder, .message-bar textarea::placeholder {
-  color: #ADD8E6; 
-  opacity: 1; 
+.message-input::placeholder{
+  color: black;
+}
+
+.send-button{
+  background-color: #8EA8C3;
 }
 
 .message {
-  padding: 1.5%;
-  color: white;
-  text-align: justify;
+  max-width: 400px;
+  margin: 10px;
+  position: relative;
 }
 
-.timestamp {
-  font-size: 12px;
-  color: grey;
+.message-header {
+  display: flex;       
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 2px;
 }
 
+.user, .timestamp {
+  color: #8EA8C3;
+}
+
+.message-bubble {
+  padding: 10px;
+  border-radius: 15px; 
+  background-color: #8EA8C3;
+  position: relative;
+  word-wrap: break-word;
+}
 /**EVERYTHING RELATED TO THE RIGHT SIDE BAR**/
 
 .right-sidebar {
   width: 20%;
   padding: 20px;
-  padding-top:0px;
+  padding-top: 0px;
+  overflow-y: hidden; /* Prevents overflow on right sidebar */
 }
 
 .user-sidebar {
@@ -184,70 +324,4 @@
   font-size: 12px;
   color: black;
 }
-
-.trash-icon{
-  width: 20px; height:20px;
-}
-.top-right-buttons button{
-  background-color: transparent;
-  color: #8EA8C3;
-  display: grid;
-  place-items: center; 
-  width: 70px;  /* Adjust as needed */
-  height: auto; /* Adjust as needed */
-}
-
-.top-right-buttons button:hover {
-  background-color: black; 
-}
-
-
-.top-left-buttons button{
-  background-color: transparent;
-  color: #8EA8C3;
-  display: grid;
-  place-items: center; 
-  width: 100px;  /* Adjust as needed */
-  height: auto; /* Adjust as needed */
-}
-
-.top-left-buttons button:hover {
-  background-color: black; 
-}
-
-.group-icon{
-  width: 40px; 
-  height:40px;
-}
-
-.groups h2 {
-  position: relative;
-  display: inline-block; 
-}
-
-.groups h2::after {
-  content: '';
-  position: absolute;
-  height: 3px; /* Height of the underline */
-  background-color: #406E8E; /* Color of the underline */
-  left: 0;
-  right: -90%;
-  bottom: -5px; /* Adjusts the distance from the text to the underline */
-  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
-}
-
-.channels h2 {
-  position: relative;
-  display: inline-block; 
-}
-
-.channels h2::after {
-  content: '';
-  position: absolute;
-  height: 3px; /* Height of the underline */
-  background-color: #406E8E; /* Color of the underline */
-  left: 0;
-  right: -90%;
-  bottom: -5px; /* Adjusts the distance from the text to the underline */
-  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
-}
+/* xxx  */
