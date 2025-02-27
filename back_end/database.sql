@@ -1,18 +1,18 @@
 /* Table for users AKA client as user is a restricted client */
 CREATE TABLE Client (
-    user_id INT AUTO_INCREMENT,
-    user_name VARCHAR(25) DEFAULT 'Anon',
-    user_password TEXT NOT NULL,
-    user_bio TEXT,
-    user_icon INT DEFAULT 0,
-    PRIMARY KEY (user_id)
+    client_id INT AUTO_INCREMENT,
+    client_username VARCHAR(25) DEFAULT 'Anon',
+    client_password TEXT NOT NULL,
+    client_bio TEXT,
+    client_icon INT DEFAULT 0,
+    PRIMARY KEY (client_id)
 );
 
 /* Table for group AKA a guild as group and groups are restricted keywords */
 CREATE TABLE Guild (
-    group_id INT AUTO_INCREMENT,
-    group_name VARCHAR(25) DEFAULT 'Unnamed Group',
-    PRIMARY KEY(group_id)
+    guild_id INT AUTO_INCREMENT,
+    guild_name VARCHAR(25) DEFAULT 'Unnamed Group',
+    PRIMARY KEY(guild_id)
 );
 
 /* Table for channels */
@@ -24,56 +24,56 @@ CREATE TABLE Channel (
 
 /* Table for direct 1 to 1 conversations AKA a whisper */
 CREATE TABLE Whisper (
-    direct_id INT AUTO_INCREMENT,
-    user_1 INT,
-    user_2 INT,
-    FOREIGN KEY (user_1) REFERENCES Users(user_id),
-    FOREIGN KEY (user_2) REFERENCES Users(user_id),
-    PRIMARY KEY (direct_id)
+    whisper_id INT AUTO_INCREMENT,
+    client_1 INT,
+    client_2 INT,
+    FOREIGN KEY (client_1) REFERENCES Client(client_id),
+    FOREIGN KEY (client_2) REFERENCES Client(client_id),
+    PRIMARY KEY (whisper_id)
 );
 
 /* Table for messages AKA a letter (message can sometimes be a restricted keyword) */
 CREATE TABLE Letter (
-    message_id INT AUTO_INCREMENT,
+    letter_id INT AUTO_INCREMENT,
     sender_id INT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (message_id)
+    PRIMARY KEY (letter_id)
 );
 
 /* Table for members */
 CREATE TABLE GuildHasMember (
-    group_id INT,
-    user_id INT,
+    guild_id INT,
+    client_id INT,
     admin_status BOOLEAN DEFAULT 0, /* 0 for False, 1 for True */
-    FOREIGN KEY (group_id) REFERENCES Groups(group_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    PRIMARY KEY (group_id, user_id)
+    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id),
+    FOREIGN KEY (client_id) REFERENCES Client(client_id),
+    PRIMARY KEY (guild_id, client_id)
 );
 
 /* Table for group has channels */
 CREATE TABLE GuildHasChannel (
-    group_id INT,
+    guild_id INT,
     channel_id INT,
-    FOREIGN KEY (group_id) REFERENCES Groups(group_id),
-    FOREIGN KEY (channel_id) REFERENCES Channels(channel_id),
-    PRIMARY KEY (group_id, channel_id)
+    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id),
+    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id),
+    PRIMARY KEY (guild_id, channel_id)
 );
 
 /* Table for channel has messages */
 CREATE TABLE ChannelHasLetter (
     channel_id INT,
-    message_id INT,
-    FOREIGN KEY (channel_id) REFERENCES Channels(channel_id),
-    FOREIGN KEY (message_id) REFERENCES Messages(message_id),
-    PRIMARY KEY (channel_id, message_id)
+    letter_id INT,
+    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id),
+    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id),
+    PRIMARY KEY (channel_id, letter_id)
 );
 
 /* Table for direct has messages */
 CREATE TABLE WhisperHasLetter (
-    direct_id INT,
-    message_id INT,
-    FOREIGN KEY (direct_id) REFERENCES Directs(direct_id),
-    FOREIGN KEY (message_id) REFERENCES Messages(message_id),
-    PRIMARY KEY (direct_id, message_id)
+    whisper_id INT,
+    letter_id INT,
+    FOREIGN KEY (whisper_id) REFERENCES Whisper(whisper_id),
+    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id),
+    PRIMARY KEY (whisper_id, letter_id)
 );
