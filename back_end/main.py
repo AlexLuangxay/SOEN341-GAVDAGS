@@ -17,6 +17,28 @@ WALLET_PATH = os.getenv("WALLET_PATH")
 
 oracledb.init_oracle_client(config_dir=WALLET_PATH)
 
+# Function to execute SQL file
+def execute_sql_file(file_path):
+    try:
+        connection = oracledb.connect(user=DB_USER, password=DB_PASSWORD, dsn=DB_DSN)
+        cursor = connection.cursor()
+
+        with open(file_path, 'r') as sql_file:
+            sql_statements = sql_file.read()
+
+        for statement in sql_statements.split(";"):
+            statement = statement.strip()
+            if statement:
+                cursor.execute(statement)
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        print("SQL file executed successfully.")
+
+    except oracledb.Error as e:
+        print(f"Error executing SQL file: {e}")
+
 app = Flask(__name__)
 
 # Create a DB connection instance (to be used in routes)
