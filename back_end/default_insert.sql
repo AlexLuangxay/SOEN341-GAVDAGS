@@ -41,8 +41,7 @@ VALUES
     (1, 3, 0),
     (2, 1, 1),
     (2, 2, 1),
-    (2, 3, 1)
-ON DUPLICATE KEY UPDATE admin_status = VALUES(admin_status);
+    (2, 3, 1);
 
 INSERT INTO GroupHasChannel (group_id, channel_id)
 VALUES
