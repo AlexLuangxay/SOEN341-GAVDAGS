@@ -15,7 +15,7 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_DSN = os.getenv("DB_DSN")
 WALLET_PATH = os.getenv("WALLET_PATH")
 
-# oracledb.init_oracle_client(config_dir=WALLET_PATH)
+oracledb.init_oracle_client(config_dir=WALLET_PATH)
 
 app = Flask(__name__)
 
@@ -32,6 +32,7 @@ app.config["SECRET_KEY"] = "GAVDAGS"
 CORS(app)
 socketIO = SocketIO(app, cors_allowed_origins="*")
    
+users = {}
 rooms = {}
 
 @socketIO.on("username")
