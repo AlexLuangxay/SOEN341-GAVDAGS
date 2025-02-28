@@ -25,14 +25,14 @@ VALUES
     (1, 3),
     (2, 3);
 
-INSERT INTO Letter (sender_id, content, created_at)
+INSERT INTO Letter (sender_id, letter_tpe, content, created_at)
 VALUES
-    (1, 'Test Shin', '2025-02-26 14:00:00'),
-    (2, 'Test Shin', '2025-02-26 14:05:00'),
-    (3, 'Test Raiden', '2025-02-26 14:10:00'),
-    (1, 'Test Hitori', '2025-02-26 14:15:00'),
-    (1, 'Test Nijika', '2025-02-26 14:16:00'),
-    (1, 'Test DM Anthony to Gur', '2025-02-26 14:20:00');
+    (1, 'channel', 'Test Shin', '2025-02-26 14:00:00'),
+    (2, 'channel', 'Test Shin', '2025-02-26 14:05:00'),
+    (3, 'channel', 'Test Raiden', '2025-02-26 14:10:00'),
+    (1, 'channel', 'Test Hitori', '2025-02-26 14:15:00'),
+    (1, 'channel', 'Test Nijika', '2025-02-26 14:16:00'),
+    (1, 'whisper', 'Test DM Anthony to Gur', '2025-02-26 14:20:00');
 
 INSERT INTO GuildHasMember (guild_id, client_id, admin_status)
 VALUES
