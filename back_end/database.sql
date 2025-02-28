@@ -25,16 +25,17 @@ CREATE TABLE Channel (
 /* Table for direct 1 to 1 conversations AKA a whisper */
 CREATE TABLE Whisper (
     whisper_id INT AUTO_INCREMENT,
-    client_1 INT,
-    client_2 INT,
-    FOREIGN KEY (client_1) REFERENCES Client(client_id),
-    FOREIGN KEY (client_2) REFERENCES Client(client_id),
+    client_1 INT NOT NULL,
+    client_2 INT NOT NULL,
+    FOREIGN KEY (client_1) REFERENCES Client(client_id) ON DELETE CASCADE,
+    FOREIGN KEY (client_2) REFERENCES Client(client_id) ON DELETE CASCADE,
     PRIMARY KEY (whisper_id)
 );
 
 /* Table for messages AKA a letter (message can sometimes be a restricted keyword) */
 CREATE TABLE Letter (
     letter_id INT AUTO_INCREMENT,
+    letter_tpe ENUM('channel', 'whisper'),
     sender_id INT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -46,8 +47,8 @@ CREATE TABLE GuildHasMember (
     guild_id INT,
     client_id INT,
     admin_status BOOLEAN DEFAULT 0, /* 0 for False, 1 for True */
-    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id),
-    FOREIGN KEY (client_id) REFERENCES Client(client_id),
+    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id) ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES Client(client_id) ON DELETE CASCADE,
     PRIMARY KEY (guild_id, client_id)
 );
 
@@ -55,8 +56,8 @@ CREATE TABLE GuildHasMember (
 CREATE TABLE GuildHasChannel (
     guild_id INT,
     channel_id INT,
-    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id),
-    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id),
+    FOREIGN KEY (guild_id) REFERENCES Guild(guild_id) ON DELETE CASCADE,
+    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id) ON DELETE CASCADE,
     PRIMARY KEY (guild_id, channel_id)
 );
 
@@ -64,8 +65,8 @@ CREATE TABLE GuildHasChannel (
 CREATE TABLE ChannelHasLetter (
     channel_id INT,
     letter_id INT,
-    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id),
-    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id),
+    FOREIGN KEY (channel_id) REFERENCES Channel(channel_id) ON DELETE CASCADE,
+    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (channel_id, letter_id)
 );
 
@@ -73,7 +74,7 @@ CREATE TABLE ChannelHasLetter (
 CREATE TABLE WhisperHasLetter (
     whisper_id INT,
     letter_id INT,
-    FOREIGN KEY (whisper_id) REFERENCES Whisper(whisper_id),
-    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id),
+    FOREIGN KEY (whisper_id) REFERENCES Whisper(whisper_id) ON DELETE CASCADE,
+    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (whisper_id, letter_id)
 );
