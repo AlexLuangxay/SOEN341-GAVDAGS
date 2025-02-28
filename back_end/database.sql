@@ -1,3 +1,7 @@
+/* CREATE AND USE THE DATABASE */
+CREATE DATABASE Soen341;
+USE Soen341;
+
 /* Table for users AKA client as user is a restricted client */
 CREATE TABLE Client (
     client_id INT AUTO_INCREMENT,
