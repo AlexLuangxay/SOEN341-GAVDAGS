@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, session, redirect, url_for 
-from flask_socketio import join_room, leave_room, send, emit, SocketIO
+from flask import Flask, request, session
+from flask_socketio import join_room, leave_room, send, SocketIO
 from flask_cors import CORS
 from datetime import datetime
 from string import ascii_uppercase
@@ -15,7 +15,7 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_DSN = os.getenv("DB_DSN")
 WALLET_PATH = os.getenv("WALLET_PATH")
 
-oracledb.init_oracle_client(config_dir=WALLET_PATH)
+# oracledb.init_oracle_client(config_dir=WALLET_PATH)
 
 app = Flask(__name__)
 
@@ -32,15 +32,11 @@ app.config["SECRET_KEY"] = "GAVDAGS"
 CORS(app)
 socketIO = SocketIO(app, cors_allowed_origins="*")
    
-users = {}
 rooms = {}
 
 @socketIO.on("username")
 def receive_username(username):
     session["name"] = username
-    #users[username] = request.sid
-    #print(f"User added: {username} with SID: {request.sid}")
-    #print(f"Current users dict: {users}")
 
 @socketIO.on("createSignal")
 def generate_unique_code():
@@ -51,9 +47,10 @@ def generate_unique_code():
         if code not in rooms: 
             break 
     print(f"Generated Room Code: {code}")
+
     room = code 
-    #rooms.update(room)
-    rooms[room] = {"members": 0, "messages": []}
+    rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"]}]}
+    
     session["room"] = room 
     session["ID"] = request.sid
     
@@ -61,37 +58,46 @@ def generate_unique_code():
     join_room(room)
     rooms[room]["members"] += 1  
 
-    # Emit the generated room code to all connected clients
-    socketIO.emit("newRoomCode", {"code": room})
-
+    socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
+    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+    socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
+    
     print(f"Generated ID: {request.sid} joined room {room}")
+    print(f"Current rooms: {rooms}")
 
 @socketIO.on("groupCode")
 def join_group(data):
     room = data["code"]
     username = data["username"]
+
+    if room not in rooms:
+        print(f"Room {room} not found")
+        return 
+    
     join_room(room)
     rooms[room]["members"] += 1
+
+    # Check if the user is already in the room
+    if not any(user["name"] == username for user in rooms[room]["users"]):
+        rooms[room]["users"].append({"name": username}) # Add user to room
+
     session["room"] = room
     session["name"] = username
+    
     send(f"{username} has joined the room.", to=room)
-    print(f"{username} joined room {room}")
+    socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
+    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
 
 @socketIO.on("sendMessage")
 def send_message(data):
     room = data.get("room")
     message = data.get("message")
     username = session.get("name")
-
-    # if room not in rooms:
-    #     print(f"Room {room} not found")
-    #     return 
-
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    rooms[room]["messages"].append({"user" : username, "message" : message, "timestamp" : timestamp})
-    print(f"Message sent in {room} from {username}: {message}")   
-    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp}, room=room)
-    
+    rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
+    print(f"Message sent in {room} from {username}: {message}")
+    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
+
 @socketIO.on("connect")
 def connect(auth):
     room = session.get("room")
@@ -105,6 +111,7 @@ def connect(auth):
     join_room(room)
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1
+    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
     print(f"{name} joined room {room}")
 
 @socketIO.on("disconnect")
@@ -115,10 +122,12 @@ def disconnect():
 
     if room in rooms:
         rooms[room]["members"] -= 1
+        rooms[room]["users"] = [user for user in rooms[room]["users"] if user["name"] != name] # Remove user from room
         if rooms[room]["members"] <= 0:
             del rooms[room]
 
     send({"name": name, "message": "has left the room"}, to=room)
+    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
     print(f"{name} has left room {room}")
 
 if __name__ == "__main__":
