@@ -1,3 +1,4 @@
+# Shell: pip install mysql-connector-python flask
 import mysql.connector
 
 mydb = mysql.connector.connect(
