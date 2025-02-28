@@ -163,6 +163,11 @@ h1{
   border-radius: 4px;
 }
 
+.groups-list-container button .selected {
+  background-color: #8EA8C3;
+  color: black;
+}
+
 .channels-list-container {
   max-height: 100px; 
   overflow-y: auto; 
