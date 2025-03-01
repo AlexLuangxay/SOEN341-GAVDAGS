@@ -48,6 +48,7 @@ for x in mycursor:
   print(x)
 """
 
+"""
 # Insert into a table
 sql = 'INSERT INTO customers (name, address) VALUES (%s, %s)'
 val = [
@@ -67,11 +68,15 @@ val = [
 ]
 
 mycursor.executemany(sql, val)
-
-# VERY IMPORTANT, I HAVE TO COMMIT TO MAKE THE CHANGES TO THE TABLE
 mydb.commit()
+"""
 
-print(mycursor.rowcount, "record inserted.")
+# Insert into a table
+sql = 'INSERT INTO customers (name, address) VALUES (%s, %s)'
+val = ('Smurf', 'Village')
+mycursor.execute(sql,val)
+mydb.commit()
+print('ID of last record inserted: ', mycursor.lastrowid) # lastrowid returns the value generated for an AUTO_INCREMENT column
 
 # Close the database
 mydb.close()
