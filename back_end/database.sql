@@ -39,7 +39,7 @@ CREATE TABLE Whisper (
 /* Table for messages AKA a letter (message can sometimes be a restricted keyword) */
 CREATE TABLE Letter (
     letter_id INT AUTO_INCREMENT,
-    letter_tpe ENUM('channel', 'whisper'),
+    letter_type ENUM('channel', 'whisper'),
     sender_id INT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -82,3 +82,7 @@ CREATE TABLE WhisperHasLetter (
     FOREIGN KEY (letter_id) REFERENCES Letter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (whisper_id, letter_id)
 );
+
+ALTER TABLE Letter ADD FOREIGN KEY (sender_id) REFERENCES Client(client_id) ON DELETE CASCADE;
+
+ALTER TABLE Whisper ADD CONSTRAINT unique_dm UNIQUE (LEAST(client_1, client_2), GREATEST(client_1, client_2));

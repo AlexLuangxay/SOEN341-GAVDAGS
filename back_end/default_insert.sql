@@ -61,3 +61,5 @@ VALUES
 INSERT INTO WhisperHasLetter (whisper_id, letter_id)
 VALUES
     (1, 6);
+
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
