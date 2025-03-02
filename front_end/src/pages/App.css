@@ -1,15 +1,26 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Hide scrollbars */
+}
+
+
 .App {
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* Limits the height to the viewport */
   background-color: #23395B;
   color: black;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  overflow: hidden; /* Hides overflow within the app specifically */
 }
 .main-container{
   background-color: #23395B;
   flex:1;
+  overflow: auto;
 }
 
 /**EVERYTHING RELATED TO THE TOP BAR**/
@@ -120,6 +131,23 @@ h1{
   bottom: -5px; /* Adjusts the distance from the text to the underline */
   border-radius: 5px; /* Adds rounded corners to the ends of the underline */
 }
+
+.user-sidebar h2{
+  position: relative;
+  display: inline-block; 
+}
+
+.user-sidebar h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: 0;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
 
 .channels h2 {
   position: relative;
@@ -296,15 +324,40 @@ h1{
   padding: 16px;
   border-radius: 8px;
   height: 100%;
+  max-height: 80vh;
+}
+
+
+
+.people {
+  padding: 16px;
+  border-radius: 8px;
+  height: 100%;
   overflow-y: auto;
   max-height: 80vh;
 }
 
-.user-sidebar::-webkit-scrollbar {
+.people h2{
+  position: relative;
+  display: inline-block; 
+}
+
+.people h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: 0;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
+.people::-webkit-scrollbar {
   width: 8px;
 }
 
-.user-sidebar::-webkit-scrollbar-thumb {
+.people::-webkit-scrollbar-thumb {
   background-color: #8EA8C3;
   border-radius: 4px;
 }

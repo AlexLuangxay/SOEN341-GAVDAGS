@@ -23,7 +23,7 @@ const People = () => {
   };
 
   return (
-    <div className="user-sidebar">
+    <div className="people">
       <h2>Private Messages</h2>
       <div className="user-list">
         {users.map((user, index) => (

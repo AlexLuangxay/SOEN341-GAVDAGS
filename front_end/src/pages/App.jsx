@@ -7,13 +7,14 @@ import Signup from './Signup.jsx';
 
 function App() {
   return (
+    <div class = "container">
     <Routes>
       <Route path="/" element={<GroupMessageView />} />
       <Route path="/privatemessage" element={<PrivateMessageView />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
     </Routes>
-  );
+  </div>);
 }
 
 export default App;
