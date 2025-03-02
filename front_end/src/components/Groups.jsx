@@ -18,7 +18,7 @@ const Groups = ( {socket} ) => {
         };
   }, []);
   // // // // // // // // // // // 
-  
+  //hi
 
   const sendJoinCode = () => {
     if (code.trim() !== "" && username.trim() !== "") {
