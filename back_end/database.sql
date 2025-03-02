@@ -35,11 +35,20 @@ CREATE TABLE Whisper (
     PRIMARY KEY (client_1, client_2)
 );
 
-/* Table for messages AKA a letter (message can sometimes be a restricted keyword) */
-CREATE TABLE Letter (
+/* Table for guild message AKA an public letter (message can sometimes be a restricted keyword) */
+CREATE TABLE PublicLetter (
     letter_id INT AUTO_INCREMENT,
-    letter_type ENUM('channel', 'whisper'),
     sender_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (letter_id)
+);
+
+/* Table for private message AKA a private letter (message can sometimes be a restricted keyword) */
+CREATE TABLE PrivateLetter (
+    letter_id INT AUTO_INCREMENT,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (letter_id)
@@ -69,7 +78,7 @@ CREATE TABLE ChannelHasLetter (
     channel_id INT,
     letter_id INT,
     FOREIGN KEY (channel_id) REFERENCES Channel(channel_id) ON DELETE CASCADE,
-    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id) ON DELETE CASCADE,
+    FOREIGN KEY (letter_id) REFERENCES PrivateLetter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (channel_id, letter_id)
 );
 
@@ -79,6 +88,6 @@ CREATE TABLE WhisperHasLetter (
     client_2 INT NOT NULL,
     letter_id INT,
     FOREIGN KEY (client_1, client_2) REFERENCES Whisper(client_1, client_2) ON DELETE CASCADE,
-    FOREIGN KEY (letter_id) REFERENCES Letter(letter_id) ON DELETE CASCADE,
+    FOREIGN KEY (letter_id) REFERENCES PrivateLetter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (client_1, client_2, letter_id)
 );
