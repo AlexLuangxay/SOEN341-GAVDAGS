@@ -3,10 +3,10 @@ import mysql.connector
 
 # How to access the database
 config = {
-  'user': 'admin',
-  'password': 'soen341admin',
-  'host': 'soen341-database.c0pwgyc4ixjm.us-east-1.rds.amazonaws.com',
-  'database': 'Soen341',
+  'user': '',
+  'password': '',
+  'host': '',
+  'database': '',
   'raise_on_warnings': True
 }
 
@@ -15,3 +15,5 @@ mydb = mysql.connector.connect(**config)
 
 # Cursor to run queries on the database
 mycursor = mydb.cursor()
+
+# CREATE, READ, UPDATE, DELETE
