@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import GroupMessageView from './GroupMessageView.jsx';
@@ -15,6 +16,5 @@ function App() {
       <Route path="/signup" element={<Signup />} />
     </Routes>
   </div>);
-}
 
 export default App;

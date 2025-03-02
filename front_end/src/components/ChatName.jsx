@@ -1,8 +1,6 @@
 import React from "react";
 
-const ChatName = () => {
-    const chatName = "Chat Name"; 
-  
+const ChatName = ( {chatName} ) => {
     return (
         <div ClassName="chatName">
             <h1>{chatName}</h1>
