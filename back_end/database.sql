@@ -28,18 +28,17 @@ CREATE TABLE Channel (
 
 /* Table for direct 1 to 1 conversations AKA a whisper */
 CREATE TABLE Whisper (
-    whisper_id INT AUTO_INCREMENT,
     client_1 INT NOT NULL,
     client_2 INT NOT NULL,
     FOREIGN KEY (client_1) REFERENCES Client(client_id) ON DELETE CASCADE,
     FOREIGN KEY (client_2) REFERENCES Client(client_id) ON DELETE CASCADE,
-    PRIMARY KEY (whisper_id)
+    PRIMARY KEY (client_1, client_2)
 );
 
 /* Table for messages AKA a letter (message can sometimes be a restricted keyword) */
 CREATE TABLE Letter (
     letter_id INT AUTO_INCREMENT,
-    letter_tpe ENUM('channel', 'whisper'),
+    letter_type ENUM('channel', 'whisper'),
     sender_id INT NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -76,9 +75,10 @@ CREATE TABLE ChannelHasLetter (
 
 /* Table for direct has messages */
 CREATE TABLE WhisperHasLetter (
-    whisper_id INT,
+    client_1 INT NOT NULL,
+    client_2 INT NOT NULL,
     letter_id INT,
-    FOREIGN KEY (whisper_id) REFERENCES Whisper(whisper_id) ON DELETE CASCADE,
+    FOREIGN KEY (client_1, client_2) REFERENCES Whisper(client_1, client_2) ON DELETE CASCADE,
     FOREIGN KEY (letter_id) REFERENCES Letter(letter_id) ON DELETE CASCADE,
-    PRIMARY KEY (whisper_id, letter_id)
+    PRIMARY KEY (client_1, client_2, letter_id)
 );

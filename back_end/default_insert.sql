@@ -25,7 +25,7 @@ VALUES
     (1, 3),
     (2, 3);
 
-INSERT INTO Letter (sender_id, letter_tpe, content, created_at)
+INSERT INTO Letter (sender_id, letter_type, content, created_at)
 VALUES
     (1, 'channel', 'Test Shin', '2025-02-26 14:00:00'),
     (2, 'channel', 'Test Shin', '2025-02-26 14:05:00'),
