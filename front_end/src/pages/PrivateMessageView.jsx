@@ -11,7 +11,6 @@ import UserSidebar from "../components/UserSidebar";
 import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import ChatName from "../components/ChatName";
-// import "../index.css";
 
 const socket = io('http://localhost:5000');
 

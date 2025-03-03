@@ -1,30 +1,48 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
-const Groups = ( {socket} ) => {
+const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
   const [code, setCode] = useState("") // State for input field 
   const [groups, setGroups] = useState([]);
   const [username, setUsername] = useState("");
-  const [selectedGroup, setSelectedGroup] = useState(""); // State for selected group
   const [isUsernameEntered, setIsUsernameEntered] = useState(false); // State to track if username is entered
 
-
   const sendJoinCode = () => {
-    if (code.trim() !== "" && username.trim() !== "") {
+    if (code.trim() !== "" && isUsernameEntered) {
     socket.emit("groupCode", {code, username})
     localStorage.setItem("room", code); // Store room code for future use
+    setChatName(code); // Update chat name
+    setCurrentRoom(code); // Set current room
     setCode("") // Clear the input field after sending 
+    setGroups((prevGroups) => [...prevGroups, code]); // Add the new room to the groups list
+    } else if (!isUsernameEntered) {
+      console.log("You must enter a username before joining a group.") // Show this to user 
+    } else if (code.trim() === "") {
+      console.log("Room code cannot be empty.") // Show this to user 
     } else {
-      console.log("You must enter a username before creating a group.") // Show this to user 
+      console.log("Invalid room code.") // Show this to user
     }
   }
 
   const sendCreateSignal = () => {
     if (isUsernameEntered) {
-      socket.emit("createSignal")
+      socket.emit("createSignal");
     } else {
-      console.log("You must enter a username before creating a group.") // Show this to user 
+      console.log("You must enter a username before creating a group."); // Show this to user
     }
-  }
+  };
+  
+  useEffect(() => {
+    socket.on("newRoomCode", (data) => {
+      setChatName(data.code); // Update chat name with the generated room code
+      setGroups((prevGroups) => [...prevGroups, data.code]); // Add the new room to the groups list
+      localStorage.setItem("room", data.code); // Store the generated room code
+      setCurrentRoom(data.code);
+    });
+  
+    return () => {
+      socket.off("newRoomCode"); // Cleanup listener on unmount
+    };
+  }, []);
 
   const sendUsername = () => {
     if (username.trim() !== "") {
@@ -35,10 +53,14 @@ const Groups = ( {socket} ) => {
     }
   }
 
-  const setRoom = (group) => {
-    localStorage.setItem("room", group); // Store selected room
-    setSelectedGroup(group);
-    console.log("Current Room Set:", group);
+  const switchRoom = (group) => {
+    if (currentRoom !== group) {
+      socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
+      localStorage.setItem("room", group); // Store the selected room
+      setChatName(group); // Update chat name
+      setCurrentRoom(group);
+      console.log("Switched to room:", group);
+    }
   };
 
   return (
@@ -57,8 +79,8 @@ const Groups = ( {socket} ) => {
         <ul>
           {groups.map((group, index) => (
             <li key={index}>
-              <button onClick={() => setRoom(group)}
-                className={selectedGroup === group ? "selected" : ""}
+              <button onClick={() => switchRoom(group)}
+                className={currentRoom === group ? "selected" : ""}
                 >{group}
               </button>
             </li>
