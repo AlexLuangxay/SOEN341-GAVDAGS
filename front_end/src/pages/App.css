@@ -1,15 +1,26 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Hide scrollbars */
+}
+
+
 .App {
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* Limits the height to the viewport */
   background-color: #23395B;
   color: black;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  overflow: hidden; /* Hides overflow within the app specifically */
 }
 .main-container{
   background-color: #23395B;
   flex:1;
+  overflow: auto;
 }
 
 /**EVERYTHING RELATED TO THE TOP BAR**/
@@ -120,6 +131,23 @@ h1{
   bottom: -5px; /* Adjusts the distance from the text to the underline */
   border-radius: 5px; /* Adds rounded corners to the ends of the underline */
 }
+
+.user-sidebar h2{
+  position: relative;
+  display: inline-block; 
+}
+
+.user-sidebar h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: 0;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
 
 .channels h2 {
   position: relative;
@@ -294,13 +322,49 @@ h1{
   width: 20%;
   padding: 20px;
   padding-top: 0px;
-  overflow-y: hidden; /* Prevents overflow on right sidebar */
+  overflow-y: hidden;
 }
 
 .user-sidebar {
   padding: 16px;
   border-radius: 8px;
   height: 100%;
+  max-height: 80vh;
+}
+
+
+
+.people {
+  padding: 16px;
+  border-radius: 8px;
+  height: 100%;
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+.people h2{
+  position: relative;
+  display: inline-block; 
+}
+
+.people h2::after {
+  content: '';
+  position: absolute;
+  height: 3px; /* Height of the underline */
+  background-color: #406E8E; /* Color of the underline */
+  left: 0;
+  right: 0;
+  bottom: -5px; /* Adjusts the distance from the text to the underline */
+  border-radius: 5px; /* Adds rounded corners to the ends of the underline */
+}
+
+.people::-webkit-scrollbar {
+  width: 8px;
+}
+
+.people::-webkit-scrollbar-thumb {
+  background-color: #8EA8C3;
+  border-radius: 4px;
 }
 
 .user-card {
@@ -311,7 +375,18 @@ h1{
   border-radius: 8px;
   margin-bottom: 10px;
   gap: 10px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
 }
+
+.user-card:hover {
+  background-color: #406E8E;
+  color: white;
+}
+
+
 
 .avatar img {
   width: 40px;
@@ -329,4 +404,62 @@ h1{
   font-size: 12px;
   color: black;
 }
-/* xxx  */
+/*SignUp and Login page styling*/
+
+.signup-container, .login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #23395B;
+}
+.signup-box, .login-box {
+  background-color: #8EA8C3;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+.signup-box h2, .login-box h2{
+  color: #23395B;
+}
+
+.signup-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.input1 {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #161925;
+  background-color: #ffffff;
+  color:black;
+}
+
+.signup-button, .login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #23395B;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.signup-button:hover, .login-button:hover {
+  background-color: #406E8E;
+}
+
+.switch-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.switch-text a {
+  color: #23395B;
+  text-decoration: underline;
+}

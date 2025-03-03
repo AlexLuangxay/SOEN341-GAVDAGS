@@ -66,17 +66,6 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
   return (
 
     <div className="groups">
-      <h2>Username</h2>
-      <div className="groups-btn"></div>
-        <div className="input-container">
-          <input
-            className="input" type="text" value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter Username"
-          />
-          <button className="enter-btn" onClick={sendUsername}>Enter</button>
-        </div>
-        
       <h2>Groups</h2>
 
       <div className="join">
