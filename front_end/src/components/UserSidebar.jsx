@@ -1,6 +1,14 @@
 import React from "react";
 
-const UserSidebar = ( { users } ) => {
+const users = [
+  { name: "Current User", role: "Role" },
+  { name: "Other User", role: "Role" },
+  { name: "Other User", role: "Role" },
+  { name: "Other User", role: "Role" },
+];
+//I'm assuming this will be dynamically added ^^^
+
+const UserSidebar = () => {
   return (
     <div className="user-sidebar">
       {users.map((user, index) => (
@@ -10,7 +18,7 @@ const UserSidebar = ( { users } ) => {
           </div>
           <div className="user-info">
             <div className="user-name">{user.name}</div>
-            {/*<div className="user-role">{user.role}</div>*/}
+            <div className="user-role">{user.role}</div>
           </div>
         </div>
       ))}
