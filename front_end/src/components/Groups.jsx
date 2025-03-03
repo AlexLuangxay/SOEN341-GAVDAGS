@@ -7,18 +7,6 @@ const Groups = ( {socket} ) => {
   const [selectedGroup, setSelectedGroup] = useState(""); // State for selected group
   const [isUsernameEntered, setIsUsernameEntered] = useState(false); // State to track if username is entered
 
-    useEffect(() => {
-        // Listen for new room codes from backend
-        socket.on("newRoomCode", (data) => {
-            setGroups((prevGroups) => [...prevGroups, data.code]);
-        });
-
-        return () => {
-            socket.off("newRoomCode"); // Cleanup listener on unmount
-        };
-  }, []);
-  // // // // // // // // // // // 
-  //hi
 
   const sendJoinCode = () => {
     if (code.trim() !== "" && username.trim() !== "") {
