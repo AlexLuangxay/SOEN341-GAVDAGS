@@ -1,0 +1,8 @@
+gavdags_high = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ca-montreal-1.oraclecloud.com))(connect_data=(service_name=g54f73ff75254e2_gavdags_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+gavdags_low = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ca-montreal-1.oraclecloud.com))(connect_data=(service_name=g54f73ff75254e2_gavdags_low.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+gavdags_medium = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ca-montreal-1.oraclecloud.com))(connect_data=(service_name=g54f73ff75254e2_gavdags_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+
+
