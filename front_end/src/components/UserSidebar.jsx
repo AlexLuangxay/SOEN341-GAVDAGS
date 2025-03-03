@@ -1,6 +1,13 @@
 import React from "react";
 
-const UserSidebar = ( { users } ) => {
+const users = [
+  { name: "Current User", role: "Role" },
+  { name: "Other User", role: "Role" },
+  { name: "Other User", role: "Role" },
+  { name: "Other User", role: "Role" },
+];
+
+const UserSidebar = ( {} ) => {
   return (
     <div className="user-sidebar">
       {users.map((user, index) => (

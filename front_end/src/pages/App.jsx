@@ -12,6 +12,12 @@ function App() {
       <Route path="/" element={<LoginPage />} />
       <Route path="/privatemessage" element={<PrivateMessageView />} />
     </Routes>
+<<<<<<< HEAD
   </div>)
 }
+=======
+  </div>);
+}
+
+>>>>>>> main
 export default App;
