@@ -3,10 +3,10 @@ import mysql.connector
 
 # How to access the database
 config = {
-  'user': '',
-  'password': '',
-  'host': '',
-  'database': '',
+  'user': 'admin',
+  'password': 'soen341admin',
+  'host': 'soen341.c0pwgyc4ixjm.us-east-1.rds.amazonaws.com',
+  'database': 'Soen341',
   'raise_on_warnings': True
 }
 
