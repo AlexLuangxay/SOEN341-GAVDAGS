@@ -30,6 +30,18 @@ def create_client(client_username, client_password):
 # Test vvv
 # create_client('Bob', 'password')
 
+# Read a Client
+def read_client(client_id):
+  try:
+    sql = 'SELECT * FROM Client WHERE client_id = '+str(client_id)
+    mycursor.execute(sql)
+    client_obj = mycursor.fetchone()
+    print(client_obj)
+  except Exception as e:
+    print('Error Reading Client: ', e)
+# Test vvv
+for x in range(10):
+  read_client(x)
 
 # Create a Guild
 def create_guild(guild_name):
@@ -141,4 +153,4 @@ def create_private_letter(sender_id, receiver_id, content):
   except Exception as e:
     print('Error Creating Private Letter: ', e)
 # Test vvv
-create_private_letter(3, 1, 'Yahallo')
+# create_private_letter(3, 1, 'Yahallo')
