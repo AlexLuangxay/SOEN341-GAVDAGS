@@ -33,8 +33,9 @@ def create_client(client_username, client_password):
 # Read a Client
 def read_client(client_id):
   try:
-    sql = 'SELECT * FROM Client WHERE client_id = '+str(client_id)
-    mycursor.execute(sql)
+    sql = 'SELECT * FROM Client WHERE client_id = (%s)'
+    val = (client_id,)
+    mycursor.execute(sql,val)
     client_obj = mycursor.fetchone()
     print(client_obj)
   except Exception as e:
@@ -56,6 +57,19 @@ def create_guild(guild_name):
 # Test vvv
 # create_guild('Classroom of the Elite')
 
+# Read a Guild
+def read_guild(guild_id):
+  try:
+    sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
+    val = (guild_id,)
+    mycursor.execute(sql,val)
+    guild_obj = mycursor.fetchone()
+    print(guild_obj)
+  except Exception as e:
+    print('Error Reading Guild: ', e)
+# Test vvv
+for x in range(10):
+  read_guild(x)
 
 # Create a Channel
 def create_channel(guild_id, channel_name):
@@ -78,6 +92,19 @@ def create_channel(guild_id, channel_name):
 # create_channel(1, 'Anju')
 # create_channel(3, 'XYZ')
 
+# Read a Guild
+def read_guild(guild_id):
+  try:
+    sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
+    val = (guild_id,)
+    mycursor.execute(sql,val)
+    guild_obj = mycursor.fetchone()
+    print(guild_obj)
+  except Exception as e:
+    print('Error Reading Guild: ', e)
+# Test vvv
+for x in range(10):
+  read_guild(x)
 
 # Create a Whisper
 def create_whisper(client_1, client_2):
