@@ -5,6 +5,79 @@ html, body {
   overflow: hidden; /* Hide scrollbars */
 }
 
+.dark .App, 
+.dark .main-container, 
+.dark .top-bar, 
+.dark .left-sidebar, 
+.dark .chat-window, 
+.dark .right-sidebar, 
+.dark .signup-container, 
+.dark .login-container, 
+.dark .Settingsmodal-content {
+  background-color: #EFEFF0;
+  color: #EFEFF0;
+}
+
+.dark .App, 
+.dark .main-container, 
+.dark .top-bar, 
+.dark .left-sidebar, 
+.dark .chat-window, 
+.dark .right-sidebar, 
+.dark .signup-container, 
+.dark .login-container, 
+.dark .Settingsmodal-content {
+  background-color: #D5CAD6;
+  color: rgb(0, 0, 0);
+}
+
+.dark button, 
+.dark input, 
+.dark .input1, 
+.dark .user-card, 
+.dark .message-bubble {
+  background-color: #EAFFFD;
+  color: black;
+}
+
+.dark .message-bar,
+.dark .groups h2::after,
+.dark .channels h2::after,
+.dark .people h2::after{
+  background-color: #EAFFFD;
+}
+
+.dark .groupChatName h1,
+.dark .groupChatName,
+.dark .groups h2,
+.dark .channels h2,
+.dark .people h2{
+  color:#EAFFFD;
+}
+
+.dark .user-card:hover,
+.dark .groups-btn:hover,
+.dark .channels-list-container button:hover{
+  background-color: #EFEFF0;
+  color:black;
+}
+
+.dark .groups-btn,
+.dark .channels-list-container button{
+  color:black;
+}
+
+.dark .chat-window{
+  border-left: 2px solid black;
+  border-right: 2px solid black; 
+}
+
+.dark .groups-list-container::-webkit-scrollbar-thumb,
+.dark .channels-list-container::-webkit-scrollbar-thumb,
+.dark .chat-window::-webkit-scrollbar-thumb,
+.dark .people::-webkit-scrollbar-thumb{
+  background-color: black;
+}
 
 .App {
   width: 100vw;

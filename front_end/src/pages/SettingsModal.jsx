@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
 const SettingsModal = ({ isOpen, onClose }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode === 'true';
+  });
 
   const handleToggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem('darkMode', newMode);
+      return newMode;
+    });
   };
 
-  // Effect to apply dark mode to the body class
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark');
@@ -41,4 +47,3 @@ const SettingsModal = ({ isOpen, onClose }) => {
 };
 
 export default SettingsModal;
-
