@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const [darkMode, setDarkMode] = useState(false);
 
   const handleToggleDarkMode = () => {
     setDarkMode(!darkMode);
-    // Here you would also handle the actual theme change logic
   };
+
+  // Effect to apply dark mode to the body class
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   if (!isOpen) {
     return null;
@@ -33,5 +41,4 @@ const SettingsModal = ({ isOpen, onClose }) => {
 };
 
 export default SettingsModal;
-
 

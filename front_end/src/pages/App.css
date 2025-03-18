@@ -16,6 +16,10 @@ html, body {
   justify-content: center; /* Center content vertically */
   align-items: center; /* Center content horizontally */
   overflow: hidden; /* Hides overflow within the app specifically */
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
 }
 .main-container{
   background-color: #23395B;
@@ -490,14 +494,18 @@ h1{
 }
 
 .Settingsmodal-content {
-  background-color: black;
+  background-color: #23395B;
   margin: 15% auto;
+  margin-top: 5%;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 50%;
+  height:50%;
   text-decoration-color: #161925;
   font-size: 16px; /* Adjust size as needed */
-  font-weight: normal; /
+  font-weight: normal;
+  border-radius: 20px;
+  border-color: #8EA8C3;
 }
 
 .Settingsclose {
