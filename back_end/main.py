@@ -15,7 +15,7 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_DSN = os.getenv("DB_DSN")
 WALLET_PATH = os.getenv("WALLET_PATH")
 
-oracledb.init_oracle_client(config_dir=WALLET_PATH)
+# oracledb.init_oracle_client(config_dir=WALLET_PATH)
 
 app = Flask(__name__)
 
@@ -32,7 +32,6 @@ app.config["SECRET_KEY"] = "GAVDAGS"
 CORS(app)
 socketIO = SocketIO(app, cors_allowed_origins="*")
    
-users = {}
 rooms = {}
 
 @socketIO.on("username")
@@ -50,7 +49,7 @@ def generate_unique_code():
     print(f"Generated Room Code: {code}")
 
     room = code 
-    rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"]}]}
+    rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"], "status": "online"}]}
     
     session["room"] = room 
     session["ID"] = request.sid
@@ -80,7 +79,7 @@ def join_group(data):
 
     # Check if the user is already in the room
     if not any(user["name"] == username for user in rooms[room]["users"]):
-        rooms[room]["users"].append({"name": username}) # Add user to room
+        rooms[room]["users"].append({"name": username, "status": "online"}) # Add user to room
 
     session["room"] = room
     session["name"] = username
@@ -100,7 +99,7 @@ def send_message(data):
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
 
 @socketIO.on("connect")
-def connect(auth):
+def connect():
     room = session.get("room")
     name = session.get("name")
     if not room or not name: 
@@ -123,7 +122,9 @@ def disconnect():
 
     if room in rooms:
         rooms[room]["members"] -= 1
-        rooms[room]["users"] = [user for user in rooms[room]["users"] if user["name"] != name] # Remove user from room
+        for user in rooms[room]["users"]:
+            if user["name"] == name:
+                user["status"] = "offline" # Update user status to offline
         if rooms[room]["members"] <= 0:
             del rooms[room]
 

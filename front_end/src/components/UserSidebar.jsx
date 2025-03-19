@@ -10,6 +10,10 @@ const UserSidebar = ( { users } ) => {
           </div>
           <div className="user-info">
             <div className="user-name">{user.name}</div>
+            <div className={`user-status ${user.status}`}>
+              <span className={`status-circle ${user.status}`}></span>
+              {user.status}
+              </div>
             {/*<div className="user-role">{user.role}</div>*/}
           </div>
         </div>

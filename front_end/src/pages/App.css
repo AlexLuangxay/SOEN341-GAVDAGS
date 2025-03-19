@@ -325,6 +325,22 @@ h1{
   flex-direction: column;
 }
 
+.status-circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.status-circle.online {
+  background-color: green;
+}
+
+.status-circle.offline {
+  background-color: red;
+}
+
 .user-role {
   font-size: 12px;
   color: black;
