@@ -1,7 +1,7 @@
 /* Default users */
 INSERT INTO Client (client_username, client_password, client_bio)
 VALUES
-    ('Anthony', 'anthony', '(≧▽≦)'),
+    ('Anthony', 'anthony', 'Yahallo!'),
     ('Gur','gur', 'HIM'),
     ('Derek', 'derek', 'Gur''s bestie <3');
 
