@@ -333,3 +333,12 @@ def read_private_letter(letter_id):
 # Test vvv
 #for x in range(20):
 #  read_private_letter(x)
+
+def get_all_users():
+    try:
+        sql = 'SELECT client_username FROM Client'
+        mycursor.execute(sql)
+        users = [{"name": row[0]} for row in mycursor.fetchall()]
+        return users
+    except Exception as e:
+        print(f"Error fetching users: {e}")
