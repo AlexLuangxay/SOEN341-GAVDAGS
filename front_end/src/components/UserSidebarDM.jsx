@@ -20,7 +20,7 @@ const UserSidebarDM = ({ selectedUser }) => {
           <div className="user-name">{currentUser ? currentUser : "Loading..."}</div>
         </div>
       </div>
-      
+
       {selectedUser ? (
         <div className="user-card">
           <div className="avatar">
@@ -31,7 +31,7 @@ const UserSidebarDM = ({ selectedUser }) => {
           </div>
         </div>
       ) : (
-        <p>No user selected</p>
+        <p></p>
       )}
     </div>
   );
