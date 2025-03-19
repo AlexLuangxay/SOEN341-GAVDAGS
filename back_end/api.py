@@ -55,8 +55,8 @@ def getLetterFromChannel (channel_id):
   except Exception as e:
     print('Error Retrieving Messages: ', e)
 # Test vvv
-for x in range(10):
-  getLetterFromChannel(x)
+#for x in range(10):
+#  getLetterFromChannel(x)
 
 ### CREATE READ UPDATE DELETE
 
@@ -105,7 +105,25 @@ def read_client_username(client_username):
 
 # Check user password 
 def check_client_credentials(client_username, client_password):
-    return True 
+    try:
+      sql = 'SELECT * FROM Client WHERE client_username = (%s) AND client_password = (%s)'
+      val = (client_username, client_password)
+      mycursor.execute(sql,val)
+      obj = mycursor.fetchone()
+      if (obj != None) :
+        print(obj)
+        return True
+      else :
+        print("Wrong Credentials")
+      return False
+    except:
+      return False
+check_client_credentials('Anthony', 'anthony')
+check_client_credentials('Anthony', 'bob')
+check_client_credentials('Gur', 'anthony')
+check_client_credentials('Gur', 'gur')
+check_client_credentials('Derek', 'gur')
+check_client_credentials('Derek', 'derek')
 
 # Create a Guild
 def create_guild(guild_name):
