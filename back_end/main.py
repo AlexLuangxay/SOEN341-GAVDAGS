@@ -6,13 +6,22 @@ from string import ascii_uppercase
 import random 
 import os
 #from api import *
-from api import read_client_username, create_client, check_client_credentials
+from api import read_client_username, create_client, check_client_credentials, get_all_users
 
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "GAVDAGS"
 CORS(app, supports_credentials=True)
 socketIO = SocketIO(app, cors_allowed_origins="*")
+
+@app.route('/users', methods=['GET'])
+def fetch_users():
+    users = get_all_users()
+    users2 = []
+    if users:
+        return jsonify(users), 200
+    else:
+        return users2, 200
 
 @app.route("/signup", methods=["POST"])
 def signup():
