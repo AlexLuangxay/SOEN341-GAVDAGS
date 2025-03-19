@@ -187,6 +187,38 @@ def read_guild(guild_id):
 #for x in range(7):
 # read_guild(x)
 
+# Update Guild Name
+def update_guild(guild_id, guild_name):
+  try:
+    sql = 'UPDATE Guild SET guild_name = (%s) WHERE guild_id = (%s)'
+    val = (guild_name, guild_id)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    print(obj)
+  except Exception as e:
+    print('Error Updating Guild Name: ', e)
+
+# Update Guild Admin Status
+def update_guild(guild_id, client_id, admin_status):
+  try:
+    sql = 'UPDATE GuildHasMember SET admin_status = (%s) WHERE guild_id = (%s) AND client_id = (%s)'
+    val = (admin_status, guild_id, client_id)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    print(obj)
+  except Exception as e:
+    print('Error Updating Guild Member Admin Status: ', e)
+
+# Delete Guild Member
+def delete_guild_member(guild_id, client_id):
+  try:
+    sql = 'DELETE FROM GuildHasMember WHERE guild_id = (%s) AND client_id = (%s)'
+    val = (guild_id, client_id)
+    mycursor.execute(sql,val)
+    mydb.commit()
+  except Exception as e:
+    print('Error Updating Guild Member Admin Status: ', e)
+
 # Create a Whisper
 def create_whisper(client_1, client_2):
   try:
