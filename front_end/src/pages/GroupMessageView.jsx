@@ -55,7 +55,7 @@ function App() {
           <MessageBar socket={socket}/>
         </main>
         <aside className="right-sidebar">
-          <UserSidebar />
+          <UserSidebar guildId={guildId}/>
         </aside>
       </div>
     </div>

@@ -24,11 +24,7 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
   }
 
   const sendCreateSignal = () => {
-    if (isUsernameEntered) {
-      socket.emit("createSignal");
-    } else {
-      console.log("You must enter a username before creating a group."); // Show this to user
-    }
+    socket.emit("createSignal");
   };
   
   useEffect(() => {
@@ -43,15 +39,6 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
       socket.off("newRoomCode"); // Cleanup listener on unmount
     };
   }, []);
-
-  const sendUsername = () => {
-    if (username.trim() !== "") {
-      socket.emit("username", username)
-      setIsUsernameEntered(true);
-    } else {
-      console.log("Username cannot be empty.") // Show this to user 
-    }
-  }
 
   const switchRoom = (group) => {
     if (currentRoom !== group) {

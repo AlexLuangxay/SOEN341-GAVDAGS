@@ -6,7 +6,7 @@ from string import ascii_uppercase
 import random 
 import os
 #from api import *
-from api import read_client_username, create_client, check_client_credentials, get_all_users
+from api import read_client_username, create_client, check_client_credentials, get_all_users, getUserFromGuild 
 
 app = Flask(__name__)
 
@@ -19,7 +19,12 @@ def fetch_users():
     users = get_all_users() 
     current_user = session.get('user')  
     users = [user for user in users if user["name"] != current_user]
-    return jsonify(users), 200 
+    return jsonify(users), 200
+
+@app.route('/server/<int:guild_id>/users', methods=['GET'])
+def fetch_users_from_guild(guild_id):
+    users = getUserFromGuild(guild_id)
+    return jsonify(users), 200
 
 @app.route("/signup", methods=["POST"])
 def signup():
@@ -47,38 +52,38 @@ def login():
     return jsonify({"message": "Invalid credentials"}), 401
     
 # users = {}
-# rooms = {}
+rooms = {}
 
 # @socketIO.on("username")
 # def receive_username(username):
 #     session["name"] = username
 
-# @socketIO.on("createSignal")
-# def generate_unique_code():
-#     while True: 
-#         code = ""
-#         for _ in range(4):
-#             code += random.choice(ascii_uppercase)
-#         if code not in rooms: 
-#             break 
-#     print(f"Generated Room Code: {code}")
+@socketIO.on("createSignal")
+def generate_unique_code():
+    while True: 
+        code = ""
+        for _ in range(4):
+            code += random.choice(ascii_uppercase)
+        if code not in rooms: 
+            break 
+    print(f"Generated Room Code: {code}")
 
-#     room = code 
-#     rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"]}]}
+    room = code 
+    rooms[room] = {"members": 0, "messages": [], "users": [session.get('user')]}
     
-#     session["room"] = room 
-#     session["ID"] = request.sid
+    session["room"] = room 
+    session["ID"] = request.sid
     
-#     # Make the creator **JOIN** the room
-#     join_room(room)
-#     rooms[room]["members"] += 1  
+    # Make the creator **JOIN** the room
+    join_room(room)
+    rooms[room]["members"] += 1  
 
-#     socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
-#     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
-#     socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
+    socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
+    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+    socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
     
-#     print(f"Generated ID: {request.sid} joined room {room}")
-#     print(f"Current rooms: {rooms}")
+    print(f"Generated ID: {request.sid} joined room {room}")
+    print(f"Current rooms: {rooms}")
 
 # @socketIO.on("groupCode")
 # def join_group(data):
@@ -113,21 +118,21 @@ def login():
 #     print(f"Message sent in {room} from {username}: {message}")
 #     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
 
-# @socketIO.on("connect")
-# def connect(auth):
-#     room = session.get("room")
-#     name = session.get("name")
-#     if not room or not name: 
-#         return 
-#     if room not in rooms: 
-#         leave_room(room)
-#         return 
+@socketIO.on("connect")
+def connect(auth):
+    room = session.get("room")
+    name = session.get("name")
+    if not room or not name: 
+        return 
+    if room not in rooms: 
+        leave_room(room)
+        return 
 
-#     join_room(room)
-#     send({"name": name, "message": "has entered the room"}, to=room)
-#     rooms[room]["members"] += 1
-#     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
-#     print(f"{name} joined room {room}")
+    join_room(room)
+    send({"name": name, "message": "has entered the room"}, to=room)
+    rooms[room]["members"] += 1
+    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+    print(f"{name} joined room {room}")
 
 # @socketIO.on("disconnect")
 # def disconnect():
