@@ -103,7 +103,7 @@ def read_guild(guild_id):
   except Exception as e:
     print('Error Reading Guild: ', e)
 # Test vvv
-for x in range(10):
+for x in range(7):
   read_guild(x)
 
 # Create a Whisper
@@ -130,6 +130,18 @@ def create_whisper(client_1, client_2):
 # create_whisper(1, 5)
 # create_whisper(5, 1)
 
+# Read a Whisper
+def read_whisper(client_1, client_2):
+  try:
+    sql = 'SELECT * FROM Whisper WHERE client_1 = (%s) AND client_2 = (%s)'
+    val = (client_1, client_2)
+    mycursor.execute(sql,val)
+    whisper_obj = mycursor.fetchone()
+    print(whisper_obj)
+  except Exception as e:
+    print('Error Reading Whisper: ', e)
+# Test vvv
+read_whisper(1, 3)
 
 # Create a Public Letter
 def create_public_letter(channel_id, sender_id, content):
@@ -149,6 +161,19 @@ def create_public_letter(channel_id, sender_id, content):
 # Test vvv
 # create_public_letter(1, 2, 'Test Channel Letter 3')
 
+# Read a Public Letter
+def read_public_letter(letter_id):
+  try:
+    sql = 'SELECT * FROM PublicLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    public_letter_obj = mycursor.fetchone()
+    print(public_letter_obj)
+  except Exception as e:
+    print('Error Reading Public Letter: ', e)
+# Test vvv
+for x in range(20):
+  read_public_letter(x)
 
 # Create a Private Letter
 # In case of Error Creating Private Letter:  1452 (23000): Cannot add or update a child row:
@@ -181,3 +206,17 @@ def create_private_letter(sender_id, receiver_id, content):
     print('Error Creating Private Letter: ', e)
 # Test vvv
 # create_private_letter(3, 1, 'Yahallo')
+
+# Read a Private Letter
+def read_private_letter(letter_id):
+  try:
+    sql = 'SELECT * FROM PrivateLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    private_letter_obj = mycursor.fetchone()
+    print(private_letter_obj)
+  except Exception as e:
+    print('Error Reading Private Letter: ', e)
+# Test vvv
+for x in range(20):
+  read_private_letter(x)
