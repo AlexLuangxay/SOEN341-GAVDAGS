@@ -17,8 +17,7 @@ socketIO = SocketIO(app, cors_allowed_origins="*")
 @app.route('/users', methods=['GET'])
 def fetch_users():
     users = get_all_users() 
-    current_user = session.get('user')  
-    users = [user for user in users if user["name"] != current_user]
+    users = [user for user in users if user["name"] != session.get('user')]
     return jsonify(users), 200 
 
 @app.route("/signup", methods=["POST"])
