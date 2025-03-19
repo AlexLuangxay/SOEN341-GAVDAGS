@@ -10,9 +10,9 @@ function App() {
   return (
     <div class = "container">
     <Routes>
-      <Route path="/" element={<GroupMessageView />} />
+      <Route path="/groupmessage" element={<GroupMessageView />} />
       <Route path="/privatemessage" element={<PrivateMessageView />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path = "/settings" element = {<Settings />}/>
     </Routes>

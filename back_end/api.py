@@ -87,6 +87,26 @@ def read_client(client_id):
 #for x in range(10):
 #  read_client(x)
 
+# Read a Client (boolean for log in / sign up)
+def read_client_username(client_username):
+  try:
+    sql = 'SELECT * FROM Client WHERE client_username = (%s)'
+    val = (client_username,)
+    mycursor.execute(sql,val)
+    client_obj = mycursor.fetchone()
+    
+    if client_obj:
+      return True
+    else:
+      return False
+    
+  except Exception as e:
+    print('Error Reading Client: ', e)
+
+# Check user password 
+def check_client_credentials(client_username, client_password):
+    return True 
+
 # Create a Guild
 def create_guild(guild_name):
   try:
