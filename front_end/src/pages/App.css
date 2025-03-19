@@ -553,7 +553,7 @@ h1{
 }
 
 
-/* Settings*/
+/*MODALS*/
 
 .Settingsmodal {
   position: fixed;
@@ -593,4 +593,13 @@ h1{
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.shake {
+  animation: Gur 0.5s cubic-bezier(.36,.07,.19,.97) infinite;
+}
+@keyframes Gur {
+  0%, 100% { transform: translate(0, 0); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 5px); }
+  20%, 40%, 60%, 80% { transform: translate(5px, -5px); }
 }

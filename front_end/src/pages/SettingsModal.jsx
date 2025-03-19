@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
+const audio = new Audio('../../public/audio.mp3');
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const [darkMode, setDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true';
+  });
+  const [isShaking, setIsShaking] = useState(() => {
+    const savedShakeMode = localStorage.getItem('shakeMode');
+    return savedShakeMode === 'true';
+  });
+  const [isAudio, setIsAudio] = useState(() => {
+    const savedAudioMode = localStorage.getItem('AudioMode');
+    return savedAudioMode === 'true';
   });
 
   const handleToggleDarkMode = () => {
@@ -14,6 +23,22 @@ const SettingsModal = ({ isOpen, onClose }) => {
     });
   };
 
+  const handleToggleShakeMode = () => {
+    setIsShaking((prevShaking) => {
+      const newShakeMode = !prevShaking;
+      localStorage.setItem('shakeMode', newShakeMode);
+      return newShakeMode;
+    });
+  };
+
+  const handleToggleAudioMode = () => {
+    setIsAudio((prevAudio) => {
+      const newAudioMode = !prevAudio;
+      localStorage.setItem('AudioMode', newAudioMode);
+      return newAudioMode;
+    });
+  };
+
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark');
@@ -21,6 +46,24 @@ const SettingsModal = ({ isOpen, onClose }) => {
       document.body.classList.remove('dark');
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    if (isShaking) {
+      document.body.classList.add('shake');
+    } else {
+      document.body.classList.remove('shake');
+    }
+  }, [isShaking]);
+
+  useEffect(() => {
+    if (isAudio) {
+      audio.play();
+      audio.loop = true;
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  }, [isAudio]);
 
   if (!isOpen) {
     return null;
@@ -38,6 +81,26 @@ const SettingsModal = ({ isOpen, onClose }) => {
               type="checkbox"
               checked={darkMode}
               onChange={handleToggleDarkMode}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Shake mode:
+            <input
+              type="checkbox"
+              checked={isShaking}
+              onChange={handleToggleShakeMode}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Audio Mode:
+            <input
+              type="checkbox"
+              checked={isAudio}
+              onChange={handleToggleAudioMode}
             />
           </label>
         </div>
