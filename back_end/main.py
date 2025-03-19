@@ -20,6 +20,10 @@ def fetch_users():
     users = [user for user in users if user["name"] != session.get('user')]
     return jsonify(users), 200 
 
+@app.route('/current_user', methods=['GET'])
+def send_current_user():
+    return jsonify(session.get('user')), 200 
+
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.json
