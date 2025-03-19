@@ -66,8 +66,8 @@ def getLetterFromChannel (channel_id):
   except Exception as e:
     print('Error Retrieving Messages: ', e)
 # Test vvv
-for x in range(10):
-  getLetterFromChannel(x)
+#for x in range(10):
+#  getLetterFromChannel(x)
 
 ### CREATE READ UPDATE DELETE
 
@@ -116,7 +116,25 @@ def read_client_username(client_username):
 
 # Check user password 
 def check_client_credentials(client_username, client_password):
-    return True 
+    try:
+      sql = 'SELECT * FROM Client WHERE client_username = (%s) AND client_password = (%s)'
+      val = (client_username, client_password)
+      mycursor.execute(sql,val)
+      obj = mycursor.fetchone()
+      if (obj != None) :
+        print(obj)
+        return True
+      else :
+        print("Wrong Credentials")
+      return False
+    except:
+      return False
+check_client_credentials('Anthony', 'anthony')
+check_client_credentials('Anthony', 'bob')
+check_client_credentials('Gur', 'anthony')
+check_client_credentials('Gur', 'gur')
+check_client_credentials('Derek', 'gur')
+check_client_credentials('Derek', 'derek')
 
 # Create a Guild
 def create_guild(guild_name):
@@ -179,6 +197,38 @@ def read_guild(guild_id):
 # Test vvv
 #for x in range(7):
 # read_guild(x)
+
+# Update Guild Name
+def update_guild(guild_id, guild_name):
+  try:
+    sql = 'UPDATE Guild SET guild_name = (%s) WHERE guild_id = (%s)'
+    val = (guild_name, guild_id)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    print(obj)
+  except Exception as e:
+    print('Error Updating Guild Name: ', e)
+
+# Update Guild Admin Status
+def update_guild(guild_id, client_id, admin_status):
+  try:
+    sql = 'UPDATE GuildHasMember SET admin_status = (%s) WHERE guild_id = (%s) AND client_id = (%s)'
+    val = (admin_status, guild_id, client_id)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    print(obj)
+  except Exception as e:
+    print('Error Updating Guild Member Admin Status: ', e)
+
+# Delete Guild Member
+def delete_guild_member(guild_id, client_id):
+  try:
+    sql = 'DELETE FROM GuildHasMember WHERE guild_id = (%s) AND client_id = (%s)'
+    val = (guild_id, client_id)
+    mycursor.execute(sql,val)
+    mydb.commit()
+  except Exception as e:
+    print('Error Updating Guild Member Admin Status: ', e)
 
 # Create a Whisper
 def create_whisper(client_1, client_2):
@@ -294,3 +344,12 @@ def read_private_letter(letter_id):
 # Test vvv
 #for x in range(20):
 #  read_private_letter(x)
+
+def get_all_users():
+    try:
+        sql = 'SELECT client_username FROM Client'
+        mycursor.execute(sql)
+        users = [{"name": row[0]} for row in mycursor.fetchall()]
+        return users
+    except Exception as e:
+        print(f"Error fetching users: {e}")
