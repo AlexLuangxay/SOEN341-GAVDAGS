@@ -193,10 +193,19 @@ def check_guild(guild_id):
     sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    if (obj == None):
+      print("Guild Not Found")
+      return False
+    else:
+      print(obj)
+      print("Guild ",guild_id ," Found")
     return True
   except Exception as e:
     print('Error Reading Guild: ', e)
     return False
+for x in range(20):
+ check_guild(x)
 
 # Update Guild Name
 def update_guild(guild_id, guild_name):
