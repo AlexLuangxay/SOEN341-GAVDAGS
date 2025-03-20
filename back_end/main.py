@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, session, url_for, redirect
 from flask_socketio import join_room, leave_room, send, SocketIO
 from flask_cors import CORS
 from datetime import datetime
+from string import ascii_uppercase
 import random 
 import os
 from api import *
@@ -52,8 +53,8 @@ def signup():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
-    username = data.get('username')
-    password = data.get('password')
+    username = data.get("username")
+    password = data.get("password")
 
     if check_client_credentials(username, password):
         session.permanent = True
@@ -63,39 +64,26 @@ def login():
     return jsonify({"message": "Invalid credentials"}), 401
 
 @socketIO.on("createSignal")
-def generate_unique_code():
-    while True: 
-        code = 0
-        for _ in range(4):
-            code += random.randint(1,100000)
-        if not check_guild(code): 
-            break 
+def generate_new_guild(data):
+    username = data["username"]
+    group_name = ""
+    for _ in range(4):
+        group_name += random.choice(ascii_uppercase)
+    addGuildMember(create_guild(group_name),get_client_id(username),1)
+    print(f"Generated Group Code: {group_name}")
+    socketIO.emit("updateGroups", {"group_name": group_name})
 
-    create_guild(code)
-    print(f"Generated Room Code: {code}")
+@socketIO.on("joinSignal")
+def join_group(data):
+    group_name = data["group_name"]
+    username = data["username"]
 
-# @socketIO.on("groupCode")
-# def join_group(data):
-#     room = data["code"]
-#     username = data["username"]
-
-#     if room not in rooms:
-#         print(f"Room {room} not found")
-#         return 
+    if not check_guild(group_name):
+        print(f"Group {group_name} not found")
+        return 
     
-#     join_room(room)
-#     rooms[room]["members"] += 1
-
-#     # Check if the user is already in the room
-#     if not any(user["name"] == username for user in rooms[room]["users"]):
-#         rooms[room]["users"].append({"name": username}) # Add user to room
-
-#     session["room"] = room
-#     session["name"] = username
-    
-#     send(f"{username} has joined the room.", to=room)
-#     socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
-#     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+    join_room(group_name)
+    addGuildMember(group_name,get_client_id(username),0)
 
 # @socketIO.on("sendMessage")
 # def send_message(data):

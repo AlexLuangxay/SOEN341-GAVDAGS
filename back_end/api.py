@@ -27,10 +27,10 @@ def get_client_id(client_username):
     return(client_id)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
-    
-get_client_id("Anthony")
-get_client_id("Gur")
-get_client_id("Simon11123223")
+# Test vvv    
+# get_client_id("Anthony")
+# get_client_id("Gur")
+# get_client_id("Simon11123223")
 
 # Add Member to Guild
 def addGuildMember(guild_id, client_id, admin_status):
@@ -41,7 +41,7 @@ def addGuildMember(guild_id, client_id, admin_status):
     mydb.commit()
     print('Success Joining Guild as Admin')
   except Exception as e:
-    print('Error Joing Guild: ', e)
+    print('Error Joining Guild: ', e)
 
 #addGuildMember(4, 5, 0)
 #addGuildMember(5, 6, 1)
@@ -173,7 +173,7 @@ def create_guild(guild_name):
     print('Error Creating Guild: ', e)
     return False
 # Test vvv
-create_guild('New Guild')
+# create_guild('New Guild')
 
 # Read a Guild
 def read_guild(guild_id):
@@ -189,8 +189,8 @@ def read_guild(guild_id):
   except Exception as e:
     print('Error Reading Guild: ', e)
 # Test vvv
-for x in range(10):
-  read_guild(x)
+# for x in range(10):
+#   read_guild(x)
 
 # Create a Channel
 def create_channel(guild_id, channel_name):
