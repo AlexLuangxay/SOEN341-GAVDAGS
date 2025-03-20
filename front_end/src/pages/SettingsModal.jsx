@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 const audio = new Audio('../../public/audio.mp3');
 
 const SettingsModal = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true';
@@ -16,22 +14,6 @@ const SettingsModal = ({ isOpen, onClose }) => {
     const savedAudioMode = localStorage.getItem('AudioMode');
     return savedAudioMode === 'true';
   });
-
-  const handleLogOut = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/logout', {
-        method: 'GET',
-        credentials: 'include', 
-      });
-  
-      if (response.ok) {
-        const result = await response.json();
-        navigate("/"); 
-      }
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
 
   const handleToggleDarkMode = () => {
     setDarkMode((prevMode) => {
@@ -121,9 +103,6 @@ const SettingsModal = ({ isOpen, onClose }) => {
               onChange={handleToggleAudioMode}
             />
           </label>
-        </div>
-        <div>
-          <button onClick={handleLogOut}>Log out</button>
         </div>
       </div>
     </div>

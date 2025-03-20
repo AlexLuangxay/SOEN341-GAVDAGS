@@ -95,7 +95,7 @@ html, body {
 }
 
 .login-box,
-.signup-box{
+.signup{
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
@@ -115,6 +115,14 @@ html, body {
   margin-top: 10px;
 }
 
+.groupChatName h1{
+  margin-bottom: 0%;
+}
+
+.groupChatName h2{
+  margin-bottom: 0%;
+}
+
 .group-icon, .trash-icon{
   width: 40px; height:40px;
 }
@@ -125,12 +133,18 @@ html, body {
   gap: 10px;
   padding-right: 40px;
 }
+
+.top-right-buttons button{
+  color: #8EA8C3;
+}
+
 .top-left-buttons {
   display: flex;
   gap: 10px;
   margin-left: 10px;
   margin-top: 10px;
 }
+
 .top-right-buttons button {
   background-color: transparent;
   display: flex;
@@ -151,8 +165,9 @@ html, body {
   background-color: transparent;
   display: grid;
   place-items: center; 
-  margin-top: 10%;
+  margin-top: 0%;
   height:50%;
+  padding-bottom: 50px;
 }
 
 .top-bar {
@@ -160,6 +175,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   padding: 10px;
+  padding-bottom: 0;
   background: #23395B;
   color: white;
 }
@@ -198,12 +214,31 @@ h1{
   width: 65%;
 }
 
+.div-button69{
+  display: flex;
+  flex-direction: row;
+}
+
+.button69{
+  width: 15%;
+  padding: 0%;
+  padding-top: 1%;
+  height: 40px;
+}
+
+.button69 img{
+  width: 20px;
+  text-align: center;
+}
+
+
 .input{
   background-color: #8EA8C3;
   color: black;
   border-radius: 6px;
   height: 35px;
   border-color: #161925;
+  width:50%;
 }
 .input::placeholder{
   color: black;
@@ -245,6 +280,8 @@ h1{
 .channels h2 {
   position: relative;
   display: inline-block; 
+  margin-top: 0%;
+  margin-right: 10px;
 }
 
 .channels h2::after {
@@ -271,11 +308,21 @@ h1{
   display:flex;
 }
 
+.groups{
+  max-height: min(100%, 50vh); 
+}
+
 .groups-list-container {
-  max-height: 100px; 
+  max-height: min(50%, 30vh); 
   overflow-y: auto; 
   padding: 5px;
+  padding-bottom: 0;
 }
+
+.groups-list-container ul{
+  margin-bottom:0;
+}
+
 .groups-list-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -290,7 +337,7 @@ h1{
 }
 
 .channels-list-container {
-  max-height: 300px; 
+  max-height: min(50%, 30vh);  
   overflow-y: auto; 
   padding: 5px;
 }
@@ -336,7 +383,7 @@ h1{
 .main-container {
   display: flex;
   flex: 1;
-  margin-top: 10px;
+  margin-top: 0px;
   width: 100%;
 }
 
@@ -607,4 +654,16 @@ h1{
   0%, 100% { transform: translate(0, 0); }
   10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 5px); }
   20%, 40%, 60%, 80% { transform: translate(5px, -5px); }
+}
+
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure it takes full height of parent */
+}
+
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure it takes full height of parent */
 }

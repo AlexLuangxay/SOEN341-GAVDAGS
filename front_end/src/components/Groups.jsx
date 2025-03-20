@@ -52,7 +52,7 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
       <h2>Groups</h2>
 
       <div className="join">
-        <input type="text" placeholder="Room Code" class="input" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
+          <input type="text" placeholder="Room Code" class="input" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
         <div className="button-container">
           <button onClick={sendJoinCode} type="submit" className="groups-btn" name="join">Join</button>
           <button onClick={sendCreateSignal} name="create" className="groups-btn">Create</button>
@@ -71,6 +71,7 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
         </ul>
       </div>
     </div>
+    
   );
 };
 
