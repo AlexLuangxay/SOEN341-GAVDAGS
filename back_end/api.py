@@ -15,9 +15,24 @@ mydb = mysql.connector.connect(**config)
 mycursor = mydb.cursor()
 mydb.commit()
 
+# Add Member to Guild
+def addGuildMember(guild_id, client_id, admin_status):
+  try:
+    sql = 'INSERT INTO GuildHasMember (guild_id, client_id, admin_status) VALUES (%s, %s, %s)'
+    val = (guild_id, client_id, admin_status)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print('Success Joining Guild as Admin')
+  except Exception as e:
+    print('Error Joing Guild: ', e)
+
+addGuildMember(4, 5, 0)
+addGuildMember(5, 6, 1)
+addGuildMember(7, 8, 0)
+
 
 # Get all servers a user is in
-def getGuildFromMember (client_id):
+def getGuildFromMember(client_id):
   try:
     sql = 'SELECT * FROM GuildHasMember WHERE client_id = (%s)'
     val = (client_id,)
@@ -31,7 +46,7 @@ def getGuildFromMember (client_id):
 #  getGuildFromMember(x)
 
 # Get all channels a server has
-def getChannelFromGuild (guild_id):
+def getChannelFromGuild(guild_id):
   try:
     sql = 'SELECT * FROM GuildHasChannel WHERE guild_id = (%s)'
     val = (guild_id,)
@@ -45,7 +60,7 @@ def getChannelFromGuild (guild_id):
 #  getChannelFromGuild(x)
 
 # Get all messages within a channel
-def getLetterFromChannel (channel_id):
+def getLetterFromChannel(channel_id):
   try:
     sql = 'SELECT * FROM ChannelHasLetter WHERE channel_id = (%s)'
     val = (channel_id,)
