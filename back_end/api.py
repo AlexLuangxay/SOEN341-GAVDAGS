@@ -15,6 +15,23 @@ mydb = mysql.connector.connect(**config)
 mycursor = mydb.cursor()
 mydb.commit()
 
+# Get client id from username
+def get_client_id(client_username):
+  try:
+    sql = 'SELECT client_id FROM Client WHERE client_username = (%s)'
+    val = (client_username,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    client_id = obj[0]
+    print(client_id)
+    return()
+  except Exception as e:
+    print('Error Retrieving Client ID: ', e)
+    
+get_client_id("Anthony")
+get_client_id("Gur")
+get_client_id("Simon11123223")
+
 # Add Member to Guild
 def addGuildMember(guild_id, client_id, admin_status):
   try:
@@ -26,9 +43,9 @@ def addGuildMember(guild_id, client_id, admin_status):
   except Exception as e:
     print('Error Joing Guild: ', e)
 
-addGuildMember(4, 5, 0)
-addGuildMember(5, 6, 1)
-addGuildMember(7, 8, 0)
+#addGuildMember(4, 5, 0)
+#addGuildMember(5, 6, 1)
+#addGuildMember(7, 8, 0)
 
 
 # Get all servers a user is in
@@ -150,10 +167,13 @@ def create_guild(guild_name):
     mycursor.execute(sql, val)
     mydb.commit()
     print('Success Creating Guild')
+    guild_id = mycursor.lastrowid
+    return guild_id
   except Exception as e:
     print('Error Creating Guild: ', e)
+    return False
 # Test vvv
-# create_guild('Classroom of the Elite')
+create_guild('New Guild')
 
 # Read a Guild
 def read_guild(guild_id):
@@ -162,12 +182,15 @@ def read_guild(guild_id):
     val = (guild_id,)
     mycursor.execute(sql,val)
     guild_obj = mycursor.fetchone()
-    print(guild_obj)
+    if (guild_obj == None):
+      print("Guild does not exist")
+    else:
+      print(guild_obj)
   except Exception as e:
     print('Error Reading Guild: ', e)
 # Test vvv
-#for x in range(10):
-#  read_guild(x)
+for x in range(10):
+  read_guild(x)
 
 # Create a Channel
 def create_channel(guild_id, channel_name):
@@ -350,10 +373,10 @@ def get_whisperhasletter(client_1, client_2):
       return obj
   except Exception as e:
     print('Error : ', e)
-get_whisperhasletter(1,2)
-get_whisperhasletter(1,3)
-get_whisperhasletter(2,3)
-get_whisperhasletter(1,5)
+#get_whisperhasletter(1,2)
+#get_whisperhasletter(1,3)
+#get_whisperhasletter(2,3)
+#get_whisperhasletter(1,5)
 
 # Create a Public Letter
 def create_public_letter(channel_id, sender_id, content):

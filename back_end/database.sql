@@ -5,7 +5,7 @@ USE Soen341;
 /* Table for users AKA client as user is a restricted client */
 CREATE TABLE Client (
     client_id INT AUTO_INCREMENT,
-    client_username VARCHAR(25) DEFAULT 'Anon',
+    client_username VARCHAR(25) UNIQUE,
     client_password TEXT NOT NULL,
     client_bio TEXT,
     client_icon INT DEFAULT 0,
