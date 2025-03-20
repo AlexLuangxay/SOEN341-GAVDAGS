@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, session, url_for, redirect
 from flask_socketio import join_room, leave_room, send, SocketIO
 from flask_cors import CORS
 from datetime import datetime
-from string import ascii_uppercase
 import random 
 import os
 from api import *
@@ -62,40 +61,18 @@ def login():
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
-    
-# users = {}
-# rooms = {}
-
-# @socketIO.on("username")
-# def receive_username(username):
-#     session["name"] = username
 
 @socketIO.on("createSignal")
 def generate_unique_code():
     while True: 
-        code = ""
+        code = 0
         for _ in range(4):
-            code += random.choice(ascii_uppercase)
-        #if check_guild(code): 
-        break 
+            code += random.randint(1,100000)
+        if not check_guild(code): 
+            break 
+
+    create_guild(code)
     print(f"Generated Room Code: {code}")
-
-    room = code 
-    # rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"]}]}
-    
-    session["room"] = room 
-    session["ID"] = request.sid
-    
-    # Make the creator **JOIN** the room
-    join_room(room)
-    # rooms[room]["members"] += 1  
-
-    socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
-    # socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
-    # socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
-    
-    # print(f"Generated ID: {request.sid} joined room {room}")
-    # print(f"Current rooms: {rooms}")
 
 # @socketIO.on("groupCode")
 # def join_group(data):

@@ -220,12 +220,6 @@ def update_guild(guild_id, guild_name):
   except Exception as e:
     print('Error Updating Guild Name: ', e)
 
-# Increase Guild Size 
-
-# Decrease Guild Size 
-
-
-
 # Add new messages to user DM
 
 # Update Guild Admin Status
