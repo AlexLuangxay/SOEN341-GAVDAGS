@@ -1,8 +1,7 @@
 import React from "react";
 
-const GroupChatName = () => {
+const GroupChatName = ({ groupName }) => {
     const chatName = "Chat Name";
-    const groupName = "Group 1";
   
     return (
         <div className="groupChatName">

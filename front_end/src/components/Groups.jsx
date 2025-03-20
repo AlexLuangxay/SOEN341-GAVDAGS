@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
+const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
   const [code, setCode] = useState("") // State for input field 
   const [groups, setGroups] = useState([]);
   const [username, setUsername] = useState("");
@@ -10,7 +10,7 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
     if (code.trim() !== "" && isUsernameEntered) {
     socket.emit("groupCode", {code, username})
     localStorage.setItem("room", code); // Store room code for future use
-    setChatName(code); // Update chat name
+    setGroupName(code); // Update group name
     setCurrentRoom(code); // Set current room
     setCode("") // Clear the input field after sending 
     setGroups((prevGroups) => [...prevGroups, code]); // Add the new room to the groups list
@@ -29,7 +29,7 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
   
   useEffect(() => {
     socket.on("newRoomCode", (data) => {
-      setChatName(data.code); // Update chat name with the generated room code
+      setGroupName(data.code); // Update group name with the generated room code
       setGroups((prevGroups) => [...prevGroups, data.code]); // Add the new room to the groups list
       localStorage.setItem("room", data.code); // Store the generated room code
       setCurrentRoom(data.code);
@@ -44,7 +44,7 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
     if (currentRoom !== group) {
       socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
       localStorage.setItem("room", group); // Store the selected room
-      setChatName(group); // Update chat name
+      setGroupName(group); // Update group name
       setCurrentRoom(group);
       console.log("Switched to room:", group);
     }

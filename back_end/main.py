@@ -54,10 +54,6 @@ def login():
 # users = {}
 rooms = {}
 
-# @socketIO.on("username")
-# def receive_username(username):
-#     session["name"] = username
-
 @socketIO.on("createSignal")
 def generate_unique_code():
     while True: 
@@ -108,15 +104,15 @@ def generate_unique_code():
 #     socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
 #     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
 
-# @socketIO.on("sendMessage")
-# def send_message(data):
-#     room = data.get("room")
-#     message = data.get("message")
-#     username = session.get("name")
-#     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-#     rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
-#     print(f"Message sent in {room} from {username}: {message}")
-#     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
+@socketIO.on("sendMessage")
+def send_message(data):
+    room = data.get("room")
+    message = data.get("message")
+    username = session.get("name")
+    timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
+    rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
+    print(f"Message sent in {room} from {username}: {message}")
+    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
 
 @socketIO.on("connect")
 def connect(auth):

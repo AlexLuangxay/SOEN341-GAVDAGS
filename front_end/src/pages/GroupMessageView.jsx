@@ -1,5 +1,3 @@
-//We need to change this to add routing
-
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import "./App.css";
@@ -16,6 +14,7 @@ const socket = io('http://localhost:5000');
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [groupName, setGroupName] = useState("");
   
   useEffect(() => {
     socket.on("connect", () => {
@@ -42,12 +41,12 @@ function App() {
     <div className="App">
       <header className="top-bar">
         <TopLeftButtons />
-        <GroupChatName />
+        <GroupChatName groupName={groupName}/>
         <TopRightButtons />
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
-          <Groups socket={socket}/>
+          <Groups socket={socket} setGroupName={setGroupName}/>
           <Channels />
         </aside>
         <main className="chat-container">
@@ -55,7 +54,7 @@ function App() {
           <MessageBar socket={socket}/>
         </main>
         <aside className="right-sidebar">
-          <UserSidebar guildId={guildId}/>
+          <UserSidebar/>
         </aside>
       </div>
     </div>
