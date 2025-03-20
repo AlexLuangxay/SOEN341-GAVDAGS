@@ -129,12 +129,14 @@ def check_client_credentials(client_username, client_password):
       return False
     except:
       return False
+"""
 check_client_credentials('Anthony', 'anthony')
 check_client_credentials('Anthony', 'bob')
 check_client_credentials('Gur', 'anthony')
 check_client_credentials('Gur', 'gur')
 check_client_credentials('Derek', 'gur')
-check_client_credentials('Derek', 'derek')
+check_client_credentials('Derek', 'derek')"
+"""
 
 # Create a Guild
 def create_guild(guild_name):
@@ -198,6 +200,26 @@ def read_guild(guild_id):
 #for x in range(7):
 # read_guild(x)
 
+# Verify if guild exists 
+def check_guild(guild_id):
+  try:
+    sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
+    val = (guild_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    if (obj == None):
+      print("Guild Not Found")
+      return False
+    else:
+      print(obj)
+      print("Guild ",guild_id ," Found")
+    return True
+  except Exception as e:
+    print('Error Reading Guild: ', e)
+    return False
+#for x in range(20):
+# check_guild(x)
+
 # Update Guild Name
 def update_guild(guild_id, guild_name):
   try:
@@ -208,6 +230,14 @@ def update_guild(guild_id, guild_name):
     print(obj)
   except Exception as e:
     print('Error Updating Guild Name: ', e)
+
+# Increase Guild Size 
+
+# Decrease Guild Size 
+
+
+
+# Add new messages to user DM
 
 # Update Guild Admin Status
 def update_guild(guild_id, client_id, admin_status):
@@ -266,6 +296,66 @@ def read_whisper(client_1, client_2):
     print('Error Reading Whisper: ', e)
 # Test vvv
 #read_whisper(1, 3)
+
+# Get a Whisper
+def get_whisper(client_1, client_2):
+  try:
+    # To address duplicate whispers of 1 on 1 conversions
+    # I will force the oldest client to always be client_1
+    # to avoid client_1 + client_2 and client_2 + client_1 creating duplicate whispers
+    if client_1 < client_2:
+      older = client_1
+      newer = client_2
+    else :
+      older = client_2
+      newer = client_1
+
+    sql = 'SELECT * FROM Whisper WHERE client_1 = (%s) AND client_2 = (%s)'
+    val = (older, newer)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    if (obj == None):
+      print("Whisper does not exist")
+      return -1
+    else:
+      print(obj)
+      return obj
+  except Exception as e:
+    print('Error : ', e)
+#get_whisper(1,2)
+#get_whisper(1,3)
+#get_whisper(2,3)
+#get_whisper(1,5)
+
+# Get all messages between two users
+def get_whisperhasletter(client_1, client_2):
+  try:
+    # To address duplicate whispers of 1 on 1 conversions
+    # I will force the oldest client to always be client_1
+    # to avoid client_1 + client_2 and client_2 + client_1 creating duplicate whispers
+    if client_1 < client_2:
+      older = client_1
+      newer = client_2
+    else :
+      older = client_2
+      newer = client_1
+
+    sql = 'SELECT * FROM WhisperHasLetter WHERE client_1 = (%s) AND client_2 = (%s)'
+    val = (older, newer)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchall()
+    if (obj == None):
+      print("Whisper does not exist")
+      return -1
+    else:
+      print(obj)
+      return obj
+  except Exception as e:
+    print('Error : ', e)
+get_whisperhasletter(1,2)
+get_whisperhasletter(1,3)
+get_whisperhasletter(2,3)
+get_whisperhasletter(1,5)
 
 # Create a Public Letter
 def create_public_letter(channel_id, sender_id, content):

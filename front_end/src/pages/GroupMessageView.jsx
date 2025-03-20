@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import "./App.css";
 import ChatWindow from "../components/ChatWindow";
@@ -16,26 +17,45 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [groupName, setGroupName] = useState("");
   
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/current_user', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          console.log("Unauthorized access, redirecting to login.");
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        navigate("/");
+      }
+    };
+
+    checkAuth();
+
     socket.on("connect", () => {
-      console.log("Connected to WebSocket server"); // Debugging log
+      console.log("Connected to WebSocket server");
     });
-  
+
     socket.on("disconnect", () => {
-      console.log("Disconnected from WebSocket server"); // Debugging log
+      console.log("Disconnected from WebSocket server");
     });
 
     socket.on("messageReceived", (data) => {
-      console.log("Socket connected:", socket.connected);
-      console.log("New message received:", data); // Debugging log
-      setMessages((prevMessages) => [...prevMessages, data])
-  })
+      console.log("New message received:", data);
+      setMessages((prevMessages) => [...prevMessages, data]);
+    });
 
-  return () => {
-    socket.off("messageReceived");
-  }
-
-  }, []); 
+    return () => {
+      socket.off("messageReceived");
+    };
+  }, [navigate]);
 
   return (
     <div className="App">

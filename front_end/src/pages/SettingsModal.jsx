@@ -14,6 +14,11 @@ const SettingsModal = ({ isOpen, onClose }) => {
     const savedAudioMode = localStorage.getItem('AudioMode');
     return savedAudioMode === 'true';
   });
+  const [isReverse, setIsReverse] = useState(() => {
+    const savedReverseMode = localStorage.getItem('reverseMode');
+    return savedReverseMode === 'true';
+  });
+
 
   const handleToggleDarkMode = () => {
     setDarkMode((prevMode) => {
@@ -39,6 +44,14 @@ const SettingsModal = ({ isOpen, onClose }) => {
     });
   };
 
+  const handleToggleReverseMode = () => {
+    setIsReverse((prevReverse) => {
+      const newReverseMode = !prevReverse;
+      localStorage.setItem('reverseMode', newReverseMode);
+      return newReverseMode;
+    });
+  };
+
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark');
@@ -46,6 +59,14 @@ const SettingsModal = ({ isOpen, onClose }) => {
       document.body.classList.remove('dark');
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    if (isReverse) {
+      document.body.classList.add('reverse');
+    } else {
+      document.body.classList.remove('reverse');
+    }
+  }, [isReverse]);
 
   useEffect(() => {
     if (isShaking) {
@@ -101,6 +122,16 @@ const SettingsModal = ({ isOpen, onClose }) => {
               type="checkbox"
               checked={isAudio}
               onChange={handleToggleAudioMode}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Reverse Mode:
+            <input
+              type="checkbox"
+              checked={isReverse}
+              onChange={handleToggleReverseMode}
             />
           </label>
         </div>

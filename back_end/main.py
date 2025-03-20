@@ -5,26 +5,38 @@ from datetime import datetime
 from string import ascii_uppercase
 import random 
 import os
-#from api import *
-from api import read_client_username, create_client, check_client_credentials, get_all_users, getUserFromGuild 
+from api import *
+from datetime import timedelta
+from functools import wraps
 
 app = Flask(__name__)
+
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['SESSION_TYPE'] = 'filesystem'
 
 app.config["SECRET_KEY"] = "GAVDAGS"
 CORS(app, supports_credentials=True)
 socketIO = SocketIO(app, cors_allowed_origins="*")
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' not in session:
+            return jsonify({"error": "Unauthorized"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/users', methods=['GET'])
+@login_required
 def fetch_users():
     users = get_all_users() 
-    current_user = session.get('user')  
-    users = [user for user in users if user["name"] != current_user]
-    return jsonify(users), 200
+    users = [user for user in users if user["name"] != session.get('user')]
+    return jsonify(users), 200 
 
-@app.route('/server/<int:guild_id>/users', methods=['GET'])
-def fetch_users_from_guild(guild_id):
-    users = getUserFromGuild(guild_id)
-    return jsonify(users), 200
+@app.route('/current_user', methods=['GET'])
+@login_required
+def send_current_user():
+    return jsonify(session.get('user')), 200 
 
 @app.route("/signup", methods=["POST"])
 def signup():
@@ -40,13 +52,13 @@ def signup():
     
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.json  # Get JSON data from the request
+    data = request.json
     username = data.get('username')
     password = data.get('password')
 
-    # Replace with actual authentication logic
     if check_client_credentials(username, password):
-        session['user'] = username  # Store user in session
+        session.permanent = True
+        session['user'] = username
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
@@ -60,26 +72,26 @@ def generate_unique_code():
         code = ""
         for _ in range(4):
             code += random.choice(ascii_uppercase)
-        if code not in rooms: 
-            break 
+        #if check_guild(code): 
+        break 
     print(f"Generated Room Code: {code}")
 
     room = code 
-    rooms[room] = {"members": 0, "messages": [], "users": [session.get('user')]}
+    rooms[room] = {"members": 0, "messages": [], "users": [session.get("user")]}
     
     session["room"] = room 
     session["ID"] = request.sid
     
     # Make the creator **JOIN** the room
     join_room(room)
-    rooms[room]["members"] += 1  
+    # rooms[room]["members"] += 1  
 
     socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
-    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
-    socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
+    # socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+    # socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
     
-    print(f"Generated ID: {request.sid} joined room {room}")
-    print(f"Current rooms: {rooms}")
+    # print(f"Generated ID: {request.sid} joined room {room}")
+    # print(f"Current rooms: {rooms}")
 
 # @socketIO.on("groupCode")
 # def join_group(data):
@@ -108,7 +120,7 @@ def generate_unique_code():
 def send_message(data):
     room = data.get("room")
     message = data.get("message")
-    username = session.get("name")
+    username = session.get('user')
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
     rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room} from {username}: {message}")
@@ -147,9 +159,10 @@ def connect(auth):
 #     print(f"{name} has left room {room}")
 
 @app.route('/logout')
+@login_required
 def logout():
     session.pop('user', None)
-    return redirect(url_for('login'))
+    return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
     socketIO.run(app,debug=True)

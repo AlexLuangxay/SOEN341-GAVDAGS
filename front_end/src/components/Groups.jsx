@@ -3,19 +3,15 @@ import React, { useState, useEffect } from "react";
 const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
   const [code, setCode] = useState("") // State for input field 
   const [groups, setGroups] = useState([]);
-  const [username, setUsername] = useState("");
-  const [isUsernameEntered, setIsUsernameEntered] = useState(false); // State to track if username is entered
 
   const sendJoinCode = () => {
-    if (code.trim() !== "" && isUsernameEntered) {
-    socket.emit("groupCode", {code, username})
-    localStorage.setItem("room", code); // Store room code for future use
+    if (code.trim() !== "") {
+    //socket.emit("groupCode", {code, username})
+    //localStorage.setItem("room", code); // Store room code for future use
     setGroupName(code); // Update group name
-    setCurrentRoom(code); // Set current room
-    setCode("") // Clear the input field after sending 
+    //setCurrentRoom(code); // Set current room
+    //setCode("") // Clear the input field after sending 
     setGroups((prevGroups) => [...prevGroups, code]); // Add the new room to the groups list
-    } else if (!isUsernameEntered) {
-      console.log("You must enter a username before joining a group.") // Show this to user 
     } else if (code.trim() === "") {
       console.log("Room code cannot be empty.") // Show this to user 
     } else {
@@ -24,7 +20,7 @@ const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
   }
 
   const sendCreateSignal = () => {
-    socket.emit("createSignal");
+      socket.emit("createSignal");
   };
   
   useEffect(() => {
@@ -42,7 +38,7 @@ const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
 
   const switchRoom = (group) => {
     if (currentRoom !== group) {
-      socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
+      //socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
       localStorage.setItem("room", group); // Store the selected room
       setGroupName(group); // Update group name
       setCurrentRoom(group);
@@ -56,7 +52,7 @@ const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
       <h2>Groups</h2>
 
       <div className="join">
-        <input type="text" placeholder="Room Code" class="input" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
+          <input type="text" placeholder="Room Code" class="input" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
         <div className="button-container">
           <button onClick={sendJoinCode} type="submit" className="groups-btn" name="join">Join</button>
           <button onClick={sendCreateSignal} name="create" className="groups-btn">Create</button>
@@ -75,6 +71,7 @@ const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
         </ul>
       </div>
     </div>
+    
   );
 };
 

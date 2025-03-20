@@ -37,13 +37,15 @@ const SignUp = () => {
                     <div className="signup-input-group">
                         <input 
                             type="text" 
-                            placeholder="Username" 
+                            placeholder="Username"
+                            className="input1" 
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
                         <input 
                             type="password" 
                             placeholder="Password" 
+                            className="input1"
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)}    
                         />
@@ -51,7 +53,7 @@ const SignUp = () => {
                     <button type="submit" className="signup-button">Sign Up</button>
                 </form>
                 <p className="switch-text">
-                    Already have an account? <Link to ="/Login">Login</Link>
+                    Already have an account? <Link to ="/">Login</Link>
                 </p>
             </div>
         </div>
