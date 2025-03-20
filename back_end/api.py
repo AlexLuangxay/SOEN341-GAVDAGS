@@ -24,7 +24,7 @@ def get_client_id(client_username):
     obj = mycursor.fetchone()
     client_id = obj[0]
     print(client_id)
-    return()
+    return(client_id)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
     
