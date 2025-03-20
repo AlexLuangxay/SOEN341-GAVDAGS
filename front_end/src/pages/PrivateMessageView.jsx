@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import "./App.css";
 import ChatWindow from "../components/ChatWindow";
@@ -14,9 +15,31 @@ const socket = io('http://localhost:5000');
 
 function App() {
   const [messages, setMessages] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null); // Track the selected user
+  const [selectedUser, setSelectedUser] = useState(null); 
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/current_user', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          console.log("Unauthorized access, redirecting to login.");
+          navigate("/");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        navigate("/");
+        window.location.reload();
+      }
+    };
+
+    checkAuth();
+
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
     });

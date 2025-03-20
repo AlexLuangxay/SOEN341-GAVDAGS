@@ -92,8 +92,13 @@ html, body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
 }
+
+.login-box,
+.signup-box{
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
 .main-container{
   background-color: #23395B;
   flex:1;

@@ -7,20 +7,35 @@ import random
 import os
 #from api import *
 from api import read_client_username, create_client, check_client_credentials, get_all_users
+from datetime import timedelta
+from functools import wraps
 
 app = Flask(__name__)
+
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['SESSION_TYPE'] = 'filesystem'
 
 app.config["SECRET_KEY"] = "GAVDAGS"
 CORS(app, supports_credentials=True)
 socketIO = SocketIO(app, cors_allowed_origins="*")
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' not in session:
+            return jsonify({"error": "Unauthorized"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/users', methods=['GET'])
+@login_required
 def fetch_users():
     users = get_all_users() 
     users = [user for user in users if user["name"] != session.get('user')]
     return jsonify(users), 200 
 
 @app.route('/current_user', methods=['GET'])
+@login_required
 def send_current_user():
     return jsonify(session.get('user')), 200 
 
@@ -38,13 +53,13 @@ def signup():
     
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.json  # Get JSON data from the request
+    data = request.json
     username = data.get('username')
     password = data.get('password')
 
-    # Replace with actual authentication logic
     if check_client_credentials(username, password):
-        session['user'] = username  # Store user in session
+        session.permanent = True
+        session['user'] = username
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
@@ -149,9 +164,10 @@ def login():
 #     print(f"{name} has left room {room}")
 
 @app.route('/logout')
+@login_required
 def logout():
     session.pop('user', None)
-    return redirect(url_for('login'))
+    return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
     socketIO.run(app,debug=True)
