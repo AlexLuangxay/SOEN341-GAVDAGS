@@ -5,18 +5,24 @@ html, body {
   overflow: hidden; /* Hide scrollbars */
 }
 
-.dark .App, 
-.dark .main-container, 
-.dark .top-bar, 
-.dark .left-sidebar, 
-.dark .chat-window, 
-.dark .right-sidebar, 
-.dark .signup-container, 
-.dark .login-container, 
-.dark .Settingsmodal-content {
-  background-color: #EFEFF0;
-  color: #EFEFF0;
+.reverse button, 
+.reverse input, 
+.reverse .input1, 
+.reverse .user-card, 
+.reverse.message-bubble,
+.reverse.groupChatName h1,
+.reverse .groupChatName,
+.reverse .groups h2,
+.reverse .channels h2,
+.reverse .people h2,
+.reverse .user-card:hover,
+.reverse .groups-btn:hover,
+.reverse .channels-list-container button:hover,
+.reverse .chat-window,
+.reverse .Settingsmodal-content {
+  transform: scaleX(-1);
 }
+
 
 .dark .App, 
 .dark .main-container, 
@@ -29,7 +35,7 @@ html, body {
 .dark .Settingsmodal-content {
   background-color: #D5CAD6;
   color: rgb(0, 0, 0);
-}
+  }
 
 .dark button, 
 .dark input, 
@@ -79,6 +85,18 @@ html, body {
   background-color: black;
 }
 
+.dark .signup-box,
+.dark .login-box{
+  background-color: #EAFFFD;
+  color: black;
+}
+.dark .signup-box button,
+.dark .login-box button{
+  background-color: #D5CAD6;
+  color: black;
+}
+
+
 .App {
   width: 100vw;
   height: 100vh; /* Limits the height to the viewport */
@@ -95,7 +113,7 @@ html, body {
 }
 
 .login-box,
-.signup{
+.signup-box{
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
