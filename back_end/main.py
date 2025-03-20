@@ -71,7 +71,7 @@ def generate_new_guild(data):
         group_name += random.choice(ascii_uppercase)
     addGuildMember(create_guild(group_name),get_client_id(username),1)
     print(f"Generated Group Code: {group_name}")
-    socketIO.emit("updateGroups", {"group_name": group_name})
+    socketIO.emit("newRoomCode", {"group_name": group_name})
 
 @socketIO.on("joinSignal")
 def join_group(data):
