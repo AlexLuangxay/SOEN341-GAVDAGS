@@ -187,6 +187,17 @@ def read_guild(guild_id):
 #for x in range(7):
 # read_guild(x)
 
+# Verify if guild exists 
+def check_guild(guild_id):
+  try:
+    sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
+    val = (guild_id,)
+    mycursor.execute(sql,val)
+    return True
+  except Exception as e:
+    print('Error Reading Guild: ', e)
+    return False
+
 # Update Guild Name
 def update_guild(guild_id, guild_name):
   try:
@@ -197,6 +208,14 @@ def update_guild(guild_id, guild_name):
     print(obj)
   except Exception as e:
     print('Error Updating Guild Name: ', e)
+
+# Increase Guild Size 
+
+# Decrease Guild Size 
+
+# Get all messages between two users
+
+# Add new messages to user DM
 
 # Update Guild Admin Status
 def update_guild(guild_id, client_id, admin_status):

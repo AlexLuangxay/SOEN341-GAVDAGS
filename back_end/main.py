@@ -5,8 +5,7 @@ from datetime import datetime
 from string import ascii_uppercase
 import random 
 import os
-#from api import *
-from api import read_client_username, create_client, check_client_credentials, get_all_users
+from api import *
 from datetime import timedelta
 from functools import wraps
 
@@ -71,32 +70,32 @@ def login():
 # def receive_username(username):
 #     session["name"] = username
 
-# @socketIO.on("createSignal")
-# def generate_unique_code():
-#     while True: 
-#         code = ""
-#         for _ in range(4):
-#             code += random.choice(ascii_uppercase)
-#         if code not in rooms: 
-#             break 
-#     print(f"Generated Room Code: {code}")
+@socketIO.on("createSignal")
+def generate_unique_code():
+    while True: 
+        code = ""
+        for _ in range(4):
+            code += random.choice(ascii_uppercase)
+        #if check_guild(code): 
+        break 
+    print(f"Generated Room Code: {code}")
 
-#     room = code 
-#     rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"]}]}
+    room = code 
+    # rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"]}]}
     
-#     session["room"] = room 
-#     session["ID"] = request.sid
+    session["room"] = room 
+    session["ID"] = request.sid
     
-#     # Make the creator **JOIN** the room
-#     join_room(room)
-#     rooms[room]["members"] += 1  
+    # Make the creator **JOIN** the room
+    join_room(room)
+    # rooms[room]["members"] += 1  
 
-#     socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
-#     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
-#     socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
+    socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
+    # socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+    # socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
     
-#     print(f"Generated ID: {request.sid} joined room {room}")
-#     print(f"Current rooms: {rooms}")
+    # print(f"Generated ID: {request.sid} joined room {room}")
+    # print(f"Current rooms: {rooms}")
 
 # @socketIO.on("groupCode")
 # def join_group(data):
