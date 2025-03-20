@@ -15,7 +15,7 @@ CREATE TABLE Client (
 /* Table for group AKA a guild as group and groups are restricted keywords */
 CREATE TABLE Guild (
     guild_id INT AUTO_INCREMENT,
-    guild_name VARCHAR(25) DEFAULT 'Unnamed Group',
+    guild_name VARCHAR(25) UNIQUE,
     PRIMARY KEY(guild_id)
 );
 

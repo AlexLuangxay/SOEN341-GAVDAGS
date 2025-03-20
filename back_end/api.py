@@ -15,6 +15,19 @@ mydb = mysql.connector.connect(**config)
 mycursor = mydb.cursor()
 mydb.commit()
 
+# Get guild id from username
+def get_guild_id(guild_name):
+  try:
+    sql = 'SELECT Guild FROM Client WHERE guild_name = (%s)'
+    val = (guild_name,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    guild_id = obj[0]
+    print(guild_id)
+    return(guild_id)
+  except Exception as e:
+    print('Error Retrieving Guild ID: ', e)
+
 # Get client id from username
 def get_client_id(client_username):
   try:
