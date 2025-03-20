@@ -79,11 +79,12 @@ def join_group(data):
     username = data["username"]
 
     if not check_guild(get_guild_id(group_name)):
-        print(f"Group {group_name} not found")
+        print(f"Group {(group_name)} not found")
         return 
     
     join_room(group_name) # Some socket thing, have to look into whether we really need this or not 
     addGuildMember(get_guild_id(group_name),get_client_id(username),0)
+    socketIO.emit("newRoomCode", {"group_name": group_name})
 
 # @socketIO.on("sendMessage")
 # def send_message(data):

@@ -18,7 +18,7 @@ mydb.commit()
 # Get guild id from username
 def get_guild_id(guild_name):
   try:
-    sql = 'SELECT Guild FROM Client WHERE guild_name = (%s)'
+    sql = 'SELECT * FROM Guild WHERE guild_name = (%s)'
     val = (guild_name,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()

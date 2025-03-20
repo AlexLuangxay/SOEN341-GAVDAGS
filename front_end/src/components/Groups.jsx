@@ -15,7 +15,6 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
   const sendJoinCode = () => {
     if (code.trim() !== "") {
     socket.emit("joinSignal", {code, username})
-    setGroups((prevGroups) => [...prevGroups, code]); // Add the new room to the groups list
     }
   }
 
