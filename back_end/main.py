@@ -75,15 +75,15 @@ def generate_new_guild(data):
 
 @socketIO.on("joinSignal")
 def join_group(data):
-    group_name = data["group_name"]
+    group_name = data["code"]
     username = data["username"]
 
-    if not check_guild(group_name):
+    if not check_guild(get_guild_id(group_name)):
         print(f"Group {group_name} not found")
         return 
     
-    join_room(group_name)
-    addGuildMember(group_name,get_client_id(username),0)
+    join_room(group_name) # Some socket thing, have to look into whether we really need this or not 
+    addGuildMember(get_guild_id(group_name),get_client_id(username),0)
 
 # @socketIO.on("sendMessage")
 # def send_message(data):

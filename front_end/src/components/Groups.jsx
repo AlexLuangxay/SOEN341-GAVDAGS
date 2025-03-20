@@ -14,12 +14,8 @@ const Groups = ( { socket, setChatName, setCurrentRoom, currentRoom } ) => {
 
   const sendJoinCode = () => {
     if (code.trim() !== "") {
-    socket.emit("joinSignal", {group_name, username})
+    socket.emit("joinSignal", {code, username})
     setGroups((prevGroups) => [...prevGroups, code]); // Add the new room to the groups list
-    } else if (code.trim() === "") {
-      console.log("Room code cannot be empty.") // Show this to user 
-    } else {
-      console.log("Invalid room code.") // Show this to user
     }
   }
 
