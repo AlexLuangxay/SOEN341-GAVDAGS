@@ -94,6 +94,16 @@ def join_group(data):
     session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
 
+@socketIO.on("sendPrivateMessage")
+def send_private_message(data):
+    message = data.get("message")
+    recipient = data.get("recipient")
+    timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
+    sender = session.get("user")
+    print(f"Private message sent from {sender} to {recipient}: {message}")
+    #create_private_letter(get_client_id(sender), get_client_id(recipient), message)
+    socketIO.emit("privateMessageReceived", {"sender": sender, "recipient": recipient, "message": message, "timestamp": timestamp}, room=recipient)
+
 @socketIO.on("sendMessage")
 def send_message(data):
     room = session.get("room")
@@ -105,7 +115,7 @@ def send_message(data):
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
 
 @socketIO.on("connect")
-def connect(auth):
+def connect():
     room = session.get("room")
     name = session.get("name")
     if not room or not name: 
