@@ -36,7 +36,7 @@ def fetch_users():
 @app.route('/current_user', methods=['GET'])
 @login_required
 def send_current_user():
-    return jsonify(session.get('user')), 200 
+    return jsonify(session.get('user')), 200
 
 @app.route("/signup", methods=["POST"])
 def signup():
@@ -73,7 +73,10 @@ def generate_new_guild(data):
     for _ in range(4):
         group_name += random.choice(ascii_uppercase)
     addGuildMember(create_guild(group_name),get_client_id(username),1)
+    join_room(group_name)
     print(f"Generated Group Code: {group_name}")
+    session["room"] = group_name # Store the room in the session
+    session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
 
 @socketIO.on("joinSignal")
@@ -87,15 +90,17 @@ def join_group(data):
     
     join_room(group_name) # Some socket thing, have to look into whether we really need this or not 
     addGuildMember(get_guild_id(group_name),get_client_id(username),0)
+    session["room"] = group_name # Store the room in the session
+    session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
 
 @socketIO.on("sendMessage")
 def send_message(data):
-    room = data.get("room")
+    room = session.get("room")
     message = data.get("message")
-    username = session.get('user')
+    username = session.get("user")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
+    #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room} from {username}: {message}")
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
 

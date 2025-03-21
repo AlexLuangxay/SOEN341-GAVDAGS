@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 
-const MessageBar = ({ socket }) => {
+const MessageBar = ({ socket, currentGroup }) => {
   const [message, setMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 
   const sendMessage = () => {
     if (message.trim() !== '') {
-      const roomCode = localStorage.getItem('room'); // Store & retrieve the room code
-      socket.emit('sendMessage', { room: roomCode, message, file: selectedFile });
-      console.log('Sending message:', message, 'to room:', roomCode);
+      socket.emit('sendMessage', { room: currentGroup, message, file: selectedFile });
+      console.log('Sending message:', message, 'to room:', currentGroup);
       setMessage(''); // Clear the input field after sending
       setSelectedFile(null); // Clear the selected file after sending
     }

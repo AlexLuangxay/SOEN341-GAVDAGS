@@ -16,6 +16,7 @@ const socket = io('http://localhost:5000');
 function App() {
   const [messages, setMessages] = useState([]);
   const [groupName, setGroupName] = useState("");
+  const [currentGroup, setCurrentGroup] = useState("");
   
   const navigate = useNavigate();
 
@@ -66,12 +67,12 @@ function App() {
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
-          <Groups socket={socket} setGroupName={setGroupName}/>
+          <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup}/>
           <Channels />
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages}/>
-          <MessageBar socket={socket}/>
+          <MessageBar socket={socket} currentGroup={currentGroup}/>
         </main>
         <aside className="right-sidebar">
           <UserSidebar/>
