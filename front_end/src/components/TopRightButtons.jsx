@@ -31,7 +31,7 @@ const TopRightButtons = () => {
     <>
       <div className="top-right-buttons">
         <button onClick={toggleSettings}><img src={settingsIcon} alt="Settings icon" /></button>
-        <button onClick={handleLogOut}>Log out</button>
+        <button onClick={handleLogOut}>Logout</button>
       </div>
       <SettingsModal isOpen={isSettingsOpen} onClose={toggleSettings} />
     </>
