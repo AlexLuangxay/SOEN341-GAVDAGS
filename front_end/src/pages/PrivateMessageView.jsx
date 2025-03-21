@@ -18,10 +18,6 @@ function App() {
   const navigate = useNavigate();
 
   const fetchMessages = async () => {
-    if (!selectedUser){
-      console.log("boobies");
-      return;
-    } 
     try {
       const response = await fetch(`http://localhost:5001/getMessages?user=${selectedUser}`, {
         method: 'GET',
@@ -72,14 +68,14 @@ function App() {
       console.log("Disconnected from WebSocket server");
     });
 
-    socket.on("messageReceived", (data) => {
+    socket.on("privateMessageReceived", (data) => {
       console.log("Socket connected:", socket.connected);
       console.log("New message received:", data);
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
     return () => {
-      socket.off("messageReceived");
+      socket.off("privateMessageReceived");
     };
   }, []);
 
@@ -101,7 +97,7 @@ function App() {
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages} />
-          <MessageBar socket={socket} />
+          <MessageBar socket={socket} selectedUser={selectedUser}/>
         </main>
         <aside className="right-sidebar">
           <UserSidebarDM selectedUser={selectedUser} />
