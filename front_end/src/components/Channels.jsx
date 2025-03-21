@@ -1,42 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AddModal from '../pages/AddModal.jsx';
-import DeleteModal from '../pages/DeleteModal.jsx';
-import trashIcon from "../public/trash-bin.png"
-import plusIcon from "../public/Plus-sign.png"
+import trashIcon from "../public/trash-bin.png";
+import plusIcon from "../public/Plus-sign.png";
 
 const Channels = () => {
-  const channels = ["Channel 1", "Channel 2", "Channel 3", "Channel 4","Channel 5","Channel 6", "Channel 7", "Channel 8", "Channel 9"]; 
-  //I'm assuming this will be dynamically added ^^^
-  const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const [isAddOpen, setAddOpen] = useState(false);
+  const [channels, setChannels] = useState([
+    "Channel 1", "Channel 2", "Channel 3", 
+    "Channel 4", "Channel 5", "Channel 6", 
+    "Channel 7", "Channel 8", "Channel 9"
+  ]);
 
-  const toggleDelete = () => {
-    setDeleteOpen(!isDeleteOpen);
-  };
+  const [isAddOpen, setAddOpen] = useState(false);
+  const [selectedChannel, setSelectedChannel] = useState(null);
+
   const toggleAdd = () => {
     setAddOpen(!isAddOpen);
   };
 
+  const handleSelectChannel = (channel) => {
+    setSelectedChannel(channel);
+  };
+
+  const handleDeleteChannel = () => {
+    if (selectedChannel) {
+      setChannels(channels.filter(channel => channel !== selectedChannel));
+      setSelectedChannel(null);
+    }
+  };
+
+  const handleAddChannel = (newChannel) => {
+    if (newChannel && !channels.includes(newChannel)) {
+      setChannels([...channels, newChannel]);
+    }
+  };
+
   return ( 
     <div className="channels">
-      <div class="div-button69">
+      <div className="div-button69">
         <h2>Channels</h2>
-        <button class="button69" onClick={toggleAdd}><img src={plusIcon} alt="Plus icon" /></button>
-        <button class="button69" onClick={toggleDelete}><img src={trashIcon} alt="Trash bin icon" /></button>
+        <button className="button69" onClick={toggleAdd}>
+          <img src={plusIcon} alt="Plus icon" />
+        </button>
+        <button className="button69" onClick={handleDeleteChannel}>
+          <img src={trashIcon} alt="Trash bin icon" />
+        </button>
       </div>
       <div className="channels-list-container"> 
-      <ul>
-        {channels.map((channel, index) => (
-          <li key={index}>
-            <button>{channel}</button>
-          </li>
-        ))}
-      </ul>
+        <ul>
+          {channels.map((channel, index) => (
+            <li key={index}>
+              <button 
+                onClick={() => handleSelectChannel(channel)}
+                className={selectedChannel === channel ? "selected" : ""}
+              >
+                {channel}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
-      <DeleteModal isOpen={isDeleteOpen} onClose={toggleDelete} />
-      <AddModal isOpen={isAddOpen} onClose={toggleAdd} />
+      <AddModal isOpen={isAddOpen} onClose={toggleAdd} onAddChannel={handleAddChannel} />
     </div>
-
   );
 };
 
