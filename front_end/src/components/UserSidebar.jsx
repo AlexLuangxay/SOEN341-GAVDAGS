@@ -5,7 +5,7 @@ const UserSidebar = ( {guildId} ) => {
 
 useEffect(() => {
     const fetch_users_from_guild = async () => {
-        const response = await fetch(`http://localhost:5000/server/${guildId}/users`, {
+        const response = await fetch(`http://localhost:5001/server/${guildId}/users`, {
           method: "GET",
           credentials: "include",
         });
