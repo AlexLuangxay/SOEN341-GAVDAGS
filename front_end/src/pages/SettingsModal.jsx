@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-const audio = new Audio('../../public/audio.mp3');
+const audio = new Audio('audio.mp3');
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const [darkMode, setDarkMode] = useState(() => {
