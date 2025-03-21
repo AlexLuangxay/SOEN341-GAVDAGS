@@ -15,9 +15,54 @@ mydb = mysql.connector.connect(**config)
 mycursor = mydb.cursor()
 mydb.commit()
 
+# Get guild id from username
+def get_guild_id(guild_name):
+  try:
+    sql = 'SELECT * FROM Guild WHERE guild_name = (%s)'
+    val = (guild_name,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    guild_id = obj[0]
+    print(guild_id)
+    return(guild_id)
+  except Exception as e:
+    print('Error Retrieving Guild ID: ', e)
+
+# Get client id from username
+def get_client_id(client_username):
+  try:
+    sql = 'SELECT client_id FROM Client WHERE client_username = (%s)'
+    val = (client_username,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    client_id = obj[0]
+    print(client_id)
+    return(client_id)
+  except Exception as e:
+    print('Error Retrieving Client ID: ', e)
+# Test vvv    
+# get_client_id("Anthony")
+# get_client_id("Gur")
+# get_client_id("Simon11123223")
+
+# Add Member to Guild
+def addGuildMember(guild_id, client_id, admin_status):
+  try:
+    sql = 'INSERT INTO GuildHasMember (guild_id, client_id, admin_status) VALUES (%s, %s, %s)'
+    val = (guild_id, client_id, admin_status)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print('Success Joining Guild as Admin')
+  except Exception as e:
+    print('Error Joining Guild: ', e)
+
+#addGuildMember(4, 5, 0)
+#addGuildMember(5, 6, 1)
+#addGuildMember(7, 8, 0)
+
 
 # Get all servers a user is in
-def getGuildFromMember (client_id):
+def getGuildFromMember(client_id):
   try:
     sql = 'SELECT * FROM GuildHasMember WHERE client_id = (%s)'
     val = (client_id,)
@@ -31,7 +76,7 @@ def getGuildFromMember (client_id):
 #  getGuildFromMember(x)
 
 # Get all channels a server has
-def getChannelFromGuild (guild_id):
+def getChannelFromGuild(guild_id):
   try:
     sql = 'SELECT * FROM GuildHasChannel WHERE guild_id = (%s)'
     val = (guild_id,)
@@ -56,7 +101,7 @@ def getUserFromGuild (guild_id):
     print('Error Retrieving Users: ', e)
 
 # Get all messages within a channel
-def getLetterFromChannel (channel_id):
+def getLetterFromChannel(channel_id):
   try:
     sql = 'SELECT * FROM ChannelHasLetter WHERE channel_id = (%s)'
     val = (channel_id,)
@@ -146,10 +191,13 @@ def create_guild(guild_name):
     mycursor.execute(sql, val)
     mydb.commit()
     print('Success Creating Guild')
+    guild_id = mycursor.lastrowid
+    return guild_id
   except Exception as e:
     print('Error Creating Guild: ', e)
+    return False
 # Test vvv
-# create_guild('Classroom of the Elite')
+# create_guild('New Guild')
 
 # Read a Guild
 def read_guild(guild_id):
@@ -158,12 +206,15 @@ def read_guild(guild_id):
     val = (guild_id,)
     mycursor.execute(sql,val)
     guild_obj = mycursor.fetchone()
-    print(guild_obj)
+    if (guild_obj == None):
+      print("Guild does not exist")
+    else:
+      print(guild_obj)
   except Exception as e:
     print('Error Reading Guild: ', e)
 # Test vvv
-#for x in range(10):
-#  read_guild(x)
+# for x in range(10):
+#   read_guild(x)
 
 # Create a Channel
 def create_channel(guild_id, channel_name):
@@ -230,12 +281,6 @@ def update_guild(guild_id, guild_name):
     print(obj)
   except Exception as e:
     print('Error Updating Guild Name: ', e)
-
-# Increase Guild Size 
-
-# Decrease Guild Size 
-
-
 
 # Add new messages to user DM
 
@@ -352,10 +397,10 @@ def get_whisperhasletter(client_1, client_2):
       return obj
   except Exception as e:
     print('Error : ', e)
-get_whisperhasletter(1,2)
-get_whisperhasletter(1,3)
-get_whisperhasletter(2,3)
-get_whisperhasletter(1,5)
+#get_whisperhasletter(1,2)
+#get_whisperhasletter(1,3)
+#get_whisperhasletter(2,3)
+#get_whisperhasletter(1,5)
 
 # Create a Public Letter
 def create_public_letter(channel_id, sender_id, content):

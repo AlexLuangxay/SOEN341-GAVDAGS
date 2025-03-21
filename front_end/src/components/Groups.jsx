@@ -3,32 +3,30 @@ import React, { useState, useEffect } from "react";
 const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
   const [code, setCode] = useState("") // State for input field 
   const [groups, setGroups] = useState([]);
+  const [username, setCurrentUser] = useState(""); // Store logged-in user
+
+  useEffect(() => {
+    fetch("http://localhost:5000/current_user", { credentials: "include" }) 
+      .then((response) => response.json())
+      .then((data) => setCurrentUser(data))
+      .catch((error) => console.error("Error fetching user:", error));
+  }, []);
 
   const sendJoinCode = () => {
     if (code.trim() !== "") {
-    //socket.emit("groupCode", {code, username})
-    //localStorage.setItem("room", code); // Store room code for future use
-    setGroupName(code); // Update group name
-    //setCurrentRoom(code); // Set current room
-    //setCode("") // Clear the input field after sending 
-    setGroups((prevGroups) => [...prevGroups, code]); // Add the new room to the groups list
-    } else if (code.trim() === "") {
-      console.log("Room code cannot be empty.") // Show this to user 
-    } else {
-      console.log("Invalid room code.") // Show this to user
+    socket.emit("joinSignal", {code, username})
     }
   }
 
   const sendCreateSignal = () => {
-      socket.emit("createSignal");
+      socket.emit("createSignal", {username});
   };
   
   useEffect(() => {
     socket.on("newRoomCode", (data) => {
-      setGroupName(data.code); // Update group name with the generated room code
-      setGroups((prevGroups) => [...prevGroups, data.code]); // Add the new room to the groups list
-      localStorage.setItem("room", data.code); // Store the generated room code
-      setCurrentRoom(data.code);
+      console.log("Received event:", data);
+      console.log("Frontend username:", username);
+      setGroups((prevGroups) => [...prevGroups, data.group_name]); // Add the new room to the groups list
     });
   
     return () => {
@@ -36,15 +34,15 @@ const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
     };
   }, []);
 
-  const switchRoom = (group) => {
-    if (currentRoom !== group) {
-      //socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
-      localStorage.setItem("room", group); // Store the selected room
-      setGroupName(group); // Update group name
-      setCurrentRoom(group);
-      console.log("Switched to room:", group);
-    }
-  };
+  // const switchRoom = (group) => {
+  //   if (currentRoom !== group) {
+  //     //socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
+  //     localStorage.setItem("room", group); // Store the selected room
+  //     setChatName(group); // Update chat name
+  //     setCurrentRoom(group);
+  //     console.log("Switched to room:", group);
+  //   }
+  // };
 
   return (
 
