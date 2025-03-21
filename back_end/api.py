@@ -327,7 +327,7 @@ def create_whisper(client_1, client_2):
     print('Error Creating Whisper: ', e)
 # Test vvv
 # create_whisper(1, 5)
-# create_whisper(5, 1)
+create_whisper(1, 11)
 
 # Read a Whisper
 def read_whisper(client_1, client_2):
@@ -455,7 +455,7 @@ def create_private_letter(sender_id, receiver_id, content):
     else :
       older = receiver_id
       newer = sender_id
-
+    
     sql = 'INSERT INTO WhisperHasLetter (client_1, client_2, letter_id) VALUES (%s, %s, %s)'
     val = (older, newer, letter_id)
     mycursor.execute(sql, val)
@@ -464,7 +464,7 @@ def create_private_letter(sender_id, receiver_id, content):
   except Exception as e:
     print('Error Creating Private Letter: ', e)
 # Test vvv
-# create_private_letter(3, 1, 'Yahallo')
+create_private_letter(1, 11, 'Random Message For Derrek')
 
 # Read a Private Letter
 def read_private_letter(letter_id):

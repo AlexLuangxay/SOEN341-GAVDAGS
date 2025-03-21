@@ -87,7 +87,8 @@ CREATE TABLE WhisperHasLetter (
     client_1 INT NOT NULL,
     client_2 INT NOT NULL,
     letter_id INT,
-    FOREIGN KEY (client_1, client_2) REFERENCES Whisper(client_1, client_2) ON DELETE CASCADE,
+    FOREIGN KEY (client_1) REFERENCES Whisper(client_1) ON DELETE CASCADE,
+    FOREIGN KEY (client_2) REFERENCES Whisper(client_2) ON DELETE CASCADE,
     FOREIGN KEY (letter_id) REFERENCES PrivateLetter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (client_1, client_2, letter_id)
 );
