@@ -1,126 +1,106 @@
-from flask import Flask, request, session
+from flask import Flask, request, jsonify, session, url_for, redirect
 from flask_socketio import join_room, leave_room, send, SocketIO
 from flask_cors import CORS
 from datetime import datetime
 from string import ascii_uppercase
 import random 
 import os
-import oracledb
-from dotenv import load_dotenv
+from api import *
+from datetime import timedelta
+from functools import wraps
 
-load_dotenv()
-
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_DSN = os.getenv("DB_DSN")
-WALLET_PATH = os.getenv("WALLET_PATH")
-
-file = "database.sql"
-
-INSTANT_CLIENT_PATH = "./instantclient_23_7"
-oracledb.init_oracle_client(INSTANT_CLIENT_PATH)
-
-# Function to execute SQL file
-def execute_sql_file(file_path):
-    try:
-        connection = oracledb.connect(user=DB_USER, password=DB_PASSWORD, dsn=DB_DSN)
-        cursor = connection.cursor()
-
-        with open(file_path, 'r') as sql_file:
-            sql_statements = sql_file.read()
-
-        for statement in sql_statements.split(";"):
-            statement = statement.strip()
-            if statement:
-                cursor.execute(statement)
-
-        connection.commit()
-        cursor.close()
-        connection.close()
-        print("SQL file executed successfully.")
-
-    except oracledb.Error as e:
-        print(f"Error executing SQL file: {e}")
-        
 app = Flask(__name__)
 
-# Create a DB connection instance (to be used in routes)
-def get_db_connection():
-    connection = oracledb.connect(
-        user=DB_USER,
-        password=DB_PASSWORD,
-        dsn=DB_DSN
-    )
-    return connection
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.config['SESSION_TYPE'] = 'filesystem'
 
 app.config["SECRET_KEY"] = "GAVDAGS"
-CORS(app)
+CORS(app, supports_credentials=True)
 socketIO = SocketIO(app, cors_allowed_origins="*")
-   
-users = {}
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' not in session:
+            return jsonify({"error": "Unauthorized"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/users', methods=['GET'])
+@login_required
+def fetch_users():
+    users = get_all_users() 
+    users = [user for user in users if user["name"] != session.get('user')]
+    return jsonify(users), 200 
+
+@app.route('/current_user', methods=['GET'])
+@login_required
+def send_current_user():
+    return jsonify(session.get('user')), 200
+
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+
+    if read_client_username(username):
+        return jsonify({"error": "Username already exists"}), 400
+    else:
+        create_client(username, password)
+        return jsonify({"message": "Account created successfully"}), 201
+    
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+
+    if check_client_credentials(username, password):
+        session.permanent = True
+        session['user'] = username
+        return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
+
+    return jsonify({"message": "Invalid credentials"}), 401
+    
+# users = {}
 rooms = {}
 
-@socketIO.on("username")
-def receive_username(username):
-    session["name"] = username
-
 @socketIO.on("createSignal")
-def generate_unique_code():
-    while True: 
-        code = ""
-        for _ in range(4):
-            code += random.choice(ascii_uppercase)
-        if code not in rooms: 
-            break 
-    print(f"Generated Room Code: {code}")
+def generate_new_guild(data):
+    username = data["username"]
+    group_name = ""
+    for _ in range(4):
+        group_name += random.choice(ascii_uppercase)
+    addGuildMember(create_guild(group_name),get_client_id(username),1)
+    join_room(group_name)
+    print(f"Generated Group Code: {group_name}")
+    session["room"] = group_name # Store the room in the session
+    session["user"] = username
+    socketIO.emit("newRoomCode", {"group_name": group_name})
 
-    room = code 
-    rooms[room] = {"members": 0, "messages": [], "users": [{"name": session["name"]}]}
-    
-    session["room"] = room 
-    session["ID"] = request.sid
-    
-    # Make the creator **JOIN** the room
-    join_room(room)
-    rooms[room]["members"] += 1  
-
-    socketIO.emit("newRoomCode", {"code": room}, room=request.sid)
-    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
-    socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
-    
-    print(f"Generated ID: {request.sid} joined room {room}")
-    print(f"Current rooms: {rooms}")
-
-@socketIO.on("groupCode")
+@socketIO.on("joinSignal")
 def join_group(data):
-    room = data["code"]
+    group_name = data["code"]
     username = data["username"]
 
-    if room not in rooms:
-        print(f"Room {room} not found")
+    if not check_guild(get_guild_id(group_name)):
+        print(f"Group {(group_name)} not found")
         return 
     
-    join_room(room)
-    rooms[room]["members"] += 1
-
-    # Check if the user is already in the room
-    if not any(user["name"] == username for user in rooms[room]["users"]):
-        rooms[room]["users"].append({"name": username}) # Add user to room
-
-    session["room"] = room
-    session["name"] = username
-    
-    send(f"{username} has joined the room.", to=room)
-    socketIO.emit("chatHistory", rooms[room]["messages"], room=request.sid)
-    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+    join_room(group_name) # Some socket thing, have to look into whether we really need this or not 
+    addGuildMember(get_guild_id(group_name),get_client_id(username),0)
+    session["room"] = group_name # Store the room in the session
+    session["user"] = username
+    socketIO.emit("newRoomCode", {"group_name": group_name})
 
 @socketIO.on("sendMessage")
 def send_message(data):
-    room = data.get("room")
+    room = session.get("room")
     message = data.get("message")
-    username = session.get("name")
+    username = session.get("user")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
+    #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room} from {username}: {message}")
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
 
@@ -140,21 +120,52 @@ def connect(auth):
     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
     print(f"{name} joined room {room}")
 
-@socketIO.on("disconnect")
-def disconnect():
-    room = session.get("room")
-    name = session.get("name")
-    leave_room(room)
+# @socketIO.on("disconnect")
+# def disconnect():
+#     room = session.get("room")
+#     name = session.get("name")
+#     leave_room(room)
 
-    if room in rooms:
-        rooms[room]["members"] -= 1
-        rooms[room]["users"] = [user for user in rooms[room]["users"] if user["name"] != name] # Remove user from room
-        if rooms[room]["members"] <= 0:
-            del rooms[room]
+#     if room in rooms:
+#         rooms[room]["members"] -= 1
+#         rooms[room]["users"] = [user for user in rooms[room]["users"] if user["name"] != name] # Remove user from room
+#         if rooms[room]["members"] <= 0:
+#             del rooms[room]
 
-    send({"name": name, "message": "has left the room"}, to=room)
-    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
-    print(f"{name} has left room {room}")
+#     send({"name": name, "message": "has left the room"}, to=room)
+#     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
+#     print(f"{name} has left room {room}")
+
+@app.route('/getMessages', methods=['GET'])
+@login_required
+def get_messages():
+    user1 = get_client_id(session.get('user'))
+    user2 = get_client_id(request.args.get('user'))
+    whisper_data = get_whisperhasletter(user1, user2)
+
+    if not whisper_data:
+        return jsonify([])  # Return empty array if no data
+
+    messages = []
+    for data in whisper_data:
+        letter_id = data[2]
+        letter = read_private_letter(letter_id)
+        if letter:
+            messages.append({
+                'id': letter[0],
+                'user': letter[1],
+                'receiver': letter[2],
+                'message': letter[3],
+                'timestamp': letter[4].isoformat()  # Convert to JSON-friendly format
+            })
+
+    return jsonify(messages)
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.pop('user', None)
+    return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
-    socketIO.run(app,debug=True)
+    socketIO.run(app,debug=True, port=5001)

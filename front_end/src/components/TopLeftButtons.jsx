@@ -11,7 +11,7 @@ const TopLeftButtons = () => {
       <button onClick={() => navigate("/privatemessage")}>
         <img src={chatIcon} alt="Chat Icon" className="group-icon" />
       </button>
-      <button onClick={() => navigate("/")}>
+      <button onClick={() => navigate("/groupmessage")}>
         <img src={groupIcon} alt="Group Icon" className="group-icon" />
       </button>
     </div>

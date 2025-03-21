@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const users = [
-  { name: "Current User", role: "Role" },
-  { name: "Other User", role: "Role" },
-  { name: "Other User", role: "Role" },
-  { name: "Other User", role: "Role" },
-];
+const UserSidebar = ( {guildId} ) => {
+  const [users, setUsers] = useState([]);
 
-const UserSidebar = ( {} ) => {
+useEffect(() => {
+    const fetch_users_from_guild = async () => {
+        const response = await fetch(`http://localhost:5001/server/${guildId}/users`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+        setUsers(data);
+    };
+
+    fetch_users_from_guild();
+    
+  }, [guildId]);
+
   return (
     <div className="user-sidebar">
       {users.map((user, index) => (
@@ -16,7 +26,7 @@ const UserSidebar = ( {} ) => {
             <img src="profile-user.png" alt="User Avatar" />
           </div>
           <div className="user-info">
-            <div className="user-name">{user.name}</div>
+            <div className="user-name">{user.client_username}</div>
             {/*<div className="user-role">{user.role}</div>*/}
           </div>
         </div>
