@@ -497,7 +497,7 @@ def create_private_letter(sender_id, receiver_id, content):
   except Exception as e:
     print('Error Creating Private Letter: ', e)
 # Test vvv
-create_private_letter(1, 11, 'Random Message For Derrek')
+#create_private_letter(1, 11, 'Random Message For Derrek')
 
 # Read a Private Letter
 def read_private_letter(letter_id):
