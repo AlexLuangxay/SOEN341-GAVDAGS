@@ -168,4 +168,4 @@ def logout():
     return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
-    socketIO.run(app,debug=True)
+    socketIO.run(app,debug=True, port=5001)

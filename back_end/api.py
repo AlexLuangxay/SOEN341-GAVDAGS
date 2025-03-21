@@ -310,6 +310,24 @@ def update_guild(guild_id, client_id, admin_status):
   except Exception as e:
     print('Error Updating Guild Member Admin Status: ', e)
 
+def check_admin_status(guild_id, client_id):
+  try:
+    sql = 'SELECT admin_status FROM GuildHasMember WHERE guild_id = (%s) AND client_id = (%s)'
+    val = (guild_id, client_id)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    if (obj == 0):
+      print("User is not an admin")
+      return False
+    if (obj == 1):
+      print("User is an admin")
+      return True
+  except Exception as e:
+    print('Error Checking Admin Status: ', e)
+    return False
+#for x in range(20):
+# check_guild(x)
+
 # Delete Guild Member
 def delete_guild_member(guild_id, client_id):
   try:

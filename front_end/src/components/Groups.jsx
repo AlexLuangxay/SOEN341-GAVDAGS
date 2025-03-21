@@ -6,7 +6,7 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup } ) => {
   const [username, setCurrentUser] = useState(""); // Store logged-in user
 
   useEffect(() => {
-    fetch("http://localhost:5000/current_user", { credentials: "include" }) 
+    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
       .then((response) => response.json())
       .then((data) => setCurrentUser(data))
       .catch((error) => console.error("Error fetching user:", error));

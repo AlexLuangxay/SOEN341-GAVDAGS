@@ -11,7 +11,7 @@ import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import GroupChatName from "../components/GroupChatName";
 
-const socket = io('http://localhost:5000');
+const socket = io('http://localhost:5001');
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:5000/current_user', {
+        const response = await fetch('http://localhost:5001/current_user', {
           method: 'GET',
           credentials: 'include',
         });
