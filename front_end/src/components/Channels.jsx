@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AddModal from '../pages/AddModal.jsx';
 import DeleteModal from '../pages/DeleteModal.jsx';
-import trashIcon from "../../public/trash-bin.png"
-import plusIcon from "../../public/Plus-sign.png"
+import trashIcon from "../public/trash-bin.png"
+import plusIcon from "../public/Plus-sign.png"
 
 const Channels = () => {
   const channels = ["Channel 1", "Channel 2", "Channel 3", "Channel 4","Channel 5","Channel 6", "Channel 7", "Channel 8", "Channel 9"]; 

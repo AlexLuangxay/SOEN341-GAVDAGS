@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import SettingsModal from '../pages/SettingsModal.jsx';
-import settingsIcon from "../../public/settings-icon.png"
+import settingsIcon from "../public/settings-icon.png"
 
 
 const TopRightButtons = () => {
