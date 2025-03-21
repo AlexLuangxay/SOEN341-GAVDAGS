@@ -18,6 +18,9 @@ function App() {
   const navigate = useNavigate();
 
   const fetchMessages = async () => {
+    if (!selectedUser) {
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:5001/getMessages?user=${selectedUser}`, {
         method: 'GET',
