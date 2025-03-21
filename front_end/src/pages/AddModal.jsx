@@ -21,7 +21,8 @@ const AddModal = ({ isOpen, onClose, onAddChannel }) => {
         <span className="Settingsclose" onClick={onClose}>&times;</span>
         <h2>Add Channel</h2>
         <div style={{ marginTop: "10px" }}>
-          <input 
+          <input
+            class = "addBox"
             type="text" 
             value={newChannel} 
             onChange={(e) => setNewChannel(e.target.value)} 

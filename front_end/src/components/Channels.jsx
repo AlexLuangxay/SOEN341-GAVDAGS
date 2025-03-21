@@ -3,7 +3,7 @@ import AddModal from '../pages/AddModal.jsx';
 import trashIcon from "../public/trash-bin.png";
 import plusIcon from "../public/Plus-sign.png";
 
-const Channels = () => {
+const Channels = ({ onSelectChannel }) => {
   const [channels, setChannels] = useState([
     "Channel 1", "Channel 2", "Channel 3", 
     "Channel 4", "Channel 5", "Channel 6", 
@@ -19,12 +19,14 @@ const Channels = () => {
 
   const handleSelectChannel = (channel) => {
     setSelectedChannel(channel);
+    onSelectChannel(channel);
   };
 
   const handleDeleteChannel = () => {
     if (selectedChannel) {
       setChannels(channels.filter(channel => channel !== selectedChannel));
       setSelectedChannel(null);
+      onSelectChannel('');
     }
   };
 

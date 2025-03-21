@@ -17,6 +17,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [groupName, setGroupName] = useState("");
   const [currentGroup, setCurrentGroup] = useState("");
+  const [selectedChannel, setSelectedChannel] = useState("");
   
   const navigate = useNavigate();
 
@@ -62,13 +63,13 @@ function App() {
     <div className="App">
       <header className="top-bar">
         <TopLeftButtons />
-        <GroupChatName groupName={groupName}/>
+        <GroupChatName groupName={groupName} chatName={selectedChannel}/>
         <TopRightButtons />
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
           <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup}/>
-          <Channels />
+          <Channels onSelectChannel={setSelectedChannel}/>
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages}/>
