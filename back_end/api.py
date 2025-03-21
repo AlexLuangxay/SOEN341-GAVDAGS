@@ -45,6 +45,21 @@ def get_client_id(client_username):
 # get_client_id("Gur")
 # get_client_id("Simon11123223")
 
+#get client username from ID
+def get_client_name(client_id):
+  try:
+    sql = 'SELECT client_username FROM Client WHERE client_id = (%s)'
+    val = (client_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    print("obj: ", obj)
+    client_username = obj[0]
+    print(client_username)
+    return(client_username)
+  except Exception as e:
+    print('Error Retrieving Client ID: ', e)
+
+
 # Add Member to Guild
 def addGuildMember(guild_id, client_id, admin_status):
   try:
@@ -393,7 +408,7 @@ def get_whisperhasletter(client_1, client_2):
       print("Whisper does not exist")
       return -1
     else:
-      print(obj)
+      #print(obj)
       return obj
   except Exception as e:
     print('Error : ', e)
@@ -468,14 +483,16 @@ create_private_letter(1, 11, 'Random Message For Derrek')
 
 # Read a Private Letter
 def read_private_letter(letter_id):
-  try:
-    sql = 'SELECT * FROM PrivateLetter WHERE letter_id = (%s)'
-    val = (letter_id,)
-    mycursor.execute(sql,val)
-    private_letter_obj = mycursor.fetchone()
-    print(private_letter_obj)
-  except Exception as e:
-    print('Error Reading Private Letter: ', e)
+    try:
+        sql = 'SELECT * FROM PrivateLetter WHERE letter_id = (%s)'
+        val = (letter_id,)
+        mycursor.execute(sql, val)
+        private_letter_obj = mycursor.fetchone()
+        #print("Fetched Private Letter:", private_letter_obj)
+        return private_letter_obj
+    except Exception as e:
+        print('Error Reading Private Letter:', e)
+        return None
 # Test vvv
 #for x in range(20):
 #  read_private_letter(x)

@@ -136,6 +136,31 @@ def connect(auth):
 #     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
 #     print(f"{name} has left room {room}")
 
+@app.route('/getMessages', methods=['GET'])
+@login_required
+def get_messages():
+    user1 = get_client_id(session.get('user'))
+    user2 = get_client_id(request.args.get('user'))
+    whisper_data = get_whisperhasletter(user1, user2)
+
+    if not whisper_data:
+        return jsonify([])  # Return empty array if no data
+
+    messages = []
+    for data in whisper_data:
+        letter_id = data[2]
+        letter = read_private_letter(letter_id)
+        if letter:
+            messages.append({
+                'id': letter[0],
+                'user': letter[1],
+                'receiver': letter[2],
+                'message': letter[3],
+                'timestamp': letter[4].isoformat()  # Convert to JSON-friendly format
+            })
+
+    return jsonify(messages)
+
 @app.route('/logout')
 @login_required
 def logout():
