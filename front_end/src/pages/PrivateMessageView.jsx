@@ -23,7 +23,7 @@ function App() {
       return;
     } 
     try {
-      const response = await fetch(`http://localhost:5000/getMessages?user=${selectedUser}`, {
+      const response = await fetch(`http://localhost:5001/getMessages?user=${selectedUser}`, {
         method: 'GET',
         credentials: 'include',
       });
