@@ -14,6 +14,7 @@ const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
 
   const sendJoinCode = () => {
     if (code.trim() !== "") {
+      setGroupName(code); // Update group name with the generated room code
     socket.emit("joinSignal", {code, username})
     }
   }
@@ -26,23 +27,24 @@ const Groups = ( { socket, setGroupName, setCurrentRoom, currentRoom } ) => {
     socket.on("newRoomCode", (data) => {
       console.log("Received event:", data);
       console.log("Frontend username:", username);
+      setGroupName(data.group_name); // Update group name with the generated room code
       setGroups((prevGroups) => [...prevGroups, data.group_name]); // Add the new room to the groups list
     });
   
     return () => {
       socket.off("newRoomCode"); // Cleanup listener on unmount
     };
-  }, []);
+  }, [socket, username]);
 
-  // const switchRoom = (group) => {
-  //   if (currentRoom !== group) {
-  //     //socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
-  //     localStorage.setItem("room", group); // Store the selected room
-  //     setChatName(group); // Update chat name
-  //     setCurrentRoom(group);
-  //     console.log("Switched to room:", group);
-  //   }
-  // };
+  const switchRoom = (group) => {
+    if (currentRoom !== group) {
+      //socket.emit("groupCode", { code: group, username }); // Emit to request chat history for the selected room
+      localStorage.setItem("room", group); // Store the selected room
+      setGroupName(group); // Update group name
+      setCurrentRoom(group);
+      console.log("Switched to room:", group);
+    }
+  };
 
   return (
 
