@@ -3,7 +3,10 @@ name: Python Syntax Check
 on:
   push:
     branches:
-      - front_end  # Specify the branch here
+      - '*'  
+  pull_request:
+    branches:
+      - main 
 
 jobs:
   syntax-check:
