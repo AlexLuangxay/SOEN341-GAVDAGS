@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddModal from '../pages/AddModal.jsx';
 import trashIcon from "../public/trash-bin.png";
 import plusIcon from "../public/Plus-sign.png";
 
-const Channels = ({ onSelectChannel }) => {
-  const [channels, setChannels] = useState([
-    "Channel 1", "Channel 2", "Channel 3", 
-    "Channel 4", "Channel 5", "Channel 6", 
-    "Channel 7", "Channel 8", "Channel 9"
-  ]);
-
+const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
+  const [channels, setChannels] = useState([]);
   const [isAddOpen, setAddOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState(null);
 
-  const toggleAdd = () => {
-    setAddOpen(!isAddOpen);
-  };
+  useEffect(() => {
+    if (Array.isArray(channels1)) {
+      setChannels(channels1);
+    }
+  }, [channels1]);
+
+  const toggleAdd = () => setAddOpen(!isAddOpen);
 
   const handleSelectChannel = (channel) => {
     setSelectedChannel(channel);
@@ -33,6 +32,14 @@ const Channels = ({ onSelectChannel }) => {
   const handleAddChannel = (newChannel) => {
     if (newChannel && !channels.includes(newChannel)) {
       setChannels([...channels, newChannel]);
+      
+      fetch("http://localhost:5001/fetch_channels", {
+        credentials: "include",
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ group: currentGroup, channel: newChannel })
+      })
+      .catch(error => console.error('Error sending channel name:', error));
     }
   };
 
