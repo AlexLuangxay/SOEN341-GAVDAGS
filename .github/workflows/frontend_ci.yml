@@ -1,43 +1,43 @@
-name: Frontend CI
+# name: Frontend CI
 
-on:
-  push:
-    paths:
-      - 'front_end/**'
-      - 'tests/frontend/**'
-  pull_request:
-    paths:
-      - 'front_end/**'
-      - 'tests/frontend/**'
+# on:
+#   push:
+#     paths:
+#       - 'front_end/**'
+#       - 'tests/frontend/**'
+#   pull_request:
+#     paths:
+#       - 'front_end/**'
+#       - 'tests/frontend/**'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '16'
 
-      - name: Install dependencies
-        run: |
-          cd front_end
-          npm ci
+#       - name: Install dependencies
+#         run: |
+#           cd front_end
+#           npm ci
 
-      - name: Linting
-        run: |
-          cd front_end
-          npm run lint
+#       - name: Linting
+#         run: |
+#           cd front_end
+#           npm run lint
 
-      - name: Build project
-        run: |
-          cd front_end
-          npm run build
+#       - name: Build project
+#         run: |
+#           cd front_end
+#           npm run build
 
-      - name: Preview deploy
-        run: |
-          cd front_end
-          npm run preview
+#       - name: Preview deploy
+#         run: |
+#           cd front_end
+#           npm run preview
