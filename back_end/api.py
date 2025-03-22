@@ -403,16 +403,16 @@ def get_whisperhasletter(client_1, client_2):
       older = client_2
       newer = client_1
 
-    sql = 'SELECT * FROM WhisperHasLetter WHERE client_1 = (%s) AND client_2 = (%s)'
+    sql = 'SELECT letter_id FROM WhisperHasLetter WHERE client_1 = (%s) AND client_2 = (%s)'
     val = (older, newer)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
-    if (obj == None):
-      print("Whisper does not exist")
-      return -1
-    else:
+    if (obj != None):
       print(obj)
       return obj
+    else:
+      print("Whisper does not exist")
+      return False
   except Exception as e:
     print('Error : ', e)
 #get_whisperhasletter(1,2)
