@@ -1,0 +1,55 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - 'back_end/**'
+      - 'tests/backend/**'
+  pull_request:
+    paths:
+      - 'back_end/**'
+      - 'tests/backend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testdb
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8  # Ensure this matches the Python version you're using locally
+
+      - name: Install dependencies
+        run: |
+          cd back_end
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Make sure you have a requirements.txt file in your back_end directory
+
+      - name: Run tests
+        run: |
+          cd back_end
+          # Assuming you use pytest or another testing tool, you can add commands here
+          pytest  # You'll need to include this in your requirements.txt if you're using pytest
+
+      # Optionally, add other steps such as linting if you are using a linter like flake8
+      - name: Lint code
+        run: |
+          cd back_end
+          flake8 .  # Only include this if you're using flake8 as part of your project
