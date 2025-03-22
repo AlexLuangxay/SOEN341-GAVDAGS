@@ -287,7 +287,7 @@ def read_all_guild():
   except Exception as e:
     print('Error Reading Guild: ', e)
 
-read_all_guild()
+#read_all_guild()
 
 # Verify if guild exists 
 def check_guild(guild_id):
