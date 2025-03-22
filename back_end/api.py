@@ -96,12 +96,25 @@ def getChannelFromGuild(guild_id):
     val = (guild_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
-    print(obj)
+    print('list ', obj)
+    return obj
   except Exception as e:
     print('Error Retrieving Channels: ', e)
 # Test vvv
 #for x in range(10):
 #  getChannelFromGuild(x)
+
+#Get channel name from its id
+def getChannelFromID(channel_id):
+  try:
+    sql = 'SELECT channel_name FROM Channel WHERE channel_id = (%s)'
+    val = (channel_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchall()
+    print(obj)
+    return obj
+  except Exception as e:
+    print('Error Retrieving Channels: ', e)
 
 # Get all users a server has
 def getUserFromGuild (guild_id):
@@ -264,6 +277,17 @@ def read_guild(guild_id):
 # Test vvv
 #for x in range(7):
 # read_guild(x)
+#See all guilds
+def read_all_guild():
+  try:
+    sql = 'SELECT * FROM Guild'
+    mycursor.execute(sql)
+    guild_obj = mycursor.fetchall()
+    print('all: ', guild_obj)
+  except Exception as e:
+    print('Error Reading Guild: ', e)
+
+read_all_guild()
 
 # Verify if guild exists 
 def check_guild(guild_id):

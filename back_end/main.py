@@ -26,12 +26,48 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/fetch_channels', methods=['POST'])
+@login_required
+def fetch_channels():
+    data = request.get_json()
+    current_group = data.get('group')
+    channel_name = data.get('channel')
+    if not current_group or not channel_name:
+        print(current_group, channel_name)
+        return jsonify({"error": "Group and channel name are required"}), 400
+
+    print(f"Received channel '{channel_name}' for group '{current_group}'")
+    guild_id = get_guild_id(current_group)
+    create_channel(guild_id, channel_name)
+
+    return jsonify({"message": "Channel received successfully"}), 200
+
 @app.route('/users', methods=['GET'])
 @login_required
 def fetch_users():
     users = get_all_users() 
     users = [user for user in users if user["name"] != session.get('user')]
     return jsonify(users), 200 
+
+@app.route('/channels', methods=['POST'])
+@login_required
+def channels():
+    data = request.get_json()
+    guild_id = get_guild_id(data.get('group'))
+    channel_ids = getChannelFromGuild(guild_id)
+
+    if isinstance(channel_ids, list):
+        channel_ids = [channel_id[1] for channel_id in channel_ids]
+
+    channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
+    
+    
+    flat_channels = []
+    for channel in channels:
+        if isinstance(channel, list) and len(channel) > 0:
+            flat_channels.append(channel[0][0])
+    print("chat ", guild_id, "has channels: ", flat_channels)
+    return jsonify(flat_channels), 200
 
 @app.route('/current_user', methods=['GET'])
 @login_required
@@ -107,9 +143,9 @@ def send_private_message(data):
 
 @socketIO.on("sendMessage")
 def send_message(data):
-    room = session.get("room")
+    room = data.get("room")
     message = data.get("message")
-    username = session.get("user")
+    username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
     #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room} from {username}: {message}")
