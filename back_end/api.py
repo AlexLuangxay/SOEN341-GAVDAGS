@@ -548,13 +548,13 @@ def get_all_users():
         print(f"Error fetching users: {e}")
         
         
-  # Get guild members
+  # Get guild members and their role
 def get_guild_members(guild_id):
     try:
-        sql = 'SELECT client_id FROM GuildHasMember WHERE guild_id = (%s)'
+        sql = 'SELECT client_id, admin_status FROM GuildHasMember WHERE guild_id = (%s)'
         val = (guild_id,)
         mycursor.execute(sql, val)
-        members = [row[0] for row in mycursor.fetchall()]
+        members = mycursor.fetchall()
         return members
     except Exception as e:
         print(f"Error fetching guild members: {e}")
