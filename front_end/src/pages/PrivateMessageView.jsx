@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import "./App.css";
-import ChatWindow from "../components/ChatWindow";
+import ChatWindow from "../components/ChatWindowDM";
 import People from "../components/People";
-import Channels from "../components/Channels";
 import MessageBar from "../components/MessageBar";
 import UserSidebarDM from "../components/UserSidebarDM";
 import TopLeftButtons from "../components/TopLeftButtons";
@@ -15,8 +14,40 @@ const socket = io('http://localhost:5001');
 
 function App() {
   const [messages, setMessages] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null); 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
+
+  const fetchMessages = async () => {
+    if (!selectedUser) {
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:5001/getMessages?user=${selectedUser}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      } else {
+        console.error("Failed to fetch messages");
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, [selectedUser]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
+      .then((response) => response.json())
+      .then((data) => setCurrentUser(data))
+      .catch((error) => console.error("Error fetching user:", error));
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -43,26 +74,25 @@ function App() {
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
     });
-  
+
     socket.on("disconnect", () => {
       console.log("Disconnected from WebSocket server");
     });
 
-    socket.on("messageReceived", (data) => {
+    socket.on("privateMessageReceived", (data) => {
       console.log("Socket connected:", socket.connected);
       console.log("New message received:", data);
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
     return () => {
-      socket.off("messageReceived");
+      socket.off("privateMessageReceived");
     };
   }, []);
 
-  // Handle user selection from the People component
   const handleUserClick = (userName) => {
     console.log("User clicked:", userName);
-    setSelectedUser(userName); // Update the selected user state
+    setSelectedUser(userName);
   };
 
   return (
@@ -78,10 +108,9 @@ function App() {
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages} />
-          <MessageBar socket={socket} />
+          <MessageBar socket={socket} selectedUser={selectedUser} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
-          {/* Pass the selectedUser to UserSidebarDM */}
           <UserSidebarDM selectedUser={selectedUser} />
         </aside>
       </div>

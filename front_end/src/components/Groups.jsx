@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup } ) => {
+const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChannels1 } ) => {
   const [code, setCode] = useState("") // State for input field 
   const [groups, setGroups] = useState([]);
   const [username, setCurrentUser] = useState(""); // Store logged-in user
@@ -14,6 +14,7 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup } ) => {
 
   const sendJoinCode = () => {
     if (code.trim() !== "") {
+      console.log(code);
       setGroupName(code); // Update group name with the generated room code
       socket.emit("joinSignal", {code, username})
     }
@@ -43,6 +44,27 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup } ) => {
       setCurrentGroup(group);
       console.log("Switched to room:", group);
     }
+        
+    fetch("http://localhost:5001/channels", {
+      credentials: "include",
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ group: group })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Channels received:", data);
+      setChannels1(data);
+    })
+    .catch(error => {
+      console.error('Error sending channel name:', error);
+    });
+
   };
 
   return (

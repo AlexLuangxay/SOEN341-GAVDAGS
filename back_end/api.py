@@ -36,7 +36,7 @@ def get_client_id(client_username):
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     client_id = obj[0]
-    print(client_id)
+    #print(client_id)
     return(client_id)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
@@ -44,6 +44,20 @@ def get_client_id(client_username):
 # get_client_id("Anthony")
 # get_client_id("Gur")
 # get_client_id("Simon11123223")
+
+#get client username from ID
+def get_client_name(client_id):
+  try:
+    sql = 'SELECT client_username FROM Client WHERE client_id = (%s)'
+    val = (client_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    #print("obj: ", obj)
+    client_username = obj[0]
+    #print(client_username)
+    return(client_username)
+  except Exception as e:
+    print('Error Retrieving Client ID: ', e)
 
 # Add Member to Guild
 def addGuildMember(guild_id, client_id, admin_status):
@@ -82,12 +96,25 @@ def getChannelFromGuild(guild_id):
     val = (guild_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
-    print(obj)
+    print('list ', obj)
+    return obj
   except Exception as e:
     print('Error Retrieving Channels: ', e)
 # Test vvv
 #for x in range(10):
 #  getChannelFromGuild(x)
+
+#Get channel name from its id
+def getChannelFromID(channel_id):
+  try:
+    sql = 'SELECT channel_name FROM Channel WHERE channel_id = (%s)'
+    val = (channel_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchall()
+    print(obj)
+    return obj
+  except Exception as e:
+    print('Error Retrieving Channels: ', e)
 
 # Get all users a server has
 def getUserFromGuild (guild_id):
@@ -250,6 +277,17 @@ def read_guild(guild_id):
 # Test vvv
 #for x in range(7):
 # read_guild(x)
+#See all guilds
+def read_all_guild():
+  try:
+    sql = 'SELECT * FROM Guild'
+    mycursor.execute(sql)
+    guild_obj = mycursor.fetchall()
+    print('all: ', guild_obj)
+  except Exception as e:
+    print('Error Reading Guild: ', e)
+
+#read_all_guild()
 
 # Verify if guild exists 
 def check_guild(guild_id):
@@ -482,18 +520,20 @@ def create_private_letter(sender_id, receiver_id, content):
   except Exception as e:
     print('Error Creating Private Letter: ', e)
 # Test vvv
-create_private_letter(1, 11, 'Random Message For Derrek')
+#create_private_letter(1, 11, 'Random Message For Derrek')
 
 # Read a Private Letter
 def read_private_letter(letter_id):
-  try:
-    sql = 'SELECT * FROM PrivateLetter WHERE letter_id = (%s)'
-    val = (letter_id,)
-    mycursor.execute(sql,val)
-    private_letter_obj = mycursor.fetchone()
-    print(private_letter_obj)
-  except Exception as e:
-    print('Error Reading Private Letter: ', e)
+    try:
+        sql = 'SELECT * FROM PrivateLetter WHERE letter_id = (%s)'
+        val = (letter_id,)
+        mycursor.execute(sql, val)
+        private_letter_obj = mycursor.fetchone()
+        #print("Fetched Private Letter:", private_letter_obj)
+        return private_letter_obj
+    except Exception as e:
+        print('Error Reading Private Letter:', e)
+        return None
 # Test vvv
 #for x in range(20):
 #  read_private_letter(x)

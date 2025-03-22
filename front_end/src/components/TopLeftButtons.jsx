@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import chatIcon from "../../public/chat-icon.png";
-import groupIcon from "../../public/groups-icon.png";
+import chatIcon from "../public/chat-icon.png";
+import groupIcon from "../public/groups-icon.png";
 
 const TopLeftButtons = () => {
   const navigate = useNavigate();

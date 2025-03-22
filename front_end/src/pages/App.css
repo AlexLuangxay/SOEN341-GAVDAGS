@@ -685,3 +685,9 @@ h1{
   flex-direction: column;
   height: 100%; /* Ensure it takes full height of parent */
 }
+
+.addBox{
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  max-width: 300px;
+  border-radius: 10px;
+}

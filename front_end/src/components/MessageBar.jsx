@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 
-const MessageBar = ({ socket, currentGroup }) => {
+const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
   const [message, setMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 
   const sendMessage = () => {
     if (message.trim() !== '') {
-      socket.emit('sendMessage', { room: currentGroup, message, file: selectedFile });
-      console.log('Sending message:', message, 'to room:', currentGroup);
+      if (currentGroup) {
+        socket.emit('sendMessage', { room: currentGroup, currentUser: currentUser, message, file: selectedFile });
+        console.log('Sending message:', message, 'to room:', currentGroup, 'from: ', currentUser);
+      } else if (selectedUser) {
+        socket.emit('sendPrivateMessage', { recipient: selectedUser, currentUser: currentUser, message, file: selectedFile });
+        console.log('Sending private message:', message, 'to:', selectedUser);
+      }
       setMessage(''); // Clear the input field after sending
       setSelectedFile(null); // Clear the selected file after sending
     }

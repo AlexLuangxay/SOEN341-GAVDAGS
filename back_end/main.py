@@ -26,12 +26,48 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/fetch_channels', methods=['POST'])
+@login_required
+def fetch_channels():
+    data = request.get_json()
+    current_group = data.get('group')
+    channel_name = data.get('channel')
+    if not current_group or not channel_name:
+        print(current_group, channel_name)
+        return jsonify({"error": "Group and channel name are required"}), 400
+
+    print(f"Received channel '{channel_name}' for group '{current_group}'")
+    guild_id = get_guild_id(current_group)
+    create_channel(guild_id, channel_name)
+
+    return jsonify({"message": "Channel received successfully"}), 200
+
 @app.route('/users', methods=['GET'])
 @login_required
 def fetch_users():
     users = get_all_users() 
     users = [user for user in users if user["name"] != session.get('user')]
     return jsonify(users), 200 
+
+@app.route('/channels', methods=['POST'])
+@login_required
+def channels():
+    data = request.get_json()
+    guild_id = get_guild_id(data.get('group'))
+    channel_ids = getChannelFromGuild(guild_id)
+
+    if isinstance(channel_ids, list):
+        channel_ids = [channel_id[1] for channel_id in channel_ids]
+
+    channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
+    
+    
+    flat_channels = []
+    for channel in channels:
+        if isinstance(channel, list) and len(channel) > 0:
+            flat_channels.append(channel[0][0])
+    print("chat ", guild_id, "has channels: ", flat_channels)
+    return jsonify(flat_channels), 200
 
 @app.route('/current_user', methods=['GET'])
 @login_required
@@ -94,18 +130,30 @@ def join_group(data):
     session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
 
+@socketIO.on("sendPrivateMessage")
+def send_private_message(data):
+    message = data.get("message")
+    recipient = data.get("recipient")
+    timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
+    sender = data.get("currentUser")
+    print(f"Private message sent from {sender} to {recipient}: {message}")
+    create_whisper(get_client_id(sender), get_client_id(recipient))
+    create_private_letter(get_client_id(sender), get_client_id(recipient), message)
+    socketIO.emit("privateMessageReceived", {"user": sender, "recipient": recipient, "message": message, "timestamp": timestamp})
+
 @socketIO.on("sendMessage")
 def send_message(data):
-    room = session.get("room")
+    room = data.get("room")
     message = data.get("message")
-    username = session.get("user")
+    username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
     #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room} from {username}: {message}")
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
+    #create_public_letter(get_client_id(username), message) FIX THIS WHEN YOU GET METHOD TO RETRIEVE CHANNEL 
 
 @socketIO.on("connect")
-def connect(auth):
+def connect():
     room = session.get("room")
     name = session.get("name")
     if not room or not name: 
@@ -135,6 +183,31 @@ def connect(auth):
 #     send({"name": name, "message": "has left the room"}, to=room)
 #     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
 #     print(f"{name} has left room {room}")
+
+@app.route('/getMessages', methods=['GET'])
+@login_required
+def get_messages():
+    user1 = get_client_id(session.get('user'))
+    user2 = get_client_id(request.args.get('user'))
+    whisper_data = get_whisperhasletter(user1, user2)
+
+    if not whisper_data:
+        return jsonify([])  # Return empty array if no data
+
+    messages = []
+    for data in whisper_data:
+        letter_id = data[2]
+        letter = read_private_letter(letter_id)
+        if letter:
+            messages.append({
+                'id': letter[0],
+                'user': get_client_name(letter[1]),
+                'receiver': letter[2],
+                'message': letter[3],
+                'timestamp': letter[4].isoformat(timespec='minutes').replace('T', ' ')  # Convert to JSON-friendly format
+            })
+
+    return jsonify(messages)
 
 @app.route('/logout')
 @login_required

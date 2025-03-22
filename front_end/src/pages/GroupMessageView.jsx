@@ -17,8 +17,18 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [groupName, setGroupName] = useState("");
   const [currentGroup, setCurrentGroup] = useState("");
+  const [selectedChannel, setSelectedChannel] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [channels1, setChannels1] = useState([]);
   
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
+      .then((response) => response.json())
+      .then((data) => setCurrentUser(data))
+      .catch((error) => console.error("Error fetching user:", error));
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -62,17 +72,17 @@ function App() {
     <div className="App">
       <header className="top-bar">
         <TopLeftButtons />
-        <GroupChatName groupName={groupName}/>
+        <GroupChatName groupName={groupName} chatName={selectedChannel}/>
         <TopRightButtons />
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
-          <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup}/>
-          <Channels />
+          <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup} setChannels1={setChannels1}/>
+          {currentGroup && <Channels onSelectChannel={setSelectedChannel} currentGroup={currentGroup} channels1={channels1}/>}
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages}/>
-          <MessageBar socket={socket} currentGroup={currentGroup}/>
+          <MessageBar socket={socket} currentGroup={currentGroup} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
           <UserSidebar/>
