@@ -15,6 +15,7 @@ const socket = io('http://localhost:5001');
 function App() {
   const [messages, setMessages] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
   const fetchMessages = async () => {
@@ -40,6 +41,13 @@ function App() {
   useEffect(() => {
     fetchMessages();
   }, [selectedUser]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
+      .then((response) => response.json())
+      .then((data) => setCurrentUser(data))
+      .catch((error) => console.error("Error fetching user:", error));
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -100,7 +108,7 @@ function App() {
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages} />
-          <MessageBar socket={socket} selectedUser={selectedUser}/>
+          <MessageBar socket={socket} selectedUser={selectedUser} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
           <UserSidebarDM selectedUser={selectedUser} />

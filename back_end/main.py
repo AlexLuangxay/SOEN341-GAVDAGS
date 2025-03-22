@@ -99,10 +99,11 @@ def send_private_message(data):
     message = data.get("message")
     recipient = data.get("recipient")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    sender = session.get("user")
+    sender = data.get("currentUser")
     print(f"Private message sent from {sender} to {recipient}: {message}")
-    #create_private_letter(get_client_id(sender), get_client_id(recipient), message)
-    socketIO.emit("privateMessageReceived", {"sender": sender, "recipient": recipient, "message": message, "timestamp": timestamp}, room=recipient)
+    create_whisper(get_client_id(sender), get_client_id(recipient))
+    create_private_letter(get_client_id(sender), get_client_id(recipient), message)
+    socketIO.emit("privateMessageReceived", {"user": sender, "recipient": recipient, "message": message, "timestamp": timestamp})
 
 @socketIO.on("sendMessage")
 def send_message(data):
@@ -164,10 +165,10 @@ def get_messages():
         if letter:
             messages.append({
                 'id': letter[0],
-                'user': letter[1],
+                'user': get_client_name(letter[1]),
                 'receiver': letter[2],
                 'message': letter[3],
-                'timestamp': letter[4].isoformat()  # Convert to JSON-friendly format
+                'timestamp': letter[4].isoformat(timespec='minutes').replace('T', ' ')  # Convert to JSON-friendly format
             })
 
     return jsonify(messages)

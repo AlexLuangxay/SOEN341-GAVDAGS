@@ -36,7 +36,7 @@ def get_client_id(client_username):
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     client_id = obj[0]
-    print(client_id)
+    #print(client_id)
     return(client_id)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
@@ -52,13 +52,12 @@ def get_client_name(client_id):
     val = (client_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
-    print("obj: ", obj)
+    #print("obj: ", obj)
     client_username = obj[0]
-    print(client_username)
+    #print(client_username)
     return(client_username)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
-
 
 # Add Member to Guild
 def addGuildMember(guild_id, client_id, admin_status):
