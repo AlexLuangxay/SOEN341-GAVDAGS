@@ -10,6 +10,7 @@ import UserSidebar from "../components/UserSidebar";
 import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import GroupChatName from "../components/GroupChatName";
+import GroupeSidebar from "../components/GroupeSidebar";
 
 const socket = io('http://localhost:5001');
 
@@ -76,6 +77,7 @@ function App() {
           <MessageBar socket={socket} currentGroup={currentGroup}/>
         </main>
         <aside className="right-sidebar">
+          <GroupeSidebar/>
           <UserSidebar/>
         </aside>
       </div>
