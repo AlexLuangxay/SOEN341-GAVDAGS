@@ -23,7 +23,7 @@ def get_guild_id(guild_name):
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     guild_id = obj[0]
-    #print(guild_id)
+    print(guild_id)
     return(guild_id)
   except Exception as e:
     print('Error Retrieving Guild ID: ', e)
