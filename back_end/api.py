@@ -441,7 +441,7 @@ def get_whisperhasletter(client_1, client_2):
       older = client_2
       newer = client_1
 
-    sql = 'SELECT letter_id FROM WhisperHasLetter WHERE client_1 = (%s) AND client_2 = (%s)'
+    sql = 'SELECT * FROM WhisperHasLetter WHERE client_1 = (%s) AND client_2 = (%s)'
     val = (older, newer)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
