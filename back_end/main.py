@@ -180,15 +180,13 @@ def connect():
     join_room(room)
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1
-    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
     print(f"{name} joined room {room}")
-
+    
 # @socketIO.on("disconnect")
 # def disconnect():
 #     room = session.get("room")
 #     name = session.get("name")
 #     leave_room(room)
-
 #     if room in rooms:
 #         rooms[room]["members"] -= 1
 #         rooms[room]["users"] = [user for user in rooms[room]["users"] if user["name"] != name] # Remove user from room
@@ -196,7 +194,6 @@ def connect():
 #             del rooms[room]
 
 #     send({"name": name, "message": "has left the room"}, to=room)
-#     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
 #     print(f"{name} has left room {room}")
 
 @app.route('/getMessages', methods=['GET'])

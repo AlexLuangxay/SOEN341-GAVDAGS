@@ -490,7 +490,25 @@ h1{
   max-height: 80vh;
 }
 
+.status-circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
 
+.status-circle.Online {
+  background-color: green;
+}
+
+.status-circle.Offline {
+  background-color: red;
+}
+
+.user-status {
+  color: white;
+}
 
 .people {
   padding: 16px;

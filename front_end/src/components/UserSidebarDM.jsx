@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const UserSidebarDM = ({ selectedUser }) => {
+const UserSidebarDM = ({ selectedUser, status }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -18,6 +18,10 @@ const UserSidebarDM = ({ selectedUser }) => {
         </div>
         <div className="user-info">
           <div className="user-name">{currentUser ? currentUser : "Loading..."}</div>
+          <div className={"user-status"}>
+              <span className={`status-circle ${status}`}></span>
+              {status}
+              </div>
         </div>
       </div>
 
