@@ -10,6 +10,17 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChann
       .then((response) => response.json())
       .then((data) => setCurrentUser(data))
       .catch((error) => console.error("Error fetching user:", error));
+
+    fetch("http://localhost:5001/get_user_groups", { credentials: "include" })
+    .then((response) => {
+      console.log("Raw response:", response);
+      return response.json();
+    })
+    .then((data) => {
+      console.log("User's groups:", data);
+      setGroups(data); // Set the fetched groups
+    })
+    .catch((error) => console.error("Error fetching groups:", error));
   }, []);
 
   const sendJoinCode = () => {
