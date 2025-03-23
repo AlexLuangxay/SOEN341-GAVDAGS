@@ -217,3 +217,29 @@ def logout():
 
 if __name__ == "__main__":
     socketIO.run(app,debug=True, port=5001)
+
+app = Flask(__name__)
+
+@app.route("/get_group_members", methods=["POST"])
+def get_group_members():
+    # Get guild_id from the request body
+    try:
+        data = request.get_json()  # Get data from the POST body
+        guild_id = data.get("group")  # Assuming the client sends 'group' as the guild ID
+
+        if not guild_id:
+            return jsonify({"error": "Guild ID is required"}), 400
+
+        # Use the function from api.py to fetch members from the database
+        members = get_guild_members(guild_id)  # This is where the function from api.py is called
+        
+        if members:
+            return jsonify(members)  # Return the fetched members as a JSON response
+        else:
+            return jsonify({"message": "No members found"}), 404
+    except Exception as e:
+        print(f"Error in get_group_members route: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)

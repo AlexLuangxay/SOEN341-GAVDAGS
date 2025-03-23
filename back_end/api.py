@@ -548,6 +548,8 @@ def get_all_users():
         print(f"Error fetching users: {e}")
         
         
+
+
   # Get guild members and their role
 def get_guild_members(guild_id):
     try:
@@ -558,3 +560,6 @@ def get_guild_members(guild_id):
         return members
     except Exception as e:
         print(f"Error fetching guild members: {e}")
+        
+        
+        
