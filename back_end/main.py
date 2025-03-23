@@ -26,6 +26,21 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/get_user_groups', methods=['GET'])
+@login_required
+def get_user_groups():
+    username = session.get('user')
+    client_id = get_client_id(username)  # Fetch user ID
+    groups = getGuildFromMember(client_id)  # Fetch groups from database
+
+    if not groups:
+        return jsonify([])  # Return empty list if no groups found
+
+    group_ids = [group[0] for group in groups]  # Extract group names
+    group_names = [get_guild_name(group_id) for group_id in group_ids] 
+    #print(group_names)
+    return jsonify(group_names), 200
+
 @app.route('/fetch_channels', methods=['POST'])
 @login_required
 def fetch_channels():

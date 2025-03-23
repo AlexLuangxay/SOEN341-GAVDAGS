@@ -23,10 +23,25 @@ def get_guild_id(guild_name):
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     guild_id = obj[0]
-    print(guild_id)
+    #print(guild_id)
     return(guild_id)
   except Exception as e:
     print('Error Retrieving Guild ID: ', e)
+
+# Get guild id from username
+def get_guild_name(guild_id):
+  try:
+    sql = 'SELECT guild_name FROM Guild WHERE guild_id = (%s)'
+    val = (guild_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    #print(obj[0])
+    return(obj[0])
+  except Exception as e:
+    print('Error Retrieving Guild Name: ', e)
+
+# Test vvv 
+#get_guild_name(266)
 
 # Get client id from username
 def get_client_id(client_username):
@@ -82,7 +97,8 @@ def getGuildFromMember(client_id):
     val = (client_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
-    print(obj)
+    #print(obj)
+    return(obj)
   except Exception as e:
     print('Error Retrieving Guilds: ', e)
 # Test vvv
@@ -383,7 +399,7 @@ def create_whisper(client_1, client_2):
     print('Error Creating Whisper: ', e)
 # Test vvv
 # create_whisper(1, 5)
-create_whisper(1, 11)
+#create_whisper(1, 11)
 
 # Read a Whisper
 def read_whisper(client_1, client_2):
