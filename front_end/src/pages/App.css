@@ -394,8 +394,9 @@ h1{
   align-items: center;
 }
 
-#dot, #paperclip, #send{
+#dot, #paperclip, #send, #microphone{
   height: 20px;
+  
 }
 
 .main-container {
@@ -448,6 +449,7 @@ h1{
 
 .send-button{
   background-color: #8EA8C3;
+  
 }
 
 .message {
