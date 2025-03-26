@@ -221,6 +221,8 @@ def get_messages():
 
     return jsonify(messages)
 
+
+
 @app.route('/logout')
 @login_required
 def logout():
