@@ -14,15 +14,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Change directory
+        run: cd front_end
 
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Change directory
-        run: cd front_end
-        
       - name: Install dependencies
         run: npm ci
 
