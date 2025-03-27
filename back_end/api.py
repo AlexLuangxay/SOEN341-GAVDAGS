@@ -16,7 +16,7 @@ mycursor = mydb.cursor()
 mydb.commit()
 
 # Get guild id from username
-def get_guild_id(guild_name):
+def get_guild_id(guild_name): # UNIQUE GUI
   try:
     sql = 'SELECT * FROM Guild WHERE guild_name = (%s)'
     val = (guild_name,)
@@ -119,6 +119,25 @@ def getChannelFromGuild(guild_id):
 # Test vvv
 #for x in range(10):
 #  getChannelFromGuild(x)
+
+## getChannelID from channel name
+def getChannelID(channel_name):
+  try:
+    sql = 'SELECT * FROM Channel'
+    mycursor.execute(sql)
+    obj = mycursor.fetchall()
+    for x in obj:
+        print(x)
+    sql = 'SELECT channel_id FROM Channel WHERE channel_name = %s'
+    val = (channel_name,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    print("channel_name: ", channel_name)
+    print("channel_id: ", obj[0])
+    return obj
+  except Exception as e:
+    print('Error Retrieving Channels: ', e)
+    
 
 #Get channel name from its id
 def getChannelFromID(channel_id):

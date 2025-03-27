@@ -82,23 +82,28 @@ def fetch_guild_users():
 @app.route('/channels', methods=['POST'])
 @login_required
 def channels():
-    # data = request.get_json()
-    # guild_id = get_guild_id(data.get('group'))
-    # channel_ids = getChannelFromGuild(guild_id)
+    data = request.get_json()
+    guild_id = get_guild_id(data.get('group'))
+    channel_ids = getChannelFromGuild(guild_id)
+    
+    
+    print("getting channels for guild ", guild_id)
 
-    # if isinstance(channel_ids, list):
-    #     channel_ids = [channel_id[1] for channel_id in channel_ids]
+    if isinstance(channel_ids, list):
+        channel_ids = [channel_id[1] for channel_id in channel_ids]
 
-    # channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
+    channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
     
     
-    # flat_channels = []
+    print("channels ", channels)
     
-    # for channel in channels:
-    #     if isinstance(channel, list) and len(channel) > 0:
-    #         flat_channels.append(channel[0][0])
-    # print("chat ", guild_id, "has channels: ", flat_channels)
-    return jsonify([]), 200
+    flat_channels = []
+    
+    for channel in channels:
+        if isinstance(channel, list) and len(channel) > 0:
+            flat_channels.append(channel[0][0])
+    print("chat ", guild_id, "has channels: ", flat_channels)
+    return jsonify(channels), 200
 
 @app.route('/current_user', methods=['GET'])
 @login_required
@@ -160,6 +165,10 @@ def join_group(data):
     session["room"] = group_name # Store the room in the session
     session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
+    
+    
+    
+    
 
 @socketIO.on("sendPrivateMessage")
 def send_private_message(data):
@@ -174,29 +183,52 @@ def send_private_message(data):
 
 @socketIO.on("sendMessage")
 def send_message(data):
-    room = data.get("room")
+    room = data.get("room")[0][0]
+    room_id = getChannelID(room)
     message = data.get("message")
     username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
     #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
-    print(f"Message sent in {room} from {username}: {message}")
-    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
+    print(f"Message sent in {room_id} from {username}: {message}")
+    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room_id}, room=room_id)
+    connected_clients = socketIO.server.manager.get_participants('/', room_id)
+    print(f"Connected clients in room {room_id}: {connected_clients}")
     #create_public_letter(get_client_id(username), message) FIX THIS WHEN YOU GET METHOD TO RETRIEVE CHANNEL 
 
-@socketIO.on("connect")
-def connect():
-    room = session.get("room")
-    name = session.get("name")
+@socketIO.on("connectRoom")
+def connectRoom(data):
+    roomlist = data.get("group")
+    
+    # I NEED TO GET THE CHANNEL ID AND STORE IT IN THE VAR room
+    channel_name = roomlist[0][0]
+    room = getChannelID(channel_name)
+    if room is None:
+        return
+    room : int = room[0]
+    print(room)
+    name = data.get("username")
+    print(f"Connecting to room {room} as {name}")
+    
     if not room or not name: 
         return 
-    if room not in rooms: 
-        leave_room(room)
-        return 
+    # if room not in rooms: 
+    #     leave_room(room)
+    #     return 
 
     join_room(room)
+    socketIO.emit("messageReceived", {"user": name, "message": "has entered the room", "timestamp": datetime.now().strftime('%Y-%m-%d %I:%M %p'), "room": room}, room=room)
     send({"name": name, "message": "has entered the room"}, to=room)
-    rooms[room]["members"] += 1
+    
+    history = getLetterFromChannel(room)
+    
+    if history:
+        for letter in history:
+            print(letter)
+            socketIO.emit("messageReceived", {"user": get_client_name(letter[1]), "message": letter[3], "timestamp": letter[4].isoformat(timespec='minutes').replace('T', ' '), "room": room}, room=room)
+        
+    # rooms[room]["members"] += 1
     print(f"{name} joined room {room}")
+    
     
 # @socketIO.on("disconnect")
 # def disconnect():

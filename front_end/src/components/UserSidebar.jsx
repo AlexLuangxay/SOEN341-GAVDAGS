@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 
 const UserSidebar = ({ guildId }) => {
+  const [currentUser, setCurrentUser] = useState(null);
   const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/current_user", { credentials: "include" })
+      .then(response => response.json())
+      .then(data => setCurrentUser(data))
+      .catch(error => console.error("Error fetching user:", error));
+  }, []);
 
   useEffect(
     () => {
       const fetch_users_from_guild = async () => {
         if (!guildId) {
-          return ;
+          return;
         }
+
         const response = await fetch(
           `http://localhost:5001/guild_users?guild_id=${guildId}`,
           {
@@ -17,6 +26,11 @@ const UserSidebar = ({ guildId }) => {
           }
         );
 
+  
+
+
+
+  
         const data = await response.json();
         console.log(data);
         setUsers(data);

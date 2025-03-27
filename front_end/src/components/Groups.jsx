@@ -53,7 +53,7 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChann
     if (currentGroup !== group) {
       setGroupName(group); // Update group name
       setCurrentGroup(group);
-      console.log("Switched to room:", group);
+      console.log("Switched to room:", group, "as", username);
     }
         
     fetch("http://localhost:5001/channels", {
@@ -83,7 +83,7 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChann
     <div className="groups">
       <h2>Groups</h2>
       <div className="join">
-          <input type="text" placeholder="Room Code" className="input" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
+          <input type="text" placeholder="Room Code" class="input" name="code" value={code} onChange={(e) => setCode(e.target.value)}/>
         <div className="button-container">
           <button onClick={sendJoinCode} type="submit" className="groups-btn" name="join">Join</button>
           <button onClick={sendCreateSignal} name="create" className="groups-btn">Create</button>

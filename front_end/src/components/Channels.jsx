@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from "react";
-import AddModal from '../pages/AddModal.jsx';
+import AddModal from "../pages/AddModal.jsx";
 import trashIcon from "../public/trash-bin.png";
 import plusIcon from "../public/Plus-sign.png";
 
-const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
+const Channels = ({
+  setMessages,
+  currentUser,
+  socket,
+  onSelectChannel,
+  currentGroup,
+  channels1
+}) => {
   const [channels, setChannels] = useState([]);
   const [isAddOpen, setAddOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState(null);
 
-  useEffect(() => {
-    if (Array.isArray(channels1)) {
-      setChannels(channels1);
-    }
-  }, [channels1]);
+  useEffect(
+    () => {
+      if (Array.isArray(channels1)) {
+        setChannels(channels1);
+      }
+    },
+    [channels1]
+  );
 
   const toggleAdd = () => setAddOpen(!isAddOpen);
 
-  const handleSelectChannel = (channel) => {
+  const handleSelectChannel = channel => {
+    setMessages([]);
+
+    console.log("Selected channel:", channel);
+    socket.emit("connectRoom", { group: channel, username: currentUser });
+
+    
+
     setSelectedChannel(channel);
     onSelectChannel(channel);
   };
@@ -25,25 +42,24 @@ const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
     if (selectedChannel) {
       setChannels(channels.filter(channel => channel !== selectedChannel));
       setSelectedChannel(null);
-      onSelectChannel('');
+      onSelectChannel("");
     }
   };
 
-  const handleAddChannel = (newChannel) => {
+  const handleAddChannel = newChannel => {
     if (newChannel && !channels.includes(newChannel)) {
       setChannels([...channels, newChannel]);
-      
+
       fetch("http://localhost:5001/fetch_channels", {
         credentials: "include",
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ group: currentGroup, channel: newChannel })
-      })
-      .catch(error => console.error('Error sending channel name:', error));
+      }).catch(error => console.error("Error sending channel name:", error));
     }
   };
 
-  return ( 
+  return (
     <div className="channels">
       <div className="div-button69">
         <h2>Channels</h2>
@@ -54,21 +70,25 @@ const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
           <img src={trashIcon} alt="Trash bin icon" />
         </button>
       </div>
-      <div className="channels-list-container"> 
+      <div className="channels-list-container">
         <ul>
-          {channels.map((channel, index) => (
+          {channels.map((channel, index) =>
             <li key={index}>
-              <button 
+              <button
                 onClick={() => handleSelectChannel(channel)}
                 className={selectedChannel === channel ? "selected" : ""}
               >
                 {channel}
               </button>
             </li>
-          ))}
+          )}
         </ul>
       </div>
-      <AddModal isOpen={isAddOpen} onClose={toggleAdd} onAddChannel={handleAddChannel} />
+      <AddModal
+        isOpen={isAddOpen}
+        onClose={toggleAdd}
+        onAddChannel={handleAddChannel}
+      />
     </div>
   );
 };

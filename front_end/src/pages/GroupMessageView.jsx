@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 import "./App.css";
 import ChatWindow from "../components/ChatWindow";
 import Groups from "../components/Groups";
@@ -11,7 +11,7 @@ import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import GroupChatName from "../components/GroupChatName";
 
-const socket = io('http://localhost:5001');
+const socket = io("http://localhost:5001");
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -20,69 +20,89 @@ function App() {
   const [selectedChannel, setSelectedChannel] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
   const [channels1, setChannels1] = useState([]);
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
-      .then((response) => response.json())
-      .then((data) => setCurrentUser(data))
-      .catch((error) => console.error("Error fetching user:", error));
+    fetch("http://localhost:5001/current_user", { credentials: "include" })
+      .then(response => response.json())
+      .then(data => setCurrentUser(data))
+      .catch(error => console.error("Error fetching user:", error));
   }, []);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('http://localhost:5001/current_user', {
-          method: 'GET',
-          credentials: 'include',
-        });
+  useEffect(
+    () => {
+      const checkAuth = async () => {
+        try {
+          const response = await fetch("http://localhost:5001/current_user", {
+            method: "GET",
+            credentials: "include"
+          });
 
-        if (!response.ok) {
-          console.log("Unauthorized access, redirecting to login.");
+          if (!response.ok) {
+            console.log("Unauthorized access, redirecting to login.");
+            navigate("/");
+          }
+        } catch (error) {
+          console.error("Error checking authentication:", error);
           navigate("/");
         }
-      } catch (error) {
-        console.error("Error checking authentication:", error);
-        navigate("/");
-      }
-    };
+      };
 
-    checkAuth();
+      checkAuth();
 
-    socket.on("connect", () => {
-      console.log("Connected to WebSocket server");
-    });
+      socket.on("connect", () => {
+        console.log("Connected to WebSocket server");
+      });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from WebSocket server");
-    });
+      socket.on("disconnect", () => {
+        console.log("Disconnected from WebSocket server");
+      });
 
-    socket.on("messageReceived", (data) => {
-      console.log("New message received:", data);
-      // setMessages((prevMessages) => [...prevMessages, data]);
-    });
+      socket.on("messageReceived", data => {
+        console.log("New message received:", data);
+        setMessages(prevMessages => [...prevMessages, data]);
+      });
 
-    return () => {
-      socket.off("messageReceived");
-    };
-  }, [navigate]);
+      return () => {
+        socket.off("messageReceived");
+      };
+    },
+    [navigate]
+  );
 
   return (
     <div className="App">
       <header className="top-bar">
         <TopLeftButtons />
-        <GroupChatName groupName={groupName} chatName={selectedChannel}/>
+        <GroupChatName groupName={groupName} chatName={selectedChannel} />
         <TopRightButtons />
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
-          <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup} setChannels1={setChannels1}/>
-          {currentGroup && <Channels onSelectChannel={setSelectedChannel} currentGroup={currentGroup} channels1={channels1}/>}
+          <Groups
+            socket={socket}
+            setGroupName={setGroupName}
+            setCurrentGroup={setCurrentGroup}
+            setChannels1={setChannels1}
+          />
+          {currentGroup &&
+            <Channels
+              setMessages={setMessages}
+              currentUser={currentUser}
+              socket={socket}
+              onSelectChannel={setSelectedChannel}
+              currentGroup={currentGroup}
+              channels1={channels1}
+            />}
         </aside>
         <main className="chat-container">
-          <ChatWindow messages={messages}/>
-          <MessageBar socket={socket} currentGroup={currentGroup} currentUser={currentUser}/>
+          <ChatWindow messages={messages} />
+          <MessageBar
+            socket={socket}
+            channel={selectedChannel}
+            currentUser={currentUser}
+          />
         </main>
         <aside className="right-sidebar">
           <UserSidebar guildId={currentGroup} />
