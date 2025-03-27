@@ -510,7 +510,7 @@ def read_public_letter(letter_id):
 # In case of Error Creating Private Letter:  1452 (23000): Cannot add or update a child row:
 # a foreign key constraint fails (`Soen341`.`WhisperHasLetter`, CONSTRAINT `WhisperHasLetter_ibfk_1` FOREIGN KEY (`client_1`, `client_2`)
 # REFERENCES `Whisper` (`client_1`, `client_2`) ON DELETE CASCADE)
-# ^^^ MAKE SURE TO CREATE THE WHISPER (DM INSTANSE BEFOREHAND)
+# ^^^ MAKE SURE TO CREATE THE WHISPER (DM INSTANCE BEFOREHAND)
 def create_private_letter(sender_id, receiver_id, content):
   try:
     sql_letter = 'INSERT INTO PrivateLetter (sender_id, receiver_id, content) VALUES (%s, %s, %s)'
@@ -536,7 +536,7 @@ def create_private_letter(sender_id, receiver_id, content):
   except Exception as e:
     print('Error Creating Private Letter: ', e)
 # Test vvv
-#create_private_letter(1, 11, 'Random Message For Derrek')
+#create_private_letter(1, 11, 'Random Message For Derek')
 
 # Read a Private Letter
 def read_private_letter(letter_id):

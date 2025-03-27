@@ -1,36 +1,42 @@
 import React, { useEffect, useState } from "react";
 
-const UserSidebar = ( {guildId} ) => {
-  const [users, setUsers] = useState([]);
+const UserSidebar = ({ selectedUser, status }) => {
+  const [currentUser, setCurrentUser] = useState(null);
 
-useEffect(() => {
-    const fetch_users_from_guild = async () => {
-        const response = await fetch(`http://localhost:5001/server/${guildId}/users`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        const data = await response.json();
-        setUsers(data);
-    };
-
-    fetch_users_from_guild();
-    
-  }, [guildId]);
+  useEffect(() => {
+    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
+      .then((response) => response.json())
+      .then((data) => setCurrentUser(data))
+      .catch((error) => console.error("Error fetching user:", error));
+  }, []);
 
   return (
     <div className="user-sidebar">
-      {users.map((user, index) => (
-        <div key={index} className="user-card">
+      <div className="user-card">
+        <div className="avatar">
+          <img src="profile-user.png" alt="User Avatar" />
+        </div>
+        <div className="user-info">
+          <div className="user-name">{currentUser ? currentUser : "Loading..."}</div>
+          <div className={"user-status"}>
+              <span className={`status-circle ${status}`}></span>
+              {status}
+              </div>
+        </div>
+      </div>
+
+      {selectedUser ? (
+        <div className="user-card">
           <div className="avatar">
             <img src="profile-user.png" alt="User Avatar" />
           </div>
           <div className="user-info">
-            <div className="user-name">{user.client_username}</div>
-            {/*<div className="user-role">{user.role}</div>*/}
+            <div className="user-name">{selectedUser}</div>
           </div>
         </div>
-      ))}
+      ) : (
+        <p></p>
+      )}
     </div>
   );
 };
