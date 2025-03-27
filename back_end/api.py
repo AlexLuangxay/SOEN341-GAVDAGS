@@ -562,20 +562,3 @@ def get_all_users():
         return users
     except Exception as e:
         print(f"Error fetching users: {e}")
-        
-        
-
-
-  # Get guild members and their role
-def get_guild_members(guild_id):
-    try:
-        sql = 'SELECT client_id, admin_status FROM GuildHasMember WHERE guild_id = (%s)'
-        val = (guild_id,)
-        mycursor.execute(sql, val)
-        members = mycursor.fetchall()
-        return members
-    except Exception as e:
-        print(f"Error fetching guild members: {e}")
-        
-        
-        
