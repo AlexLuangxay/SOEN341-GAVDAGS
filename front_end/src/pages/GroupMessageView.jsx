@@ -85,7 +85,7 @@ function App() {
           <MessageBar socket={socket} currentGroup={currentGroup} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
-          <UserSidebar/>
+          <UserSidebar currentGroup={currentGroup} />
         </aside>
       </div>
     </div>

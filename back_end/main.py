@@ -41,6 +41,24 @@ def get_user_groups():
     #print(group_names)
     return jsonify(group_names), 200
 
+@app.route('/get_group_users', methods=['POST'])
+@login_required
+def get_group_users():
+    data = request.get_json()
+    group_name = data.get('group')
+
+    if not group_name:
+        return jsonify({"error": "Group name is required"}), 400
+
+    guild_id = get_guild_id(group_name)
+    users = getUserFromGuild(guild_id)
+
+    if not users:
+        return jsonify([])  # Return empty list if no users found
+
+    user_list = [user[0] for user in users]  # Extract usernames
+    return jsonify(user_list), 200
+
 @app.route('/fetch_channels', methods=['POST'])
 @login_required
 def fetch_channels():
@@ -75,7 +93,6 @@ def channels():
         channel_ids = [channel_id[1] for channel_id in channel_ids]
 
     channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
-    
     
     flat_channels = []
     for channel in channels:
