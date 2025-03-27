@@ -60,6 +60,8 @@ def fetch_channels():
 @app.route('/users', methods=['GET'])
 @login_required
 def fetch_users():
+    guild_id = request.args.get('guild_id')
+    print("Getting users for guild ", guild_id)
     users = get_all_users() 
     users = [user for user in users if user["name"] != session.get('user')]
     return jsonify(users), 200 

@@ -135,6 +135,7 @@ def getChannelFromID(channel_id):
 # Get all users a server has
 def getUserFromGuild (guild_id):
   try:
+    
     sql = 'SELECT Client.client_username FROM GuildHasMember JOIN Client ON GuildHasMember.client_id = Client.client_id WHERE GuildHasMember.guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)

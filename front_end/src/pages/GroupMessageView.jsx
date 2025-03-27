@@ -10,7 +10,6 @@ import UserSidebar from "../components/UserSidebar";
 import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import GroupChatName from "../components/GroupChatName";
-import GroupSidebar from "../components/GroupSidebar";
 
 const socket = io('http://localhost:5001');
 
@@ -61,7 +60,7 @@ function App() {
 
     socket.on("messageReceived", (data) => {
       console.log("New message received:", data);
-      setMessages((prevMessages) => [...prevMessages, data]);
+      // setMessages((prevMessages) => [...prevMessages, data]);
     });
 
     return () => {
@@ -86,8 +85,7 @@ function App() {
           <MessageBar socket={socket} currentGroup={currentGroup} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
-        <GroupSidebar socket={socket} currentGroup={currentGroup} />
-          <UserSidebar/>
+          <UserSidebar guildId={currentGroup} />
         </aside>
       </div>
     </div>
