@@ -8,6 +8,7 @@ import os
 from api import *
 from datetime import timedelta
 from functools import wraps
+import faker
 
 app = Flask(__name__)
 
@@ -60,31 +61,44 @@ def fetch_channels():
 @app.route('/users', methods=['GET'])
 @login_required
 def fetch_users():
-    guild_id = request.args.get('guild_id')
-    print("Getting users for guild ", guild_id)
     users = get_all_users() 
     users = [user for user in users if user["name"] != session.get('user')]
+    return jsonify(users), 200 
+
+
+@app.route('/guild_users', methods=['GET'])
+@login_required
+def fetch_guild_users():
+    guild_id = request.args.get('guild_id')
+    print("Getting users for guild ", guild_id)
+    print("FETCHING USERS")
+    # users = get_guild_members(guild_id)
+    fake = faker.Faker()
+    users = [{"name": fake.name()} for _ in range(10)]
+    users = [user for user in users if user["name"] != session.get('user')]
+    print("DONE===============")
     return jsonify(users), 200 
 
 @app.route('/channels', methods=['POST'])
 @login_required
 def channels():
-    data = request.get_json()
-    guild_id = get_guild_id(data.get('group'))
-    channel_ids = getChannelFromGuild(guild_id)
+    # data = request.get_json()
+    # guild_id = get_guild_id(data.get('group'))
+    # channel_ids = getChannelFromGuild(guild_id)
 
-    if isinstance(channel_ids, list):
-        channel_ids = [channel_id[1] for channel_id in channel_ids]
+    # if isinstance(channel_ids, list):
+    #     channel_ids = [channel_id[1] for channel_id in channel_ids]
 
-    channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
+    # channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
     
     
-    flat_channels = []
-    for channel in channels:
-        if isinstance(channel, list) and len(channel) > 0:
-            flat_channels.append(channel[0][0])
-    print("chat ", guild_id, "has channels: ", flat_channels)
-    return jsonify(flat_channels), 200
+    # flat_channels = []
+    
+    # for channel in channels:
+    #     if isinstance(channel, list) and len(channel) > 0:
+    #         flat_channels.append(channel[0][0])
+    # print("chat ", guild_id, "has channels: ", flat_channels)
+    return jsonify([]), 200
 
 @app.route('/current_user', methods=['GET'])
 @login_required

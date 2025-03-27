@@ -564,7 +564,6 @@ def get_all_users():
     except Exception as e:
         print(f"Error fetching users: {e}")
         
-        
 
 
   # Get guild members and their role
