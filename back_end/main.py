@@ -222,6 +222,31 @@ def get_messages():
     return jsonify(messages)
 
 
+@app.route('/getChannelMessages', methods=['GET'])
+@login_required
+def get_messages():
+    channel_id = request.args.get('channel_id')
+
+    if not channel_id:
+        return jsonify({"error": "Channel ID is required"}), 400
+
+    messages_data = getLetterFromChannel(channel_id)
+
+    if not messages_data:
+        return jsonify([])  # Return empty array if no messages
+
+    messages = []
+    for message in messages_data:
+        messages.append({
+            'id': message[0],
+            'user': get_client_name(message[1]),  # Sender name
+            'channel_id': channel_id,
+            'message': message[2],
+            'timestamp': message[3].isoformat(timespec='minutes').replace('T', ' ')  # Convert timestamp format
+        })
+
+    return jsonify(messages)
+
 
 @app.route('/logout')
 @login_required
