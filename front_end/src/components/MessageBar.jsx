@@ -3,6 +3,31 @@ import React, { useState } from 'react';
 const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
   const [message, setMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isListening, setIsListening] = useState(false);
+
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+
+  recognition.onresult = (event) => {
+    const transcript = Array.from(event.results)
+      .map((result) => result[0].transcript)
+      .join('');
+    setMessage(transcript);
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+  };
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognition.stop();
+    } else {
+      recognition.start();
+    }
+    setIsListening((prev) => !prev);
+  };
 
   const sendMessage = () => {
     if (message.trim() !== '') {
@@ -13,8 +38,8 @@ const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
         socket.emit('sendPrivateMessage', { recipient: selectedUser, currentUser: currentUser, message, file: selectedFile });
         console.log('Sending private message:', message, 'to:', selectedUser);
       }
-      setMessage(''); // Clear the input field after sending
-      setSelectedFile(null); // Clear the selected file after sending
+      setMessage('');
+      setSelectedFile(null);
     }
   };
 
@@ -29,7 +54,7 @@ const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
 
   return (
     <div className="message-bar">
-      <img id="dot" src="circle.png" />
+      <img id="dot" src="circle.png" alt="Status" />
       <input
         type="text"
         placeholder="Message here"
@@ -51,6 +76,9 @@ const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
       <button className="send-button" onClick={triggerFileInput}>
         <img id="paperclip" src="paperclip.png" alt="Attach File" />
       </button>
+      <button className="send-button" onClick={toggleListening} style={{ backgroundColor: isListening ? 'white' : 'transparent' }}>
+        <img id="microphone" src='microphone.png' alt="Microphone" />
+      </button>
       <button className="send-button" onClick={sendMessage}>
         <img id="send" src="message.png" alt="Send Message" />
       </button>
@@ -59,4 +87,3 @@ const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
 };
 
 export default MessageBar;
-

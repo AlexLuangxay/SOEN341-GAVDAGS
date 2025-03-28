@@ -79,7 +79,7 @@ CREATE TABLE ChannelHasLetter (
     channel_id INT,
     letter_id INT,
     FOREIGN KEY (channel_id) REFERENCES Channel(channel_id) ON DELETE CASCADE,
-    FOREIGN KEY (letter_id) REFERENCES PrivateLetter(letter_id) ON DELETE CASCADE,
+    FOREIGN KEY (letter_id) REFERENCES PublicLetter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (channel_id, letter_id)
 );
 
