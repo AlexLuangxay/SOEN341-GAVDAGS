@@ -26,12 +26,63 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/get_user_groups', methods=['GET'])
+@login_required
+def get_user_groups():
+    username = session.get('user')
+    client_id = get_client_id(username)  # Fetch user ID
+    groups = getGuildFromMember(client_id)  # Fetch groups from database
+
+    if not groups:
+        return jsonify([])  # Return empty list if no groups found
+
+    group_ids = [group[0] for group in groups]  # Extract group names
+    group_names = [get_guild_name(group_id) for group_id in group_ids] 
+    #print(group_names)
+    return jsonify(group_names), 200
+
+@app.route('/fetch_channels', methods=['POST'])
+@login_required
+def fetch_channels():
+    data = request.get_json()
+    current_group = data.get('group')
+    channel_name = data.get('channel')
+    if not current_group or not channel_name:
+        print(current_group, channel_name)
+        return jsonify({"error": "Group and channel name are required"}), 400
+
+    print(f"Received channel '{channel_name}' for group '{current_group}'")
+    guild_id = get_guild_id(current_group)
+    create_channel(guild_id, channel_name)
+
+    return jsonify({"message": "Channel received successfully"}), 200
+
 @app.route('/users', methods=['GET'])
 @login_required
 def fetch_users():
     users = get_all_users() 
     users = [user for user in users if user["name"] != session.get('user')]
     return jsonify(users), 200 
+
+@app.route('/channels', methods=['POST'])
+@login_required
+def channels():
+    data = request.get_json()
+    guild_id = get_guild_id(data.get('group'))
+    channel_ids = getChannelFromGuild(guild_id)
+
+    if isinstance(channel_ids, list):
+        channel_ids = [channel_id[1] for channel_id in channel_ids]
+
+    channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
+    
+    
+    flat_channels = []
+    for channel in channels:
+        if isinstance(channel, list) and len(channel) > 0:
+            flat_channels.append(channel[0][0])
+    print("chat ", guild_id, "has channels: ", flat_channels)
+    return jsonify(flat_channels), 200
 
 @app.route('/current_user', methods=['GET'])
 @login_required
@@ -94,18 +145,30 @@ def join_group(data):
     session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
 
+@socketIO.on("sendPrivateMessage")
+def send_private_message(data):
+    message = data.get("message")
+    recipient = data.get("recipient")
+    timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
+    sender = data.get("currentUser")
+    print(f"Private message sent from {sender} to {recipient}: {message}")
+    create_whisper(get_client_id(sender), get_client_id(recipient))
+    create_private_letter(get_client_id(sender), get_client_id(recipient), message)
+    socketIO.emit("privateMessageReceived", {"user": sender, "recipient": recipient, "message": message, "timestamp": timestamp})
+
 @socketIO.on("sendMessage")
 def send_message(data):
-    room = session.get("room")
+    room = data.get("room")
     message = data.get("message")
-    username = session.get("user")
+    username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
     #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room} from {username}: {message}")
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
+    #create_public_letter(get_client_id(username), message) FIX THIS WHEN YOU GET METHOD TO RETRIEVE CHANNEL 
 
 @socketIO.on("connect")
-def connect(auth):
+def connect():
     room = session.get("room")
     name = session.get("name")
     if not room or not name: 
@@ -117,15 +180,13 @@ def connect(auth):
     join_room(room)
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1
-    socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
     print(f"{name} joined room {room}")
-
+    
 # @socketIO.on("disconnect")
 # def disconnect():
 #     room = session.get("room")
 #     name = session.get("name")
 #     leave_room(room)
-
 #     if room in rooms:
 #         rooms[room]["members"] -= 1
 #         rooms[room]["users"] = [user for user in rooms[room]["users"] if user["name"] != name] # Remove user from room
@@ -133,7 +194,6 @@ def connect(auth):
 #             del rooms[room]
 
 #     send({"name": name, "message": "has left the room"}, to=room)
-#     socketIO.emit("updateUsers", rooms[room]["users"], room=room) # Emit updated user list
 #     print(f"{name} has left room {room}")
 
 @app.route('/getMessages', methods=['GET'])
@@ -153,13 +213,40 @@ def get_messages():
         if letter:
             messages.append({
                 'id': letter[0],
-                'user': letter[1],
+                'user': get_client_name(letter[1]),
                 'receiver': letter[2],
                 'message': letter[3],
-                'timestamp': letter[4].isoformat()  # Convert to JSON-friendly format
+                'timestamp': letter[4].isoformat(timespec='minutes').replace('T', ' ')  # Convert to JSON-friendly format
             })
 
     return jsonify(messages)
+
+
+@app.route('/getChannelMessages', methods=['GET'])
+@login_required
+def get_channel_messages():
+    channel_id = request.args.get('channel_id')
+
+    if not channel_id:
+        return jsonify({"error": "Channel ID is required"}), 400
+
+    messages_data = getLetterFromChannel(channel_id)
+
+    if not messages_data:
+        return jsonify([])  # Return empty array if no messages
+
+    messages = []
+    for message in messages_data:
+        messages.append({
+            'id': message[0],
+            'user': get_client_name(message[1]),  # Sender name
+            'channel_id': channel_id,
+            'message': message[2],
+            'timestamp': message[3].isoformat(timespec='minutes').replace('T', ' ')  # Convert timestamp format
+        })
+
+    return jsonify(messages)
+
 
 @app.route('/logout')
 @login_required
@@ -169,3 +256,29 @@ def logout():
 
 if __name__ == "__main__":
     socketIO.run(app,debug=True, port=5001)
+
+app = Flask(__name__)
+
+@app.route("/get_group_members", methods=["POST"])
+def get_group_members():
+    # Get guild_id from the request body
+    try:
+        data = request.get_json()  # Get data from the POST body
+        guild_id = data.get("group")  # Assuming the client sends 'group' as the guild ID
+
+        if not guild_id:
+            return jsonify({"error": "Guild ID is required"}), 400
+
+        # Use the function from api.py to fetch members from the database
+        members = get_guild_members(guild_id)  # This is where the function from api.py is called
+        
+        if members:
+            return jsonify(members)  # Return the fetched members as a JSON response
+        else:
+            return jsonify({"message": "No members found"}), 404
+    except Exception as e:
+        print(f"Error in get_group_members route: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)

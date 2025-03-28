@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import SettingsModal from '../pages/SettingsModal.jsx';
-import settingsIcon from "../../public/settings-icon.png"
+import settingsIcon from "../public/settings-icon.png"
 
 
 const TopRightButtons = () => {
@@ -31,7 +31,7 @@ const TopRightButtons = () => {
     <>
       <div className="top-right-buttons">
         <button onClick={toggleSettings}><img src={settingsIcon} alt="Settings icon" /></button>
-        <button onClick={handleLogOut}>Log out</button>
+        <button onClick={handleLogOut}>Logout</button>
       </div>
       <SettingsModal isOpen={isSettingsOpen} onClose={toggleSettings} />
     </>

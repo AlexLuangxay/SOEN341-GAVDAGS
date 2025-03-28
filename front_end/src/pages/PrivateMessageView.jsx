@@ -15,13 +15,14 @@ const socket = io('http://localhost:5001');
 function App() {
   const [messages, setMessages] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [status, setStatus] = useState("Offline");
   const navigate = useNavigate();
 
   const fetchMessages = async () => {
-    if (!selectedUser){
-      console.log("boobies");
+    if (!selectedUser) {
       return;
-    } 
+    }
     try {
       const response = await fetch(`http://localhost:5001/getMessages?user=${selectedUser}`, {
         method: 'GET',
@@ -41,6 +42,13 @@ function App() {
   useEffect(() => {
     fetchMessages();
   }, [selectedUser]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
+      .then((response) => response.json())
+      .then((data) => setCurrentUser(data))
+      .catch((error) => console.error("Error fetching user:", error));
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -66,20 +74,26 @@ function App() {
 
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
+      setStatus("Online");
     });
 
     socket.on("disconnect", () => {
       console.log("Disconnected from WebSocket server");
+      setStatus("Offline");
     });
 
-    socket.on("messageReceived", (data) => {
+    if (socket.connected) { //Check if socket is already connected
+      setStatus("Online");
+    }
+
+    socket.on("privateMessageReceived", (data) => {
       console.log("Socket connected:", socket.connected);
       console.log("New message received:", data);
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
     return () => {
-      socket.off("messageReceived");
+      socket.off("privateMessageReceived");
     };
   }, []);
 
@@ -101,10 +115,10 @@ function App() {
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages} />
-          <MessageBar socket={socket} />
+          <MessageBar socket={socket} selectedUser={selectedUser} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
-          <UserSidebarDM selectedUser={selectedUser} />
+          <UserSidebarDM selectedUser={selectedUser} status={status}/>
         </aside>
       </div>
     </div>
