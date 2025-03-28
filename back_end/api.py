@@ -596,5 +596,23 @@ def get_guild_members(guild_id):
     except Exception as e:
         print(f"Error fetching guild members: {e}")
         
-        
+def update_user_status(client_id, status):
+    try:
+        sql = 'UPDATE Client SET client_status = (%s) WHERE client_id = (%s)'
+        val = (status, client_id)
+        mycursor.execute(sql, val)
+        mydb.commit()
+        print("Status updated successfully")
+    except Exception as e:
+        print(f"Error updating user status: {e}")
+
+def fetch_user_status(client_id):
+    try:
+        sql = 'SELECT client_status FROM Client WHERE client_id = (%s)'
+        val = (client_id,)
+        mycursor.execute(sql, val)
+        status = mycursor.fetchone()
+        return status[0]
+    except Exception as e:
+        print(f"Error fetching user status: {e}")       
         
