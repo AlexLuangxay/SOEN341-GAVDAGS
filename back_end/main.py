@@ -224,7 +224,7 @@ def get_messages():
 
 @app.route('/getChannelMessages', methods=['GET'])
 @login_required
-def get_messages():
+def get_channel_messages():
     channel_id = request.args.get('channel_id')
 
     if not channel_id:
