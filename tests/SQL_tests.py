@@ -1,40 +1,61 @@
+
+
+
+
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'back_end')))
-from api import create_client, read_client_username, create_guild, read_guild
+from api import (create_client, read_client_username, create_guild, read_guild,
+                 get_guild_id, get_client_id, addGuildMember)
 
 class TestDatabaseOperations(unittest.TestCase):
-    @patch('api.create_guild')
-    @patch('api.read_guild')
-    def test_guild_operations(self, mock_read_guild, mock_create_guild):
-        # Setup mocks
-        mock_create_guild.return_value = 1  # Assume this is the guild ID
-        mock_read_guild.return_value = (1, 'TestGuild')
+    @patch('api.mysql.connector.connect')
+    def setUp(self, mock_connect):
+        """Setup mock database connection."""
+        self.mock_db = MagicMock()
+        mock_connect.return_value = self.mock_db
+        self.mock_cursor = MagicMock()
+        self.mock_db.cursor.return_value = self.mock_cursor
 
-        # Call the function under test
-        guild_id = api.create_guild('TestGuild')
-        fetched_guild = api.read_guild(guild_id)
+    def test_create_client(self):
+        """Test client creation."""
+        self.mock_cursor.lastrowid = 1
+        self.mock_cursor.fetchone.return_value = (1, 'testuser')
+        client_id = create_client('testuser', 'password')
+        self.mock_cursor.execute.assert_called()
+        self.assertEqual(client_id, 1, "Should return the client ID")
 
-        # Assertions to ensure correct behavior
-        self.assertIsNotNone(fetched_guild, "Guild should exist in the database")
-        self.assertEqual(fetched_guild[1], 'TestGuild', "The guild names should match")
+    def test_read_client_username(self):
+        """Test reading client username."""
+        self.mock_cursor.fetchone.return_value = (1, 'testuser')
+        result = read_client_username('testuser')
+        self.assertTrue(result, "Should return True if client exists")
 
-    @patch('api.create_client')
-    @patch('api.read_client_username')
-    def test_client_operations(self, mock_read_client_username, mock_create_client):
-        # Setup mock
-        mock_create_client.return_value = True
-        mock_read_client_username.return_value = True
+    def test_create_guild(self):
+        """Test guild creation."""
+        self.mock_cursor.lastrowid = 123
+        self.mock_cursor.fetchone.return_value = None  # simulate no existing guild
+        guild_id = create_guild('NewGuild')
+        self.assertEqual(guild_id, 123, "Should return the new guild ID")
 
-        # Test creation and retrieval of a client
-        api.create_client("testuser", "testpass")
-        result = api.read_client_username("testuser")
+    def test_get_guild_id(self):
+        """Test fetching guild ID by name."""
+        self.mock_cursor.fetchone.return_value = (123,)
+        guild_id = get_guild_id('TestGuild')
+        self.assertEqual(guild_id, 123, "Should return the correct guild ID")
 
-        # Verify
-        self.assertTrue(result, "User should be found after creation")
+    def test_add_guild_member(self):
+        """Test adding a member to a guild."""
+        addGuildMember(123, 1, 0)
+        self.mock_cursor.execute.assert_called_with(
+            'INSERT INTO GuildHasMember (guild_id, client_id, admin_status) VALUES (%s, %s, %s)',
+            (123, 1, 0)
+        )
+        self.mock_db.commit.assert_called_once()
 
 if __name__ == '__main__':
     unittest.main()
+
