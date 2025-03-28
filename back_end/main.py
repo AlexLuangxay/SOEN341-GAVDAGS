@@ -131,6 +131,7 @@ def login():
     if check_client_credentials(username, password):
         session.permanent = True
         session['user'] = username
+        update_user_status(get_client_id(username), 1)
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
@@ -165,10 +166,7 @@ def join_group(data):
     session["room"] = group_name # Store the room in the session
     session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
-    
-    
-    
-    
+  
 
 @socketIO.on("sendPrivateMessage")
 def send_private_message(data):
@@ -272,13 +270,9 @@ def get_messages():
 @app.route('/logout')
 @login_required
 def logout():
+    update_user_status(get_client_id(session.get('user')), 0)
     session.pop('user', None)
     return jsonify({"message": "Logged out successfully"}), 200
-
-if __name__ == "__main__":
-    socketIO.run(app,debug=True, port=5001)
-
-app = Flask(__name__)
 
 @app.route("/get_group_members", methods=["POST"])
 def get_group_members():
@@ -300,6 +294,21 @@ def get_group_members():
     except Exception as e:
         print(f"Error in get_group_members route: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
+    
+@app.route('/get_user_status', methods=['GET'])
+@login_required
+def get_user_status():
+    username = request.args.get("username")
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
+
+    client_id = get_client_id(username)
+    if client_id is None:
+        return jsonify({"error": "User not found"}), 404
+
+    status = fetch_user_status(client_id)  # Fetch status from the database
+    #print(f"User {username} is {'online' if status else 'offline'}")
+    return jsonify({"status": status}), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketIO.run(app,debug=True, port=5001)
