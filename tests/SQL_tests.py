@@ -1,5 +1,9 @@
 import unittest
 from unittest.mock import patch
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'back_end')))
 from api import create_client, read_client_username, create_guild, read_guild
 
 class TestDatabaseOperations(unittest.TestCase):
