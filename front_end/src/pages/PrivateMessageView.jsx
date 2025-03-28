@@ -16,7 +16,6 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [status, setStatus] = useState("Offline");
   const navigate = useNavigate();
 
   const fetchMessages = async () => {
@@ -74,17 +73,11 @@ function App() {
 
     socket.on("connect", () => {
       console.log("Connected to WebSocket server");
-      setStatus("Online");
     });
 
     socket.on("disconnect", () => {
       console.log("Disconnected from WebSocket server");
-      setStatus("Offline");
     });
-
-    if (socket.connected) { //Check if socket is already connected
-      setStatus("Online");
-    }
 
     socket.on("privateMessageReceived", (data) => {
       console.log("Socket connected:", socket.connected);
