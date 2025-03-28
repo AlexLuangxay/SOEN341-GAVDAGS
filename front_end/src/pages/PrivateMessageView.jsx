@@ -1,42 +1,99 @@
-//We need to change this to add routing
-
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import "./App.css";
-import ChatWindow from "../components/ChatWindow";
+import ChatWindow from "../components/ChatWindowDM";
 import People from "../components/People";
-import Channels from "../components/Channels";
 import MessageBar from "../components/MessageBar";
-import UserSidebar from "../components/UserSidebar";
+import UserSidebarDM from "../components/UserSidebarDM";
 import TopLeftButtons from "../components/TopLeftButtons";
 import TopRightButtons from "../components/TopRightButtons";
 import ChatName from "../components/ChatName";
 
-const socket = io('http://localhost:5000');
+const socket = io('http://localhost:5001');
 
 function App() {
   const [messages, setMessages] = useState([]);
-  
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
+
+  const fetchMessages = async () => {
+    if (!selectedUser) {
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:5001/getMessages?user=${selectedUser}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      } else {
+        console.error("Failed to fetch messages");
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
   useEffect(() => {
+    fetchMessages();
+  }, [selectedUser]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/current_user", { credentials: "include" }) 
+      .then((response) => response.json())
+      .then((data) => setCurrentUser(data))
+      .catch((error) => console.error("Error fetching user:", error));
+  }, []);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/current_user', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          console.log("Unauthorized access, redirecting to login.");
+          navigate("/");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        navigate("/");
+        window.location.reload();
+      }
+    };
+
+    checkAuth();
+
     socket.on("connect", () => {
-      console.log("Connected to WebSocket server"); // Debugging log
+      console.log("Connected to WebSocket server");
     });
-  
+
     socket.on("disconnect", () => {
-      console.log("Disconnected from WebSocket server"); // Debugging log
+      console.log("Disconnected from WebSocket server");
     });
 
-    socket.on("messageReceived", (data) => {
+    socket.on("privateMessageReceived", (data) => {
       console.log("Socket connected:", socket.connected);
-      console.log("New message received:", data); // Debugging log
-      setMessages((prevMessages) => [...prevMessages, data])
-  })
+      console.log("New message received:", data);
+      setMessages((prevMessages) => [...prevMessages, data]);
+    });
 
-  return () => {
-    socket.off("messageReceived");
-  }
+    return () => {
+      socket.off("privateMessageReceived");
+    };
+  }, []);
 
-  }, []); 
+  const handleUserClick = (userName) => {
+    console.log("User clicked:", userName);
+    setSelectedUser(userName);
+  };
 
   return (
     <div className="App">
@@ -47,14 +104,14 @@ function App() {
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
-          <People socket={socket}/>
+          <People socket={socket} handleUserClick={handleUserClick} />
         </aside>
         <main className="chat-container">
-          <ChatWindow messages={messages}/>
-          <MessageBar socket={socket}/>
+          <ChatWindow messages={messages} />
+          <MessageBar socket={socket} selectedUser={selectedUser} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
-          <UserSidebar />
+          <UserSidebarDM selectedUser={selectedUser}/>
         </aside>
       </div>
     </div>

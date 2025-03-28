@@ -5,17 +5,18 @@ USE Soen341;
 /* Table for users AKA client as user is a restricted client */
 CREATE TABLE Client (
     client_id INT AUTO_INCREMENT,
-    client_username VARCHAR(25) DEFAULT 'Anon',
+    client_username VARCHAR(25) UNIQUE,
     client_password TEXT NOT NULL,
     client_bio TEXT,
     client_icon INT DEFAULT 0,
+    client_status BOOLEAN DEFAULT 0, /* 0 for offline, 1 for online */
     PRIMARY KEY (client_id)
 );
 
 /* Table for group AKA a guild as group and groups are restricted keywords */
 CREATE TABLE Guild (
     guild_id INT AUTO_INCREMENT,
-    guild_name VARCHAR(25) DEFAULT 'Unnamed Group',
+    guild_name VARCHAR(25) UNIQUE,
     PRIMARY KEY(guild_id)
 );
 
@@ -78,7 +79,7 @@ CREATE TABLE ChannelHasLetter (
     channel_id INT,
     letter_id INT,
     FOREIGN KEY (channel_id) REFERENCES Channel(channel_id) ON DELETE CASCADE,
-    FOREIGN KEY (letter_id) REFERENCES PrivateLetter(letter_id) ON DELETE CASCADE,
+    FOREIGN KEY (letter_id) REFERENCES PublicLetter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (channel_id, letter_id)
 );
 
@@ -87,7 +88,8 @@ CREATE TABLE WhisperHasLetter (
     client_1 INT NOT NULL,
     client_2 INT NOT NULL,
     letter_id INT,
-    FOREIGN KEY (client_1, client_2) REFERENCES Whisper(client_1, client_2) ON DELETE CASCADE,
+    FOREIGN KEY (client_1) REFERENCES Whisper(client_1) ON DELETE CASCADE,
+    FOREIGN KEY (client_2) REFERENCES Whisper(client_2) ON DELETE CASCADE,
     FOREIGN KEY (letter_id) REFERENCES PrivateLetter(letter_id) ON DELETE CASCADE,
     PRIMARY KEY (client_1, client_2, letter_id)
 );

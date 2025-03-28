@@ -5,6 +5,97 @@ html, body {
   overflow: hidden; /* Hide scrollbars */
 }
 
+.reverse button, 
+.reverse input, 
+.reverse .input1, 
+.reverse .user-card, 
+.reverse.message-bubble,
+.reverse.groupChatName h1,
+.reverse .groupChatName,
+.reverse .groups h2,
+.reverse .channels h2,
+.reverse .people h2,
+.reverse .user-card:hover,
+.reverse .groups-btn:hover,
+.reverse .channels-list-container button:hover,
+.reverse .chat-window,
+.reverse .Settingsmodal-content {
+  transform: scaleX(-1);
+}
+
+
+.dark .App, 
+.dark .main-container, 
+.dark .top-bar, 
+.dark .left-sidebar, 
+.dark .chat-window, 
+.dark .right-sidebar, 
+.dark .signup-container, 
+.dark .login-container, 
+.dark .Settingsmodal-content {
+  background-color: #D5CAD6;
+  color: rgb(0, 0, 0);
+  }
+
+.dark button, 
+.dark input, 
+.dark .input1, 
+.dark .user-card, 
+.dark .message-bubble {
+  background-color: #EAFFFD;
+  color: black;
+}
+
+.dark .message-bar,
+.dark .groups h2::after,
+.dark .channels h2::after,
+.dark .people h2::after{
+  background-color: #EAFFFD;
+}
+
+.dark .groupChatName h1,
+.dark .groupChatName,
+.dark .groups h2,
+.dark .channels h2,
+.dark .people h2{
+  color:#EAFFFD;
+}
+
+.dark .user-card:hover,
+.dark .groups-btn:hover,
+.dark .channels-list-container button:hover{
+  background-color: #EFEFF0;
+  color:black;
+}
+
+.dark .groups-btn,
+.dark .channels-list-container button{
+  color:black;
+}
+
+.dark .chat-window{
+  border-left: 2px solid black;
+  border-right: 2px solid black; 
+}
+
+.dark .groups-list-container::-webkit-scrollbar-thumb,
+.dark .channels-list-container::-webkit-scrollbar-thumb,
+.dark .chat-window::-webkit-scrollbar-thumb,
+.dark .people::-webkit-scrollbar-thumb{
+  background-color: black;
+}
+
+.dark .signup-box,
+.dark .login-box{
+  background-color: #EAFFFD;
+  color: black;
+}
+.dark .signup-box button,
+.dark .login-box button{
+  background-color: #D5CAD6;
+  color: black;
+}
+
 
 .App {
   width: 100vw;
@@ -16,7 +107,16 @@ html, body {
   justify-content: center; /* Center content vertically */
   align-items: center; /* Center content horizontally */
   overflow: hidden; /* Hides overflow within the app specifically */
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
 }
+
+.login-box,
+.signup-box{
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
 .main-container{
   background-color: #23395B;
   flex:1;
@@ -30,6 +130,15 @@ html, body {
   align-items: flex-end;
   gap: 10px;
   color:#8EA8C3;
+  margin-top: 10px;
+}
+
+.groupChatName h1{
+  margin-bottom: 0%;
+}
+
+.groupChatName h2{
+  margin-bottom: 0%;
 }
 
 .group-icon, .trash-icon{
@@ -39,27 +148,44 @@ html, body {
 .top-right-buttons{
   display: flex;
   flex-direction: row;
-  gap: 0px;
+  gap: 10px;
   padding-right: 40px;
 }
+
+.top-right-buttons button{
+  color: #8EA8C3;
+}
+
 .top-left-buttons {
   display: flex;
-  gap: 0px;
+  gap: 10px;
   margin-left: 10px;
+  margin-top: 10px;
 }
-.top-right-buttons button{
+
+.top-right-buttons button {
   background-color: transparent;
-  display: grid;
-  place-items: center;
-  height:50%;
-  margin-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px; /* Fixed height for consistency */
+  width: 50px; /* Fixed width to match the height */
+  padding: 0; /* Remove padding to prevent size increase */
 }
+
+.top-right-buttons img {
+  width: 80%; /* Adjusts the icon size relative to the button */
+  height: auto; /* Keeps the aspect ratio intact */
+}
+
+
 .top-left-buttons button{
   background-color: transparent;
   display: grid;
   place-items: center; 
-  margin-top: 10%;
+  margin-top: 0%;
   height:50%;
+  padding-bottom: 50px;
 }
 
 .top-bar {
@@ -67,6 +193,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   padding: 10px;
+  padding-bottom: 0;
   background: #23395B;
   color: white;
 }
@@ -105,12 +232,31 @@ h1{
   width: 65%;
 }
 
+.div-button69{
+  display: flex;
+  flex-direction: row;
+}
+
+.button69{
+  width: 15%;
+  padding: 0%;
+  padding-top: 1%;
+  height: 40px;
+}
+
+.button69 img{
+  width: 20px;
+  text-align: center;
+}
+
+
 .input{
   background-color: #8EA8C3;
   color: black;
   border-radius: 6px;
   height: 35px;
   border-color: #161925;
+  width:50%;
 }
 .input::placeholder{
   color: black;
@@ -152,6 +298,8 @@ h1{
 .channels h2 {
   position: relative;
   display: inline-block; 
+  margin-top: 0%;
+  margin-right: 10px;
 }
 
 .channels h2::after {
@@ -178,11 +326,21 @@ h1{
   display:flex;
 }
 
+.groups{
+  max-height: min(100%, 50vh); 
+}
+
 .groups-list-container {
-  max-height: 100px; 
+  max-height: min(50%, 30vh); 
   overflow-y: auto; 
   padding: 5px;
+  padding-bottom: 0;
 }
+
+.groups-list-container ul{
+  margin-bottom:0;
+}
+
 .groups-list-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -197,7 +355,7 @@ h1{
 }
 
 .channels-list-container {
-  max-height: 100px; 
+  max-height: min(50%, 30vh);  
   overflow-y: auto; 
   padding: 5px;
 }
@@ -236,14 +394,15 @@ h1{
   align-items: center;
 }
 
-#dot, #paperclip, #send{
+#dot, #paperclip, #send, #microphone{
   height: 20px;
+  
 }
 
 .main-container {
   display: flex;
   flex: 1;
-  margin-top: 10px;
+  margin-top: 0px;
   width: 100%;
 }
 
@@ -290,6 +449,7 @@ h1{
 
 .send-button{
   background-color: #8EA8C3;
+  
 }
 
 .message {
@@ -332,7 +492,25 @@ h1{
   max-height: 80vh;
 }
 
+.status-circle {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
 
+.status-circle.Online {
+  background-color: green;
+}
+
+.status-circle.Offline {
+  background-color: red;
+}
+
+.user-status {
+  color: white;
+}
 
 .people {
   padding: 16px;
@@ -462,4 +640,74 @@ h1{
 .switch-text a {
   color: #23395B;
   text-decoration: underline;
+}
+
+
+/*MODALS*/
+
+.Settingsmodal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.Settingsmodal-content {
+  background-color: #23395B;
+  margin: 15% auto;
+  margin-top: 5%;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  height:50%;
+  text-decoration-color: #161925;
+  font-size: 16px; /* Adjust size as needed */
+  font-weight: normal;
+  border-radius: 20px;
+  border-color: #8EA8C3;
+}
+
+.Settingsclose {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.Settingsclose:hover,
+.Settingsclose:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.shake {
+  animation: Gur 0.5s cubic-bezier(.36,.07,.19,.97) infinite;
+}
+@keyframes Gur {
+  0%, 100% { transform: translate(0, 0); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 5px); }
+  20%, 40%, 60%, 80% { transform: translate(5px, -5px); }
+}
+
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure it takes full height of parent */
+}
+
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure it takes full height of parent */
+}
+
+.addBox{
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  max-width: 300px;
+  border-radius: 10px;
 }

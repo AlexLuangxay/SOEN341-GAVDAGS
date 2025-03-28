@@ -1,15 +1,12 @@
 import React from "react";
 
-const GroupChatName = () => {
-    const chatName = "Chat Name";
-    const groupName = "Group 1";
-  
-    return (
-        <div className="groupChatName">
-            <h1>{groupName}</h1>
-            <h2>{chatName}</h2>
-        </div>
-    );
-  };
+const GroupChatName = ({ groupName, chatName }) => {
+  return (
+    <div className="groupChatName">
+      <h1>{groupName}</h1>
+      {<h2>{chatName}</h2>}
+    </div>
+  );
+};
 
-export default GroupChatName
+export default GroupChatName;
