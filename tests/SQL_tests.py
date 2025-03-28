@@ -10,18 +10,17 @@ class TestDatabaseOperations(unittest.TestCase):
     @patch('api.create_guild')
     @patch('api.read_guild')
     def test_guild_operations(self, mock_read_guild, mock_create_guild):
-        # Setup mock responses
-        mock_create_guild.return_value = 123  # Assume 123 is the guild ID
-        mock_read_guild.return_value = ("123", "TestGuild")
-        
-        # Call the function
-        guild_name = "TestGuild"
-        created_guild_id = create_guild(guild_name)
-        fetched_guild = read_guild(created_guild_id)
-        
-        # Assert
+        # Setup mocks
+        mock_create_guild.return_value = 1  # Assume this is the guild ID
+        mock_read_guild.return_value = (1, 'TestGuild')
+
+        # Call the function under test
+        guild_id = api.create_guild('TestGuild')
+        fetched_guild = api.read_guild(guild_id)
+
+        # Assertions to ensure correct behavior
         self.assertIsNotNone(fetched_guild, "Guild should exist in the database")
-        self.assertEqual(fetched_guild[1], guild_name, "The guild names should match")
+        self.assertEqual(fetched_guild[1], 'TestGuild', "The guild names should match")
 
     @patch('api.create_client')
     @patch('api.read_client_username')
@@ -29,14 +28,10 @@ class TestDatabaseOperations(unittest.TestCase):
         # Setup mock
         mock_create_client.return_value = True
         mock_read_client_username.return_value = True
-        
-        # Test variables
-        username = "testuser"
-        password = "testpass"
-        
-        # Simulate creating and verifying a client
-        create_client(username, password)
-        result = read_client_username(username)
+
+        # Test creation and retrieval of a client
+        api.create_client("testuser", "testpass")
+        result = api.read_client_username("testuser")
 
         # Verify
         self.assertTrue(result, "User should be found after creation")
