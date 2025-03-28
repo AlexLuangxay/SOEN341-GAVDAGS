@@ -127,6 +127,7 @@ def login():
     if check_client_credentials(username, password):
         session.permanent = True
         session['user'] = username
+        update_user_status(get_client_id(username), 1)  # Set user status to online
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
@@ -237,13 +238,26 @@ def get_messages():
 
     return jsonify(messages)
 
+@app.route('/get_user_status', methods=['GET'])
+def get_user_status():
+    username = request.args.get("username")
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
+ 
+    client_id = get_client_id(username)
+    if client_id is None:
+        return jsonify({"error": "User not found"}), 404
+ 
+    status = fetch_user_status(client_id)  # Fetch status from the database
+    #print(f"User {username} is {'online' if status else 'offline'}")
+    return jsonify({"status": status}), 200
+
 @app.route('/logout')
 @login_required
 def logout():
+    update_user_status(get_client_id(session.get('user')), 0)
     session.pop('user', None)
     return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
     socketIO.run(app,debug=True, port=5001)
-
-app = Flask(__name__)
