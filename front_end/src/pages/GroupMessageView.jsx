@@ -59,6 +59,7 @@ function App() {
     });
 
     socket.on("messageReceived", (data) => {
+      console.log("Socket connected:", socket.connected);
       console.log("New message received:", data);
       setMessages((prevMessages) => [...prevMessages, data]);
     });

@@ -179,9 +179,8 @@ def send_message(data):
     message = data.get("message")
     username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
-    print(f"Message sent in {room} from {username}: {message}")
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
+    print(f"Message sent in {room} from {username}: {message}")
     #create_public_letter(get_client_id(username), message) FIX THIS WHEN YOU GET METHOD TO RETRIEVE CHANNEL 
 
 @socketIO.on("connect")
