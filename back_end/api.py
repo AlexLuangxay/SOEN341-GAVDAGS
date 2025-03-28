@@ -23,7 +23,7 @@ def get_guild_id(guild_name):
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     guild_id = obj[0]
-    print(guild_id)
+    #print(guild_id)
     return(guild_id)
   except Exception as e:
     print('Error Retrieving Guild ID: ', e)
@@ -510,7 +510,7 @@ def read_public_letter(letter_id):
 # In case of Error Creating Private Letter:  1452 (23000): Cannot add or update a child row:
 # a foreign key constraint fails (`Soen341`.`WhisperHasLetter`, CONSTRAINT `WhisperHasLetter_ibfk_1` FOREIGN KEY (`client_1`, `client_2`)
 # REFERENCES `Whisper` (`client_1`, `client_2`) ON DELETE CASCADE)
-# ^^^ MAKE SURE TO CREATE THE WHISPER (DM INSTANSE BEFOREHAND)
+# ^^^ MAKE SURE TO CREATE THE WHISPER (DM INSTANCE BEFOREHAND)
 def create_private_letter(sender_id, receiver_id, content):
   try:
     sql_letter = 'INSERT INTO PrivateLetter (sender_id, receiver_id, content) VALUES (%s, %s, %s)'
@@ -536,7 +536,7 @@ def create_private_letter(sender_id, receiver_id, content):
   except Exception as e:
     print('Error Creating Private Letter: ', e)
 # Test vvv
-#create_private_letter(1, 11, 'Random Message For Derrek')
+#create_private_letter(1, 11, 'Random Message For Derek')
 
 # Read a Private Letter
 def read_private_letter(letter_id):
@@ -562,20 +562,23 @@ def get_all_users():
         return users
     except Exception as e:
         print(f"Error fetching users: {e}")
-        
-        
 
+def update_user_status(client_id, status):
+  try:
+    sql = 'UPDATE Client SET client_status = (%s) WHERE client_id = (%s)'
+    val = (status, client_id)
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print("Status updated successfully")
+  except Exception as e:
+    print(f"Error updating user status: {e}")
 
-  # Get guild members and their role
-def get_guild_members(guild_id):
-    try:
-        sql = 'SELECT client_id, admin_status FROM GuildHasMember WHERE guild_id = (%s)'
-        val = (guild_id,)
-        mycursor.execute(sql, val)
-        members = mycursor.fetchall()
-        return members
-    except Exception as e:
-        print(f"Error fetching guild members: {e}")
-        
-        
-        
+def fetch_user_status(client_id):
+  try:
+    sql = 'SELECT client_status FROM Client WHERE client_id = (%s)'
+    val = (client_id,)
+    mycursor.execute(sql, val)
+    status = mycursor.fetchone()
+    return status[0]
+  except Exception as e:
+    print(f"Error fetching user status: {e}") 
