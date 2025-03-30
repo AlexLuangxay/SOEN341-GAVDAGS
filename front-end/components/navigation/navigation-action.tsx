@@ -6,7 +6,7 @@ export const NavigationAction = () => {
     const {onOpen} = useModal();
     return (
         <div>
-            <button onClick={() => onOpen("CreateServer")}
+            <button onClick={() => onOpen("createServer")}
     
             className="group flex items-center">
                 <div
