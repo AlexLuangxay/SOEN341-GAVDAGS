@@ -1,6 +1,6 @@
 // Example of a simple React component test using React Testing Library and Jest
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import App from "./pages/App.jsx"
 
 test('Group', () => {
   render(<App />);
