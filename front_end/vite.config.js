@@ -7,4 +7,9 @@ export default defineConfig({
   plugins: [react(), nodePolyfills({
     include: ['crypto']
   })],
-})
+  resolve: {
+    alias: {
+      'crypto': 'crypto-browserify',
+    }
+  }
+});
