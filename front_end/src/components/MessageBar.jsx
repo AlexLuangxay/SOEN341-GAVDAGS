@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
+const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, currentUser }) => {
   const [message, setMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [isListening, setIsListening] = useState(false);
@@ -32,8 +32,8 @@ const MessageBar = ({ socket, currentGroup, selectedUser, currentUser }) => {
   const sendMessage = () => {
     if (message.trim() !== '') {
       if (currentGroup) {
-        socket.emit('sendMessage', { room: currentGroup, currentUser: currentUser, message, file: selectedFile });
-        console.log('Sending message:', message, 'to room:', currentGroup, 'from: ', currentUser);
+        socket.emit('sendMessage', { room: currentGroup, channel: currentChannel, currentUser: currentUser, message, file: selectedFile });
+        console.log('Sending message:', message, 'to room:', currentGroup, ' to channel: ', currentChannel,'from: ', currentUser);
       } else if (selectedUser) {
         socket.emit('sendPrivateMessage', { recipient: selectedUser, currentUser: currentUser, message, file: selectedFile });
         console.log('Sending private message:', message, 'to:', selectedUser);

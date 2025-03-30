@@ -24,6 +24,11 @@ function App() {
   
   const navigate = useNavigate();
 
+  const handleSelectChannel = (channel, fetchedMessages = []) => {
+    setSelectedChannel(channel);
+    setMessages(fetchedMessages);  // Pass setMessages down as part of the state
+  };
+
   useEffect(() => {
     fetch("http://localhost:5001/current_user", { credentials: "include" }) 
       .then((response) => response.json())
@@ -41,11 +46,11 @@ function App() {
 
         if (!response.ok) {
           console.log("Unauthorized access, redirecting to login.");
-          navigate("/");
+          navigate("/"); 
         }
       } catch (error) {
         console.error("Error checking authentication:", error);
-        navigate("/");
+        navigate("/"); 
       }
     };
 
@@ -79,14 +84,14 @@ function App() {
       <div className="main-container">
         <aside className="left-sidebar">
           <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup} setChannels1={setChannels1}/>
-          {currentGroup && <Channels onSelectChannel={setSelectedChannel} currentGroup={currentGroup} channels1={channels1}/>}
+          {currentGroup && <Channels onSelectChannel={handleSelectChannel} currentGroup={currentGroup} channels1={channels1} setMessages={setMessages}/>}
         </aside>
         <main className="chat-container">
           <ChatWindow messages={messages}/>
-          <MessageBar socket={socket} currentGroup={currentGroup} currentUser={currentUser}/>
+          <MessageBar socket={socket} currentGroup={currentGroup} currentChannel={selectedChannel} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
-        <GroupSidebar socket={socket} currentGroup={currentGroup} />
+          <GroupSidebar socket={socket} currentGroup={currentGroup} />
           <UserSidebar/>
         </aside>
       </div>

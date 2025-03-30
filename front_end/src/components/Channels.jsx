@@ -3,7 +3,7 @@ import AddModal from '../pages/AddModal.jsx';
 import trashIcon from "../public/trash-bin.png";
 import plusIcon from "../public/Plus-sign.png";
 
-const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
+const Channels = ({ onSelectChannel, currentGroup, channels1, setMessages }) => {
   const [channels, setChannels] = useState([]);
   const [isAddOpen, setAddOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState(null);
@@ -16,9 +16,30 @@ const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
 
   const toggleAdd = () => setAddOpen(!isAddOpen);
 
-  const handleSelectChannel = (channel) => {
+  const handleSelectChannel = async (channel) => {
     setSelectedChannel(channel);
-    onSelectChannel(channel);
+  
+    try {
+      const response = await fetch("http://localhost:5001/getchannelmessages", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ channel }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch channel messages");
+      }
+  
+      const data = await response.json();
+      console.log(data);
+      setMessages(data); // This will update messages in the App component
+      onSelectChannel(channel, data); // Optionally call the onSelectChannel callback with the fetched messages
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   };
 
   const handleDeleteChannel = () => {

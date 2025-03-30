@@ -132,6 +132,17 @@ def getChannelFromID(channel_id):
   except Exception as e:
     print('Error Retrieving Channels: ', e)
 
+#Get channel name from its id
+def getIDFromChannel(channel_name):
+  try:
+    sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
+    val = (channel_name,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    return obj
+  except Exception as e:
+    print('Error Retrieving Channels: ', e)
+
 # Get all users a server has
 def getUserFromGuild (guild_id):
   try:
@@ -150,13 +161,22 @@ def getLetterFromChannel(channel_id):
     val = (channel_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
-    print(obj)
+    return(obj)
+  except Exception as e:
+    print('Error Retrieving Messages: ', e)
+
+def getMessageFromLetter(letter_id):
+  try:
+    sql = 'SELECT content FROM PublicLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    return(obj[0])
   except Exception as e:
     print('Error Retrieving Messages: ', e)
 # Test vvv
 #for x in range(10):
 #  getLetterFromChannel(x)
-
 ### CREATE READ UPDATE DELETE
 
 # Create a Client
@@ -485,7 +505,10 @@ def create_public_letter(channel_id, sender_id, content):
     letter_id = mycursor.lastrowid
     
     sql_relation = 'INSERT INTO ChannelHasLetter (channel_id, letter_id) VALUES (%s, %s)'
-    val_relation = (channel_id, letter_id)
+    val_relation = (channel_id[0], letter_id)
+    print(val_relation)
+    mycursor.execute(sql_relation, val_relation)
+    mydb.commit()
     print('Success Creating Public Letter')
   except Exception as e:
     print('Error Creating Public Letter: ', e)
