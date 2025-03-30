@@ -34,7 +34,7 @@ html, body {
 .dark .login-container, 
 .dark .Settingsmodal-content {
   background-color: #D5CAD6;
-  color: rgb(0, 0, 0);
+  color: rgb(0 0 0);
   }
 
 .dark button, 
@@ -90,6 +90,7 @@ html, body {
   background-color: #EAFFFD;
   color: black;
 }
+
 .dark .signup-box button,
 .dark .login-box button{
   background-color: #D5CAD6;
@@ -123,7 +124,7 @@ html, body {
   overflow: auto;
 }
 
-/**EVERYTHING RELATED TO THE TOP BAR**/
+/** EVERYTHING RELATED TO THE TOP BAR **/
 
 .groupChatName {
   display: flex;
@@ -202,7 +203,7 @@ h1{
   color:#8EA8C3;
 }
 
-/**EVERYTHING RELATED TO THE LEFT SIDE BAR**/
+/** EVERYTHING RELATED TO THE LEFT SIDE BAR **/
 .left-sidebar {
   width: 20%;
   display: flex;
@@ -220,6 +221,7 @@ h1{
   gap: 10px;
   justify-content: left;
 }
+
 .enter-btn{
   width: 50%;
 }
@@ -258,6 +260,7 @@ h1{
   border-color: #161925;
   width:50%;
 }
+
 .input::placeholder{
   color: black;
 }
@@ -317,6 +320,7 @@ h1{
   background-color: transparent;
   color: #8EA8C3;
 }
+
 .left-sidebar button:hover {
   background-color: #8EA8C3; 
   color: black; 
@@ -344,6 +348,7 @@ h1{
 .groups-list-container::-webkit-scrollbar {
   width: 8px;
 }
+
 .groups-list-container::-webkit-scrollbar-thumb {
   background-color: #8EA8C3;
   border-radius: 4px;
@@ -359,15 +364,17 @@ h1{
   overflow-y: auto; 
   padding: 5px;
 }
+
 .channels-list-container::-webkit-scrollbar {
   width: 8px;
 }
+
 .channels-list-container::-webkit-scrollbar-thumb {
   background-color: #8EA8C3;
   border-radius: 4px;
 }
 
-/**EVERYTHING RELATED TO THE MIDDLE SECTION**/
+/** EVERYTHING RELATED TO THE MIDDLE SECTION **/
 .chat-window{
   height:80vh;
   background-color: #23395B; 
@@ -382,6 +389,7 @@ h1{
 .chat-window::-webkit-scrollbar {
   width: 8px;
 }
+
 .chat-window::-webkit-scrollbar-thumb {
   background-color: #8EA8C3;
   border-radius: 4px;
@@ -402,7 +410,7 @@ h1{
 .main-container {
   display: flex;
   flex: 1;
-  margin-top: 0px;
+  margin-top: 0;
   width: 100%;
 }
 
@@ -476,12 +484,13 @@ h1{
   position: relative;
   word-wrap: break-word;
 }
-/**EVERYTHING RELATED TO THE RIGHT SIDE BAR**/
+
+/** EVERYTHING RELATED TO THE RIGHT SIDE BAR **/
 
 .right-sidebar {
   width: 20%;
   padding: 20px;
-  padding-top: 0px;
+  padding-top: 0;
   overflow-y: hidden;
 }
 
@@ -582,7 +591,8 @@ h1{
   font-size: 12px;
   color: black;
 }
-/*SignUp and Login page styling*/
+
+/* SignUp and Login page styling */
 
 .signup-container, .login-container {
   display: flex;
@@ -592,6 +602,7 @@ h1{
   width: 100vw;
   background-color: #23395B;
 }
+
 .signup-box, .login-box {
   background-color: #8EA8C3;
   padding: 30px;
@@ -615,7 +626,7 @@ h1{
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #161925;
-  background-color: #ffffff;
+  background-color: #fff;
   color:black;
 }
 
@@ -637,13 +648,14 @@ h1{
   margin-top: 10px;
   font-size: 14px;
 }
+
 .switch-text a {
   color: #23395B;
   text-decoration: underline;
 }
 
 
-/*MODALS*/
+/* MODALS */
 
 .Settingsmodal {
   position: fixed;
@@ -653,7 +665,7 @@ h1{
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgb(0 0 0 / 40%);
 }
 
 .Settingsmodal-content {
@@ -688,6 +700,7 @@ h1{
 .shake {
   animation: Gur 0.5s cubic-bezier(.36,.07,.19,.97) infinite;
 }
+
 @keyframes Gur {
   0%, 100% { transform: translate(0, 0); }
   10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 5px); }
