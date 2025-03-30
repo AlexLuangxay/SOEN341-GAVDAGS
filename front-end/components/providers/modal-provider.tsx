@@ -21,8 +21,8 @@ export const ModalProvider = () => {
         <>
             <CreateServerModal />
             <InviteModal />
-            <MemberModal />
             <EditServerModal/>
+            <MemberModal />
         </>
     )
 }
