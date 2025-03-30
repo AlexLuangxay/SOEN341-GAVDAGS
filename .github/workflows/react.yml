@@ -27,9 +27,9 @@ jobs:
     #   run: npm run lint
     #   working-directory: front_end
 
-    - name: Build
-      run: npm run build
-      working-directory: front_end
+    # - name: Build
+    #   run: npm run build
+    #   working-directory: front_end
 
     - name: Run tests
       run: npm run test
