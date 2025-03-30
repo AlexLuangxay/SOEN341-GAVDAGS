@@ -21,8 +21,8 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { ServerWithMembersWithProfiles } from "@/types";
-import { ScrollArea } from "../ui/scroll-area";
-import { UserAvatar } from "../user-avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { UserAvatar } from "@/components/user-avatar";
 import { Check, Loader2, MoreVertical, Shield, ShieldAlert, ShieldCheck, ShieldQuestion } from "lucide-react";
 import { useState } from "react";
 import { MemberRole } from "@prisma/client";

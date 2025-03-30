@@ -107,7 +107,7 @@ return(
                         <FormItem >
                             <FormLabel className="uppercase text-xs font-bold text-zinc-500
                             dark: text-secondary/70">Server Name</FormLabel>
-                            Server Name
+                
                             <FormControl>
                                 <Input 
                                 disabled = {isLoading}  
