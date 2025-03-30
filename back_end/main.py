@@ -65,6 +65,7 @@ def fetch_channelmessages():
     print(channelid[0])
     message_data = getLetterFromChannel(channelid[0])
     print(message_data)
+    #hello
 
     letter_data = []
 
