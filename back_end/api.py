@@ -174,6 +174,26 @@ def getMessageFromLetter(letter_id):
     return(obj[0])
   except Exception as e:
     print('Error Retrieving Messages: ', e)
+
+def getSenderFromLetter(letter_id):
+  try:
+    sql = 'SELECT sender_id FROM PublicLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    return(obj[0])
+  except Exception as e:
+    print('Error Retrieving Messages: ', e)
+
+def getTimeStampFromLetter(letter_id):
+  try:
+    sql = 'SELECT created_at FROM PublicLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    return(obj[0])
+  except Exception as e:
+    print('Error Retrieving Messages: ', e)
 # Test vvv
 #for x in range(10):
 #  getLetterFromChannel(x)

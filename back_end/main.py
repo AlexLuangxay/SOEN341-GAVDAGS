@@ -65,16 +65,18 @@ def fetch_channelmessages():
     print(channelid[0])
     message_data = getLetterFromChannel(channelid[0])
     print(message_data)
-    #hello
 
     letter_data = []
 
     for item in message_data:
-        letter_data.append(getMessageFromLetter(item[1]))
+        letter_data.append({
+            'message': getMessageFromLetter(item[1]), 
+            'user': get_client_name(getSenderFromLetter(item[1])), 
+            'timestamp': getTimeStampFromLetter(item[1]).isoformat(timespec='minutes').replace('T', ' ')})
 
     if not letter_data:
         return jsonify([]) 
-
+    
     return jsonify(letter_data)
 
 

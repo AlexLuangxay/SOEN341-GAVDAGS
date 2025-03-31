@@ -35,7 +35,7 @@ const Channels = ({ onSelectChannel, currentGroup, channels1, setMessages }) => 
   
       const data = await response.json();
       console.log(data);
-      setMessages(data); // This will update messages in the App component
+      setMessages(data);
       onSelectChannel(channel, data); // Optionally call the onSelectChannel callback with the fetched messages
     } catch (error) {
       console.error("Error fetching messages:", error);
