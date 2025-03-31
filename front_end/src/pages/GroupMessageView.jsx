@@ -24,6 +24,30 @@ function App() {
   
   const navigate = useNavigate();
 
+  const fetchMessages = async () => {
+    if (!selectedChannel) {
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:5001/getChannelMessages?channel_id=${selectedChannel}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      } else {
+        console.error("Failed to fetch messages");
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+ useEffect(() => {
+    fetchMessages();
+  }, [selectedChannel]);
+
   useEffect(() => {
     fetch("http://localhost:5001/current_user", { credentials: "include" }) 
       .then((response) => response.json())

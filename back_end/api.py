@@ -131,6 +131,22 @@ def getChannelFromID(channel_id):
     return obj
   except Exception as e:
     print('Error Retrieving Channels: ', e)
+    
+#Get ID from channel name
+def getChannelIDFromName(channel_name):
+    try:
+        sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
+        val = (channel_name,)
+        mycursor.execute(sql, val)
+        obj = mycursor.fetchone()  # Use fetchone() since channel names should be unique
+        
+        if obj:
+            return obj[0]  # Return the ID
+        else:
+            return None  # Return None if no matching channel found
+    except Exception as e:
+        print('Error Retrieving Channel ID: ', e)
+        return None
 
 # Get all users a server has
 def getUserFromGuild (guild_id):
