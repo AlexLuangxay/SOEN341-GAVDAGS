@@ -83,7 +83,7 @@ function App() {
       </header>
       <div className="main-container">
         <aside className="left-sidebar">
-          <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup} setChannels1={setChannels1}/>
+          <Groups socket={socket} setGroupName={setGroupName} setCurrentGroup={setCurrentGroup} setChannels1={setChannels1} setMessages={setMessages}/>
           {currentGroup && <Channels onSelectChannel={handleSelectChannel} currentGroup={currentGroup} channels1={channels1} setMessages={setMessages}/>}
         </aside>
         <main className="chat-container">
