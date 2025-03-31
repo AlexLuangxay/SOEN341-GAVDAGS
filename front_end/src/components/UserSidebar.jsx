@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const UserSidebar = ({ currentGroup }) => {
+const UserSidebar = ({ currentGroup, socket }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -18,6 +18,24 @@ const UserSidebar = ({ currentGroup }) => {
         .catch((error) => console.error("Error fetching group users:", error));
     }
   }, [currentGroup]);
+
+  // Listen for real-time status updates
+  useEffect(() => {
+    const handleStatusUpdate = (data) => {
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.username === data.username ? { ...user, status: data.status === "Online" } : user
+        )
+      );
+    }
+
+    socket.on("statusUpdate", handleStatusUpdate);
+    
+    return () => {
+      socket.off("statusUpdate", handleStatusUpdate);
+    };
+
+  }, [socket]);
 
   return (
     <div className="user-sidebar">

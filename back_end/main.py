@@ -136,6 +136,7 @@ def login():
         session.permanent = True
         session['user'] = username
         update_user_status(get_client_id(username), 1)  # Set user status to online
+        socketIO.emit("statusUpdate", {"username": username, "status": "Online"})  # Emit status update to all clients
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
@@ -288,7 +289,9 @@ def get_channel_messages():
 @app.route('/logout')
 @login_required
 def logout():
-    update_user_status(get_client_id(session.get('user')), 0)
+    username = session.get('user')
+    update_user_status(get_client_id(username), 0)
+    socketIO.emit("statusUpdate", {"username": username, "status": "Offline"})
     session.pop('user', None)
     return jsonify({"message": "Logged out successfully"}), 200
 
