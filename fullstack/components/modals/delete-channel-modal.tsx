@@ -45,10 +45,11 @@ export const DeleteChannelModal = () => {
         router.push(`/servers/${server?.id}`);
       }
       catch(error){
+        console.log("THIS IS AN EROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR")
         console.log(error)
       }
       finally{
-        console.log("I SHOULD NOT BE HERE")
+
         setIsLoading(false)
         router.refresh();
         router.push(`/servers/${server?.id}`);
