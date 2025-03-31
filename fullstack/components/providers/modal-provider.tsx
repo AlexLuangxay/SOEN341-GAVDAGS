@@ -1,0 +1,34 @@
+"use client";
+
+import { CreateServerModal } from "@/components/modals/create-server-modal";
+import { useEffect, useState } from "react";
+import { InviteModal } from "@/components/modals/invite-modal";
+import { MemberModal } from "@/components/modals/members-modal";
+import { EditServerModal } from "@/components/modals/edit-server-modal";
+import { CreateChannelModal } from "@/components/modals/create-channel-modal";
+import { LeaveServerModal } from "@/components/modals/leave-server-modal";
+import { DeleteServerModal } from "@/components/modals/delete-server-modal";
+
+
+export const ModalProvider = () => {
+
+    const[isMOunted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }
+    ,[]);
+    if(!isMOunted){
+        return null;
+    }
+    return(
+        <>
+            <CreateServerModal />
+            <InviteModal />
+            <EditServerModal/>
+            <MemberModal />
+            <CreateChannelModal />
+            <LeaveServerModal />
+            <DeleteServerModal/>
+        </>
+    )
+}
