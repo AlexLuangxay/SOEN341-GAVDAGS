@@ -355,10 +355,10 @@ def check_admin_status(guild_id, client_id):
     val = (guild_id, client_id)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
-    if (obj == 0):
+    if (obj[0] == 0):
       print("User is not an admin")
       return False
-    if (obj == 1):
+    if (obj[0] == 1):
       print("User is an admin")
       return True
   except Exception as e:
