@@ -2,7 +2,7 @@
 import qs from "query-string";
 import axios from "axios";
 import * as z from "zod";
-import {useParams, useRouter} from "next/navigation";
+import { useRouter} from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { useForm} from "react-hook-form";
 import { useModal } from "@/hooks/use-modal-store";
@@ -43,23 +43,28 @@ const formSchema = z.object({
                 type: z.nativeEnum(ChannelType)
 });
 
-export const CreateChannelModal = () => {
-    const {isOpen, onClose, type} = useModal();
+export const EditChannelModal = () => {
+    const {isOpen, onClose, type, data} = useModal();
     const router = useRouter();
-    const params = useParams();
 
-    const isModalOpen = isOpen && type === "createChannel";
+
+    const isModalOpen = isOpen && type === "editChannel";
+    const { channel, server} = data;
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            type: ChannelType.TEXT,
-
+            type: ChannelType.TEXT
         },
     });
 
-    useEffect(() => {},[ChannelType, form])
+        useEffect(() => {
+            if(channel){
+                form.setValue("name", channel.name);
+                form.setValue("type", channel.type);
+            }
+        },[channel, form])
 
     const isLoading = form.formState.isSubmitting;
 
@@ -69,12 +74,12 @@ export const CreateChannelModal = () => {
         try{
 
             const url = qs.stringifyUrl({
-                url: "/api/channels",
+                url: `/api/channels/${channel?.id}`,
                 query: {
-                    serverId: params?.serverId,
+                    serverId: server?.id,
                 },
             });
-            await axios.post(url, values);
+            await axios.patch(url, values);
                 form.reset();
                 router.refresh();
                 onClose();
@@ -93,7 +98,7 @@ return(
   <Dialog open={isModalOpen} onOpenChange={handleClose}> 
     <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
-            <DialogTitle className="text-2xl text-center font-bold">Create Channel</DialogTitle>
+            <DialogTitle className="text-2xl text-center font-bold">Edit Channel</DialogTitle>
     
         </DialogHeader>
         <Form {...form}>
@@ -150,7 +155,7 @@ return(
                     )}/>
                 </div>
                 <DialogFooter className="bg-gray-100 px-6 py-4" >
-                    <Button disabled={isLoading} variant = "primary">Create</Button>
+                    <Button disabled={isLoading} variant = "primary">Save</Button>
                 </DialogFooter>
 
             </form>
