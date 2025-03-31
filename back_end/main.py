@@ -56,7 +56,15 @@ def get_group_users():
     if not users:
         return jsonify([])  # Return empty list if no users found
 
-    user_list = [user[0] for user in users]  # Extract usernames
+    user_list = []  
+    for user in users:
+        username = user[0] # Extract usernames
+        client_id = get_client_id(username)
+        status = fetch_user_status(client_id)
+        user_list.append({
+            'username': username,
+            'status': status
+        })
     return jsonify(user_list), 200
 
 @app.route('/fetch_channels', methods=['POST'])
