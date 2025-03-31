@@ -2,14 +2,20 @@ import React, { useEffect, useState } from "react";
 
 const UserSidebarDM = ({ selectedUser }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [currentUserStatus, setCurrentUserStatus] = useState("Online");
+  const [currentUserStatus, setCurrentUserStatus] = useState("Offline");
   const [selectedUserStatus, setSelectedUserStatus] = useState("Offline");
   
+  // Fetch current user's username and status
   useEffect(() => {
     fetch("http://localhost:5001/current_user", { credentials: "include" }) 
       .then((response) => response.json())
-      .then((data) => setCurrentUser(data))
-      .catch((error) => console.error("Error fetching user:", error));
+      .then((username) => {
+        setCurrentUser(username);
+        return fetch(`http://localhost:5001/get_user_status?username=${username}`);
+      })
+      .then((response) => response.json())
+      .then((statusData) => setCurrentUserStatus(statusData.status ? "Online" : "Offline"))
+      .catch((error) => console.error("Error fetching current user or status:", error));
   }, []);
 
   // Fetch selected user's status
