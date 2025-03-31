@@ -2,10 +2,8 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function DELETE(
-    request: Request,
-    { params }: { params: { memberId: string } }
-){
+export async function DELETE(request: Request, props: { params: Promise<{ memberId: string }> }) {
+    const params = await props.params;
     try{
         const profile = await currentProfile();
         const {searchParams} = new URL(request.url);
@@ -62,10 +60,8 @@ export async function DELETE(
 }
 
 
-export async function PATCH(
-    request: Request,
-    { params }: { params: { memberId: string } }
-){
+export async function PATCH(request: Request, props: { params: Promise<{ memberId: string }> }) {
+    const params = await props.params;
 
     try{
         const profile = await currentProfile();
@@ -122,4 +118,4 @@ export async function PATCH(
     } catch (error: unknown) {
         return new Response("Internal Error", {status: 500});
 }
-    }
+}

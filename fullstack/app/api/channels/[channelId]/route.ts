@@ -4,10 +4,8 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { channelId: string } }
-) {
+export async function DELETE(req: Request, props: { params: Promise<{ channelId: string }> }) {
+  const params = await props.params;
   try {
     const profile = await currentProfile();
     const {searchParams} = new URL(req.url);

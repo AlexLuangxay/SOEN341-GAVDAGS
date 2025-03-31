@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
-  context: { params: { serverId: string } }
+  context: { params: Promise<{ serverId: string }> }
 ) {
   try {
     const { params } = context; 
