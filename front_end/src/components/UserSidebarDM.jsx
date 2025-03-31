@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const UserSidebarDM = ({ selectedUser }) => {
+const UserSidebarDM = ({ selectedUser, socket }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserStatus, setCurrentUserStatus] = useState("Offline");
   const [selectedUserStatus, setSelectedUserStatus] = useState("Offline");
@@ -27,6 +27,21 @@ const UserSidebarDM = ({ selectedUser }) => {
         .catch((error) => console.error("Error fetching selected user status:", error));
     }
   }, [selectedUser]);
+
+  // Listen for real-time status updates
+  useEffect(() => {
+    const handleStatusUpdate = (data) => {
+      if (data.username === selectedUser) {
+        setSelectedUserStatus(data.status);
+      }
+    };
+
+    socket.on("statusUpdate", handleStatusUpdate);
+
+    return () => {
+      socket.off("statusUpdate", handleStatusUpdate);
+    };
+  }, [currentUser, selectedUser, socket]);
 
   return (
     <div className="user-sidebar">
