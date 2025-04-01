@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 import { Open_Sans } from 'next/font/google'
 import { ModalProvider } from '@/components/providers/modal-provider'
 import { SocketProvider } from '@/components/providers/socket-provider'
+import { QueryProvider } from '@/components/providers/query-provider'
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -47,7 +48,9 @@ export default function RootLayout({
           <SocketProvider>
           <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem storageKey='gavdags-theme'>
             <ModalProvider />
+            <QueryProvider>
             {children}
+            </QueryProvider>
           </ThemeProvider>
           </SocketProvider>
         </body>

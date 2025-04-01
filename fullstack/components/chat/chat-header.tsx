@@ -1,6 +1,6 @@
 import { Hash} from "lucide-react";
-import { UserAvatar } from "./user-avatar";
-import { SocketIndicator } from "./socket-indicator";
+import { UserAvatar } from "../user-avatar";
+import { SocketIndicator } from "../socket-indicator";
 
 interface ChatHeaderProps {
   serverId: string;

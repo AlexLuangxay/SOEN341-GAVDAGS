@@ -47,6 +47,7 @@ export const ChatInput = (
                 query,
             })
             await axios.post(url, values);
+            form.reset(); 
         } catch (error) {
             console.log(error);
         }
@@ -80,7 +81,11 @@ export const ChatInput = (
                             {...field}
                             />
                             <div className="absolute top-7 right-8">
-                                <Send/>
+                                <button
+                                onClick={() => form.handleSubmit(onSubmit)} 
+                                type="submit">
+                                        <Send/>
+                                </button>
                             </div>
                             </div>
                         </FormControl>
