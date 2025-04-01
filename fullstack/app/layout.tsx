@@ -13,6 +13,7 @@ import { ThemeProvider } from '@/components/providers/theme-provider'
 import { cn } from '@/lib/utils'
 import { Open_Sans } from 'next/font/google'
 import { ModalProvider } from '@/components/providers/modal-provider'
+import { SocketProvider } from '@/components/providers/socket-provider'
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -43,10 +44,12 @@ export default function RootLayout({
           font.className,
           "bg-white -[#EADDC7] dark:bg-[#313338]",
         )}>
+          <SocketProvider>
           <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem storageKey='gavdags-theme'>
             <ModalProvider />
             {children}
           </ThemeProvider>
+          </SocketProvider>
         </body>
       </html>
     </ClerkProvider>
