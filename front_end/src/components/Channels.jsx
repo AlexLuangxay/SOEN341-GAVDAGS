@@ -7,12 +7,28 @@ const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
   const [channels, setChannels] = useState([]);
   const [isAddOpen, setAddOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false); // Track admin status
 
   useEffect(() => {
     if (Array.isArray(channels1)) {
       setChannels(channels1);
     }
   }, [channels1]);
+
+  // Fetch admin status
+  useEffect(() => {
+  if (currentGroup) {
+    fetch("http://localhost:5001/check_admin", {
+      credentials: "include",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ group: currentGroup })
+    })
+    .then(res => res.json())
+    .then(data => setIsAdmin(data.is_admin))
+    .catch(err => console.error("Error checking admin status:", err));
+    }
+  }, [currentGroup]);
 
   const toggleAdd = () => setAddOpen(!isAddOpen);
 
@@ -47,12 +63,16 @@ const Channels = ({ onSelectChannel, currentGroup, channels1 }) => {
     <div className="channels">
       <div className="div-button69">
         <h2>Channels</h2>
-        <button className="button69" onClick={toggleAdd}>
-          <img src={plusIcon} alt="Plus icon" />
-        </button>
-        <button className="button69" onClick={handleDeleteChannel}>
-          <img src={trashIcon} alt="Trash bin icon" />
-        </button>
+        {isAdmin && ( // Only show buttons if user is an admin
+           <>
+             <button className="button69" onClick={toggleAdd}>
+               <img src={plusIcon} alt="Plus icon" />
+             </button>
+             <button className="button69" onClick={handleDeleteChannel}>
+               <img src={trashIcon} alt="Trash bin icon" />
+             </button>
+           </>
+         )}
       </div>
       <div className="channels-list-container"> 
         <ul>
