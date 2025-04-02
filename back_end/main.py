@@ -124,6 +124,8 @@ def signup():
         return jsonify({"error": "Username already exists"}), 400
     else:
         create_client(username, password)
+        update_user_status(get_client_id(username), 1)  # Set user status to online
+        socketIO.emit("statusUpdate", {"username": username, "status": "Online"})  # Emit status update to all clients
         return jsonify({"message": "Account created successfully"}), 201
     
 @app.route('/login', methods=['POST'])
