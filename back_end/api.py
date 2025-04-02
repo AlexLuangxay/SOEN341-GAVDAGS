@@ -10,20 +10,25 @@ config = {
   'raise_on_warnings': True
 }
 
-# Connect to the database
-mydb = mysql.connector.connect(**config)
-mycursor = mydb.cursor()
-mydb.commit()
+# # Connect to the database
+# mydb = mysql.connector.connect(**config)
+# mycursor = mydb.cursor()
+# mydb.commit()
 
 # Get guild id from username
 def get_guild_id(guild_name):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+
     sql = 'SELECT * FROM Guild WHERE guild_name = (%s)'
     val = (guild_name,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     guild_id = obj[0]
     #print(guild_id)
+    
+    mydb.close()
     return(guild_id)
   except Exception as e:
     print('Error Retrieving Guild ID: ', e)
@@ -31,11 +36,16 @@ def get_guild_id(guild_name):
 # Get guild id from username
 def get_guild_name(guild_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+  
     sql = 'SELECT guild_name FROM Guild WHERE guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     #print(obj[0])
+    
+    mydb.close()
     return(obj[0])
   except Exception as e:
     print('Error Retrieving Guild Name: ', e)
@@ -46,12 +56,17 @@ def get_guild_name(guild_id):
 # Get client id from username
 def get_client_id(client_username):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+
     sql = 'SELECT client_id FROM Client WHERE client_username = (%s)'
     val = (client_username,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
     client_id = obj[0]
     #print(client_id)
+    
+    mydb.close()
     return(client_id)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
@@ -63,6 +78,9 @@ def get_client_id(client_username):
 #get client username from ID
 def get_client_name(client_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+
     sql = 'SELECT client_username FROM Client WHERE client_id = (%s)'
     val = (client_id,)
     mycursor.execute(sql,val)
@@ -70,6 +88,8 @@ def get_client_name(client_id):
     #print("obj: ", obj)
     client_username = obj[0]
     #print(client_username)
+    
+    mydb.close()
     return(client_username)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
@@ -77,10 +97,15 @@ def get_client_name(client_id):
 # Add Member to Guild
 def addGuildMember(guild_id, client_id, admin_status):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+
     sql = 'INSERT INTO GuildHasMember (guild_id, client_id, admin_status) VALUES (%s, %s, %s)'
     val = (guild_id, client_id, admin_status)
     mycursor.execute(sql, val)
     mydb.commit()
+    
+    mydb.close()
     print('Success Joining Guild as Admin')
   except Exception as e:
     print('Error Joining Guild: ', e)
@@ -93,11 +118,16 @@ def addGuildMember(guild_id, client_id, admin_status):
 # Get all servers a user is in
 def getGuildFromMember(client_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM GuildHasMember WHERE client_id = (%s)'
     val = (client_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
     #print(obj)
+    
+    mydb.close()
     return(obj)
   except Exception as e:
     print('Error Retrieving Guilds: ', e)
@@ -108,11 +138,16 @@ def getGuildFromMember(client_id):
 # Get all channels a server has
 def getChannelFromGuild(guild_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM GuildHasChannel WHERE guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
     print('list ', obj)
+    
+    mydb.close()
     return obj
   except Exception as e:
     print('Error Retrieving Channels: ', e)
@@ -123,11 +158,16 @@ def getChannelFromGuild(guild_id):
 #Get channel name from its id
 def getChannelFromID(channel_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT channel_name FROM Channel WHERE channel_id = (%s)'
     val = (channel_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
     print(obj)
+    
+    mydb.close()
     return obj
   except Exception as e:
     print('Error Retrieving Channels: ', e)
@@ -135,10 +175,15 @@ def getChannelFromID(channel_id):
 # Get all users a server has
 def getUserFromGuild (guild_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT Client.client_username FROM GuildHasMember JOIN Client ON GuildHasMember.client_id = Client.client_id WHERE GuildHasMember.guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)
     users = mycursor.fetchall()
+    
+    mydb.close()
     return users
   except Exception as e:
     print('Error Retrieving Users: ', e)
@@ -146,10 +191,15 @@ def getUserFromGuild (guild_id):
 # Get all messages within a channel
 def getLetterFromChannel(channel_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM ChannelHasLetter WHERE channel_id = (%s)'
     val = (channel_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
+    
+    mydb.close()
     print(obj)
   except Exception as e:
     print('Error Retrieving Messages: ', e)
@@ -162,10 +212,15 @@ def getLetterFromChannel(channel_id):
 # Create a Client
 def create_client(client_username, client_password):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'INSERT INTO Client (client_username, client_password) VALUES (%s, %s)'
     val = (client_username, client_password)
     mycursor.execute(sql, val)
     mydb.commit()
+    
+    mydb.close()
     print('Success Creating Client')
   except Exception as e:
     print('Error Creating Client: ', e)
@@ -175,10 +230,15 @@ def create_client(client_username, client_password):
 # Read a Client
 def read_client(client_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM Client WHERE client_id = (%s)'
     val = (client_id,)
     mycursor.execute(sql,val)
     client_obj = mycursor.fetchone()
+    
+    mydb.close()
     print(client_obj)
   except Exception as e:
     print('Error Reading Client: ', e)
@@ -189,11 +249,16 @@ def read_client(client_id):
 # Read a Client (boolean for log in / sign up)
 def read_client_username(client_username):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM Client WHERE client_username = (%s)'
     val = (client_username,)
     mycursor.execute(sql,val)
     client_obj = mycursor.fetchone()
     
+    
+    mydb.close()
     if client_obj:
       return True
     else:
@@ -204,19 +269,24 @@ def read_client_username(client_username):
 
 # Check user password 
 def check_client_credentials(client_username, client_password):
-    try:
-      sql = 'SELECT * FROM Client WHERE client_username = (%s) AND client_password = (%s)'
-      val = (client_username, client_password)
-      mycursor.execute(sql,val)
-      obj = mycursor.fetchone()
-      if (obj != None) :
-        print(obj)
-        return True
-      else :
-        print("Wrong Credentials")
-      return False
-    except:
-      return False
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
+    sql = 'SELECT * FROM Client WHERE client_username = (%s) AND client_password = (%s)'
+    val = (client_username, client_password)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    
+    mydb.close()
+    if (obj != None) :
+      print(obj)
+      return True
+    else :
+      print("Wrong Credentials")
+    return False
+  except:
+    return False
 """
 check_client_credentials('Anthony', 'anthony')
 check_client_credentials('Anthony', 'bob')
@@ -229,12 +299,17 @@ check_client_credentials('Derek', 'derek')"
 # Create a Guild
 def create_guild(guild_name):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'INSERT INTO Guild (guild_name) VALUES (%s)'
     val = (guild_name, )
     mycursor.execute(sql, val)
     mydb.commit()
     print('Success Creating Guild')
     guild_id = mycursor.lastrowid
+    
+    mydb.close()
     return guild_id
   except Exception as e:
     print('Error Creating Guild: ', e)
@@ -245,10 +320,15 @@ def create_guild(guild_name):
 # Read a Guild
 def read_guild(guild_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)
     guild_obj = mycursor.fetchone()
+    
+    mydb.close()
     if (guild_obj == None):
       print("Guild does not exist")
     else:
@@ -262,6 +342,9 @@ def read_guild(guild_id):
 # Create a Channel
 def create_channel(guild_id, channel_name):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql_channel = 'INSERT INTO Channel (channel_name) VALUES (%s)'
     val_channel = (channel_name, )
     mycursor.execute(sql_channel, val_channel)
@@ -273,6 +356,8 @@ def create_channel(guild_id, channel_name):
     val_relation = (guild_id, channel_id)
     mycursor.execute(sql_relation, val_relation)
     mydb.commit()
+    
+    mydb.close()
     print('Success Creating Channel')
   except Exception as e:
     print('Error Creating Channel: ', e)
@@ -283,10 +368,15 @@ def create_channel(guild_id, channel_name):
 # Read a Guild
 def read_guild(guild_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)
     guild_obj = mycursor.fetchone()
+    
+    mydb.close()
     print(guild_obj)
   except Exception as e:
     print('Error Reading Guild: ', e)
@@ -296,9 +386,14 @@ def read_guild(guild_id):
 #See all guilds
 def read_all_guild():
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM Guild'
     mycursor.execute(sql)
     guild_obj = mycursor.fetchall()
+    
+    mydb.close()
     print('all: ', guild_obj)
   except Exception as e:
     print('Error Reading Guild: ', e)
@@ -308,10 +403,15 @@ def read_all_guild():
 # Verify if guild exists 
 def check_guild(guild_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
     val = (guild_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
+    
+    mydb.close()
     if (obj == None):
       print("Guild Not Found")
       return False
@@ -328,10 +428,15 @@ def check_guild(guild_id):
 # Update Guild Name
 def update_guild(guild_id, guild_name):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'UPDATE Guild SET guild_name = (%s) WHERE guild_id = (%s)'
     val = (guild_name, guild_id)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
+    
+    mydb.close()
     print(obj)
   except Exception as e:
     print('Error Updating Guild Name: ', e)
@@ -341,20 +446,30 @@ def update_guild(guild_id, guild_name):
 # Update Guild Admin Status
 def update_guild(guild_id, client_id, admin_status):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'UPDATE GuildHasMember SET admin_status = (%s) WHERE guild_id = (%s) AND client_id = (%s)'
     val = (admin_status, guild_id, client_id)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
+    
+    mydb.close()
     print(obj)
   except Exception as e:
     print('Error Updating Guild Member Admin Status: ', e)
 
 def check_admin_status(guild_id, client_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT admin_status FROM GuildHasMember WHERE guild_id = (%s) AND client_id = (%s)'
     val = (guild_id, client_id)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
+    
+    mydb.close()
     if (obj[0] == 0):
       print("User is not an admin")
       return False
@@ -370,16 +485,24 @@ check_admin_status(1,1)
 # Delete Guild Member
 def delete_guild_member(guild_id, client_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'DELETE FROM GuildHasMember WHERE guild_id = (%s) AND client_id = (%s)'
     val = (guild_id, client_id)
     mycursor.execute(sql,val)
     mydb.commit()
+    
+    mydb.close()
   except Exception as e:
     print('Error Updating Guild Member Admin Status: ', e)
 
 # Create a Whisper
 def create_whisper(client_1, client_2):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     # To address duplicate whispers of 1 on 1 conversions
     # I will force the oldest client to always be client_1
     # to avoid client_1 + client_2 and client_2 + client_1 creating duplicate whispers
@@ -394,6 +517,8 @@ def create_whisper(client_1, client_2):
     val = (older, newer)
     mycursor.execute(sql, val)
     mydb.commit()
+    
+    mydb.close()
     print('Success Creating Whisper')
   except Exception as e:
     print('Error Creating Whisper: ', e)
@@ -404,10 +529,15 @@ def create_whisper(client_1, client_2):
 # Read a Whisper
 def read_whisper(client_1, client_2):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM Whisper WHERE client_1 = (%s) AND client_2 = (%s)'
     val = (client_1, client_2)
     mycursor.execute(sql,val)
     whisper_obj = mycursor.fetchone()
+    
+    mydb.close()
     print(whisper_obj)
   except Exception as e:
     print('Error Reading Whisper: ', e)
@@ -417,6 +547,9 @@ def read_whisper(client_1, client_2):
 # Get a Whisper
 def get_whisper(client_1, client_2):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     # To address duplicate whispers of 1 on 1 conversions
     # I will force the oldest client to always be client_1
     # to avoid client_1 + client_2 and client_2 + client_1 creating duplicate whispers
@@ -431,6 +564,8 @@ def get_whisper(client_1, client_2):
     val = (older, newer)
     mycursor.execute(sql,val)
     obj = mycursor.fetchone()
+    
+    mydb.close()
     if (obj == None):
       print("Whisper does not exist")
       return -1
@@ -447,6 +582,9 @@ def get_whisper(client_1, client_2):
 # Get all messages between two users
 def get_whisperhasletter(client_1, client_2):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     # To address duplicate whispers of 1 on 1 conversions
     # I will force the oldest client to always be client_1
     # to avoid client_1 + client_2 and client_2 + client_1 creating duplicate whispers
@@ -461,6 +599,8 @@ def get_whisperhasletter(client_1, client_2):
     val = (older, newer)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
+    
+    mydb.close()
     if (obj != None):
       print(obj)
       return obj
@@ -477,6 +617,9 @@ def get_whisperhasletter(client_1, client_2):
 # Create a Public Letter
 def create_public_letter(channel_id, sender_id, content):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql_letter = 'INSERT INTO PublicLetter (sender_id, content) VALUES (%s, %s)'
     val_letter = (sender_id, content)
     mycursor.execute(sql_letter, val_letter)
@@ -486,6 +629,9 @@ def create_public_letter(channel_id, sender_id, content):
     
     sql_relation = 'INSERT INTO ChannelHasLetter (channel_id, letter_id) VALUES (%s, %s)'
     val_relation = (channel_id, letter_id)
+    mycursor.execute(sql_relation, val_relation)
+    
+    mydb.close()
     print('Success Creating Public Letter')
   except Exception as e:
     print('Error Creating Public Letter: ', e)
@@ -495,10 +641,15 @@ def create_public_letter(channel_id, sender_id, content):
 # Read a Public Letter
 def read_public_letter(letter_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT * FROM PublicLetter WHERE letter_id = (%s)'
     val = (letter_id,)
     mycursor.execute(sql,val)
     public_letter_obj = mycursor.fetchone()
+    
+    mydb.close()
     print(public_letter_obj)
   except Exception as e:
     print('Error Reading Public Letter: ', e)
@@ -513,6 +664,9 @@ def read_public_letter(letter_id):
 # ^^^ MAKE SURE TO CREATE THE WHISPER (DM INSTANCE BEFOREHAND)
 def create_private_letter(sender_id, receiver_id, content):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql_letter = 'INSERT INTO PrivateLetter (sender_id, receiver_id, content) VALUES (%s, %s, %s)'
     val_letter = (sender_id, receiver_id, content)
     mycursor.execute(sql_letter, val_letter)
@@ -532,6 +686,8 @@ def create_private_letter(sender_id, receiver_id, content):
     val = (older, newer, letter_id)
     mycursor.execute(sql, val)
     mydb.commit()
+    
+    mydb.close()
     print('Success Creating Private Letter')
   except Exception as e:
     print('Error Creating Private Letter: ', e)
@@ -540,45 +696,65 @@ def create_private_letter(sender_id, receiver_id, content):
 
 # Read a Private Letter
 def read_private_letter(letter_id):
-    try:
-        sql = 'SELECT * FROM PrivateLetter WHERE letter_id = (%s)'
-        val = (letter_id,)
-        mycursor.execute(sql, val)
-        private_letter_obj = mycursor.fetchone()
-        #print("Fetched Private Letter:", private_letter_obj)
-        return private_letter_obj
-    except Exception as e:
-        print('Error Reading Private Letter:', e)
-        return None
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
+    sql = 'SELECT * FROM PrivateLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql, val)
+    private_letter_obj = mycursor.fetchone()
+    
+    mydb.close()
+    #print("Fetched Private Letter:", private_letter_obj)
+    return private_letter_obj
+  except Exception as e:
+    print('Error Reading Private Letter:', e)
+    return None
 # Test vvv
 #for x in range(20):
 #  read_private_letter(x)
 
 def get_all_users():
-    try:
-        sql = 'SELECT client_username FROM Client'
-        mycursor.execute(sql)
-        users = [{"name": row[0]} for row in mycursor.fetchall()]
-        return users
-    except Exception as e:
-        print(f"Error fetching users: {e}")
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
+    sql = 'SELECT client_username FROM Client'
+    mycursor.execute(sql)
+    users = [{"name": row[0]} for row in mycursor.fetchall()]
+    
+    mydb.close()
+    return users
+  except Exception as e:
+    print(f"Error fetching users: {e}")
 
 def update_user_status(client_id, status):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'UPDATE Client SET client_status = (%s) WHERE client_id = (%s)'
     val = (status, client_id)
     mycursor.execute(sql, val)
     mydb.commit()
+    
+    mydb.close()
     print("Status updated successfully")
   except Exception as e:
     print(f"Error updating user status: {e}")
 
 def fetch_user_status(client_id):
   try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
     sql = 'SELECT client_status FROM Client WHERE client_id = (%s)'
     val = (client_id,)
     mycursor.execute(sql, val)
     status = mycursor.fetchone()
+    
+    mydb.close()
     return status[0]
   except Exception as e:
     print(f"Error fetching user status: {e}") 
