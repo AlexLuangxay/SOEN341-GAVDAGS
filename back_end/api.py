@@ -32,6 +32,8 @@ def get_guild_id(guild_name):
     return(guild_id)
   except Exception as e:
     print('Error Retrieving Guild ID: ', e)
+    
+    mydb.close()
 
 # Get guild id from username
 def get_guild_name(guild_id):
@@ -49,9 +51,11 @@ def get_guild_name(guild_id):
     return(obj[0])
   except Exception as e:
     print('Error Retrieving Guild Name: ', e)
+    
+    mydb.close()
 
 # Test vvv 
-#get_guild_name(266)
+#print(get_guild_name(1))
 
 # Get client id from username
 def get_client_id(client_username):
@@ -70,6 +74,8 @@ def get_client_id(client_username):
     return(client_id)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
+    
+    mydb.close()
 # Test vvv    
 # get_client_id("Anthony")
 # get_client_id("Gur")
@@ -93,6 +99,8 @@ def get_client_name(client_id):
     return(client_username)
   except Exception as e:
     print('Error Retrieving Client ID: ', e)
+    
+    mydb.close()
 
 # Add Member to Guild
 def addGuildMember(guild_id, client_id, admin_status):
@@ -109,6 +117,8 @@ def addGuildMember(guild_id, client_id, admin_status):
     print('Success Joining Guild as Admin')
   except Exception as e:
     print('Error Joining Guild: ', e)
+    
+    mydb.close()
 
 #addGuildMember(4, 5, 0)
 #addGuildMember(5, 6, 1)
@@ -131,6 +141,8 @@ def getGuildFromMember(client_id):
     return(obj)
   except Exception as e:
     print('Error Retrieving Guilds: ', e)
+    
+    mydb.close()
 # Test vvv
 #for x in range(10):
 #  getGuildFromMember(x)
@@ -151,6 +163,8 @@ def getChannelFromGuild(guild_id):
     return obj
   except Exception as e:
     print('Error Retrieving Channels: ', e)
+    
+    mydb.close()
 # Test vvv
 #for x in range(10):
 #  getChannelFromGuild(x)
@@ -171,6 +185,8 @@ def getChannelFromID(channel_id):
     return obj
   except Exception as e:
     print('Error Retrieving Channels: ', e)
+    
+    mydb.close()
 
 # Get all users a server has
 def getUserFromGuild (guild_id):
@@ -187,6 +203,8 @@ def getUserFromGuild (guild_id):
     return users
   except Exception as e:
     print('Error Retrieving Users: ', e)
+    
+    mydb.close()
 
 # Get all messages within a channel
 def getLetterFromChannel(channel_id):
@@ -203,6 +221,8 @@ def getLetterFromChannel(channel_id):
     print(obj)
   except Exception as e:
     print('Error Retrieving Messages: ', e)
+    
+    mydb.close()
 # Test vvv
 #for x in range(10):
 #  getLetterFromChannel(x)
@@ -224,6 +244,8 @@ def create_client(client_username, client_password):
     print('Success Creating Client')
   except Exception as e:
     print('Error Creating Client: ', e)
+    
+    mydb.close()
 # Test vvv
 # create_client('Bob', 'password')
 
@@ -242,6 +264,8 @@ def read_client(client_id):
     print(client_obj)
   except Exception as e:
     print('Error Reading Client: ', e)
+    
+    mydb.close()
 # Test vvv
 #for x in range(10):
 #  read_client(x)
@@ -266,6 +290,8 @@ def read_client_username(client_username):
     
   except Exception as e:
     print('Error Reading Client: ', e)
+    
+    mydb.close()
 
 # Check user password 
 def check_client_credentials(client_username, client_password):
@@ -286,6 +312,8 @@ def check_client_credentials(client_username, client_password):
       print("Wrong Credentials")
     return False
   except:
+    
+    mydb.close()
     return False
 """
 check_client_credentials('Anthony', 'anthony')
@@ -313,6 +341,8 @@ def create_guild(guild_name):
     return guild_id
   except Exception as e:
     print('Error Creating Guild: ', e)
+    
+    mydb.close()
     return False
 # Test vvv
 # create_guild('New Guild')
@@ -335,6 +365,8 @@ def read_guild(guild_id):
       print(guild_obj)
   except Exception as e:
     print('Error Reading Guild: ', e)
+    
+    mydb.close()
 # Test vvv
 # for x in range(10):
 #   read_guild(x)
@@ -361,6 +393,8 @@ def create_channel(guild_id, channel_name):
     print('Success Creating Channel')
   except Exception as e:
     print('Error Creating Channel: ', e)
+    
+    mydb.close()
 # Test vvv
 # create_channel(1, 'Anju')
 # create_channel(3, 'XYZ')
@@ -380,6 +414,8 @@ def read_guild(guild_id):
     print(guild_obj)
   except Exception as e:
     print('Error Reading Guild: ', e)
+    
+    mydb.close()
 # Test vvv
 #for x in range(7):
 # read_guild(x)
@@ -397,6 +433,8 @@ def read_all_guild():
     print('all: ', guild_obj)
   except Exception as e:
     print('Error Reading Guild: ', e)
+    
+    mydb.close()
 
 #read_all_guild()
 
@@ -421,6 +459,8 @@ def check_guild(guild_id):
     return True
   except Exception as e:
     print('Error Reading Guild: ', e)
+    
+    mydb.close()
     return False
 #for x in range(20):
 # check_guild(x)
@@ -440,6 +480,8 @@ def update_guild(guild_id, guild_name):
     print(obj)
   except Exception as e:
     print('Error Updating Guild Name: ', e)
+    
+    mydb.close()
 
 # Add new messages to user DM
 
@@ -458,6 +500,8 @@ def update_guild(guild_id, client_id, admin_status):
     print(obj)
   except Exception as e:
     print('Error Updating Guild Member Admin Status: ', e)
+    
+    mydb.close()
 
 def check_admin_status(guild_id, client_id):
   try:
@@ -478,6 +522,8 @@ def check_admin_status(guild_id, client_id):
       return True
   except Exception as e:
     print('Error Checking Admin Status: ', e)
+    
+    mydb.close()
     return False
 # TESTT
 check_admin_status(1,1)
@@ -496,6 +542,8 @@ def delete_guild_member(guild_id, client_id):
     mydb.close()
   except Exception as e:
     print('Error Updating Guild Member Admin Status: ', e)
+    
+    mydb.close()
 
 # Create a Whisper
 def create_whisper(client_1, client_2):
@@ -522,6 +570,8 @@ def create_whisper(client_1, client_2):
     print('Success Creating Whisper')
   except Exception as e:
     print('Error Creating Whisper: ', e)
+    
+    mydb.close()
 # Test vvv
 # create_whisper(1, 5)
 #create_whisper(1, 11)
@@ -541,6 +591,8 @@ def read_whisper(client_1, client_2):
     print(whisper_obj)
   except Exception as e:
     print('Error Reading Whisper: ', e)
+    
+    mydb.close()
 # Test vvv
 #read_whisper(1, 3)
 
@@ -574,6 +626,8 @@ def get_whisper(client_1, client_2):
       return obj
   except Exception as e:
     print('Error : ', e)
+    
+    mydb.close()
 #get_whisper(1,2)
 #get_whisper(1,3)
 #get_whisper(2,3)
@@ -609,6 +663,8 @@ def get_whisperhasletter(client_1, client_2):
       return False
   except Exception as e:
     print('Error : ', e)
+    
+    mydb.close()
 #get_whisperhasletter(1,2)
 #get_whisperhasletter(1,3)
 #get_whisperhasletter(2,3)
@@ -635,6 +691,8 @@ def create_public_letter(channel_id, sender_id, content):
     print('Success Creating Public Letter')
   except Exception as e:
     print('Error Creating Public Letter: ', e)
+    
+    mydb.close()
 # Test vvv
 # create_public_letter(1, 2, 'Test Channel Letter 3')
 
@@ -653,6 +711,8 @@ def read_public_letter(letter_id):
     print(public_letter_obj)
   except Exception as e:
     print('Error Reading Public Letter: ', e)
+    
+    mydb.close()
 # Test vvv
 #for x in range(20):
 #  read_public_letter(x)
@@ -691,6 +751,8 @@ def create_private_letter(sender_id, receiver_id, content):
     print('Success Creating Private Letter')
   except Exception as e:
     print('Error Creating Private Letter: ', e)
+    
+    mydb.close()
 # Test vvv
 #create_private_letter(1, 11, 'Random Message For Derek')
 
@@ -710,6 +772,8 @@ def read_private_letter(letter_id):
     return private_letter_obj
   except Exception as e:
     print('Error Reading Private Letter:', e)
+    
+    mydb.close()
     return None
 # Test vvv
 #for x in range(20):
@@ -728,6 +792,8 @@ def get_all_users():
     return users
   except Exception as e:
     print(f"Error fetching users: {e}")
+    
+    mydb.close()
 
 def update_user_status(client_id, status):
   try:
@@ -743,6 +809,8 @@ def update_user_status(client_id, status):
     print("Status updated successfully")
   except Exception as e:
     print(f"Error updating user status: {e}")
+    
+    mydb.close()
 
 def fetch_user_status(client_id):
   try:
@@ -758,3 +826,5 @@ def fetch_user_status(client_id):
     return status[0]
   except Exception as e:
     print(f"Error fetching user status: {e}") 
+    
+    mydb.close()
