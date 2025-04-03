@@ -581,6 +581,22 @@ def create_private_letter(sender_id, receiver_id, content):
 # Test vvv
 #create_private_letter(1, 11, 'Random Message For Derrek')
 
+#Get ID from channel name
+def getChannelIDFromName(channel_name):
+    try:
+        sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
+        val = (channel_name,)
+        mycursor.execute(sql, val)
+        obj = mycursor.fetchone()  # Use fetchone() since channel names should be unique
+        
+        if obj:
+            return obj[0]  # Return the ID
+        else:
+            return None  # Return None if no matching channel found
+    except Exception as e:
+        print('Error Retrieving Channel ID: ', e)
+        return None
+
 # Read a Private Letter
 def read_private_letter(letter_id):
     try:
