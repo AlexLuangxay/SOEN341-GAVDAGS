@@ -29,23 +29,47 @@ const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, curren
     setIsListening((prev) => !prev);
   };
 
+
   const sendMessage = () => {
-    if (message.trim() !== '') {
+    // Use the typed message or the Base64 image string
+    const outgoingMessage = message.trim() !== '' ? message : selectedFile;
+  
+    if (outgoingMessage) {
       if (currentGroup) {
-        socket.emit('sendMessage', { room: currentGroup, channel: currentChannel, currentUser: currentUser, message, file: selectedFile });
-        console.log('Sending message:', message, 'to room:', currentGroup, ' to channel: ', currentChannel,'from: ', currentUser);
+        socket.emit('sendMessage', {
+          room: currentGroup,
+          channel: currentChannel,
+          currentUser: currentUser,
+          message: outgoingMessage
+        });
+        console.log('Sending message (text or image):', outgoingMessage, 'to room:', currentGroup, 'channel:', currentChannel, 'from:', currentUser);
       } else if (selectedUser) {
-        socket.emit('sendPrivateMessage', { recipient: selectedUser, currentUser: currentUser, message, file: selectedFile });
-        console.log('Sending private message:', message, 'to:', selectedUser);
+        socket.emit('sendPrivateMessage', {
+          recipient: selectedUser,
+          currentUser: currentUser,
+          message: outgoingMessage
+        });
+        console.log('Sending private message (text or image):', outgoingMessage, 'to:', selectedUser);
       }
+  
       setMessage('');
       setSelectedFile(null);
     }
   };
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-    console.log('File selected:', event.target.files[0]);
+  
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file && file.type === "image/png") {
+      try {
+        const base64 = await convertToBase64(file);
+        setSelectedFile(base64); 
+        console.log('Base64 PNG file ready:', base64.substring(0, 100) + '...');
+      } catch (error) {
+        console.error('Failed to convert image to Base64:', error);
+      }
+    } else {
+      alert('Please select a PNG image.');
+    }
   };
 
   const triggerFileInput = () => {
@@ -73,6 +97,9 @@ const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, curren
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
+      {selectedFile && (
+        <img src={selectedFile} alt="Preview" style={{ maxHeight: '30px', marginLeft: '10px' }} />
+      )}
       <button className="send-button" onClick={triggerFileInput}>
         <img id="paperclip" src="paperclip.png" alt="Attach File" />
       </button>
