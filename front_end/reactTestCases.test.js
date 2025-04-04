@@ -5,6 +5,6 @@ import AddModal from "./src/pages/AddModal.jsx"
 
 test('groupChatName', () => {
   render(<AddModal />);
-  const linkElement = screen.getByText(/chatName/i);
+  const linkElement = screen.getByText(/Settings/i);
   expect(linkElement).toBeInTheDocument();
 });
