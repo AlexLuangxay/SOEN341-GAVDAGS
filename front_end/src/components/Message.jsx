@@ -31,7 +31,7 @@ const Message = ({ text, user, timestamp }) => {
             }}
           />
         ) : (
-          <p>{text}</p>
+          <p style={{margin: '0px'}}>{text}</p>
         )}
       </div>
     </div>
