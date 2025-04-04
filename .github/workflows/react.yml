@@ -30,11 +30,11 @@ jobs:
     # - name: Build
     #   run: npm run build
     #   working-directory: front_end
-
+    - name: Preview build
+      run: npm run dev
+      working-directory: front_end
+      
     - name: Run tests
       run: npm run test
       working-directory: front_end
 
-    - name: Preview build
-      run: npm run preview
-      working-directory: front_end
