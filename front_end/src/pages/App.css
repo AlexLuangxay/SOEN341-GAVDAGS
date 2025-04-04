@@ -41,7 +41,8 @@ html, body {
 .dark input, 
 .dark .input1, 
 .dark .user-card, 
-.dark .message-bubble {
+.dark .message-bubble,
+.dark .user-status {
   background-color: #EAFFFD;
   color: black;
 }

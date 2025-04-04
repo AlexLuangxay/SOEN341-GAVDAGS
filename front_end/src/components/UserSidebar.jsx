@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const UserSidebar = ({ currentGroup }) => {
+const UserSidebar = ({ currentGroup, socket }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -13,12 +13,29 @@ const UserSidebar = ({ currentGroup }) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Users in group:", data);
-          setUsers(data.map(user => ({ name: user, status: "online" }))); // Default to online for now
+          setUsers(data);
         })
         .catch((error) => console.error("Error fetching group users:", error));
     }
   }, [currentGroup]);
+
+  // Listen for real-time status updates
+  useEffect(() => {
+    const handleStatusUpdate = (data) => {
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.username === data.username ? { ...user, status: data.status === "Online" } : user
+        )
+      );
+    }
+
+    socket.on("statusUpdate", handleStatusUpdate);
+    
+    return () => {
+      socket.off("statusUpdate", handleStatusUpdate);
+    };
+
+  }, [socket]);
 
   return (
     <div className="user-sidebar">
@@ -30,10 +47,10 @@ const UserSidebar = ({ currentGroup }) => {
               <img src="profile-user.png" alt="User Avatar" />
             </div>
             <div className="user-info">
-              <div className="user-name">{user.name}</div>
+              <div className="user-name">{user.username}</div>
               <div className="user-status">
-                <span className={`status-circle ${user.status}`}></span>
-                {user.status}
+                <span className={`status-circle ${user.status ? "Online" : "Offline"}`}></span>
+                {user.status ? "Online" : "Offline"}
               </div>
             </div>
           </div>
