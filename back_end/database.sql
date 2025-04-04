@@ -9,6 +9,7 @@ CREATE TABLE Client (
     client_password TEXT NOT NULL,
     client_bio TEXT,
     client_icon INT DEFAULT 0,
+    client_status BOOLEAN DEFAULT 0, /* 0 for offline, 1 for online */
     PRIMARY KEY (client_id)
 );
 

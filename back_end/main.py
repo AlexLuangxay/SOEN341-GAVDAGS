@@ -41,6 +41,32 @@ def get_user_groups():
     #print(group_names)
     return jsonify(group_names), 200
 
+@app.route('/get_group_users', methods=['POST'])
+@login_required
+def get_group_users():
+    data = request.get_json()
+    group_name = data.get('group')
+
+    if not group_name:
+        return jsonify({"error": "Group name is required"}), 400
+
+    guild_id = get_guild_id(group_name)
+    users = getUserFromGuild(guild_id)
+
+    if not users:
+        return jsonify([])  # Return empty list if no users found
+
+    user_list = []  
+    for user in users:
+        username = user[0] # Extract usernames
+        client_id = get_client_id(username)
+        status = fetch_user_status(client_id)
+        user_list.append({
+            'username': username,
+            'status': status
+        })
+    return jsonify(user_list), 200
+
 @app.route('/fetch_channels', methods=['POST'])
 @login_required
 def fetch_channels():
@@ -99,7 +125,6 @@ def channels():
 
     channels = [getChannelFromID(channel_id) for channel_id in channel_ids]
     
-    
     flat_channels = []
     for channel in channels:
         if isinstance(channel, list) and len(channel) > 0:
@@ -122,6 +147,8 @@ def signup():
         return jsonify({"error": "Username already exists"}), 400
     else:
         create_client(username, password)
+        update_user_status(get_client_id(username), 1)  # Set user status to online
+        socketIO.emit("statusUpdate", {"username": username, "status": "Online"})  # Emit status update to all clients
         return jsonify({"message": "Account created successfully"}), 201
     
 @app.route('/login', methods=['POST'])
@@ -133,10 +160,29 @@ def login():
     if check_client_credentials(username, password):
         session.permanent = True
         session['user'] = username
+        update_user_status(get_client_id(username), 1)  # Set user status to online
+        socketIO.emit("statusUpdate", {"username": username, "status": "Online"})  # Emit status update to all clients
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
-    
+
+@app.route('/check_admin', methods=['POST'])
+@login_required 
+def check_admin():
+    try:
+        data = request.get_json()
+        group_name = data.get('group')
+
+        if not group_name:
+            return jsonify({"error": "Group name is required"}), 400
+
+        guild_id = get_guild_id(group_name)
+        client_id = get_client_id(session.get('user'))
+
+        return jsonify({"is_admin": check_admin_status(guild_id, client_id)}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Return error message
+        
 # users = {}
 rooms = {}
 
@@ -186,6 +232,9 @@ def send_message(data):
     message = data.get("message")
     username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
+    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
+    print(f"Message sent in {room} from {username}: {message}")
+    #create_public_letter(get_client_id(username), message) FIX THIS WHEN YOU GET METHOD TO RETRIEVE CHANNEL 
     #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room}, {channel} from {username}: {message}")
     channelid = getIDFromChannel(channel)
@@ -248,6 +297,19 @@ def get_messages():
 
     return jsonify(messages)
 
+@app.route('/get_user_status', methods=['GET'])
+def get_user_status():
+    username = request.args.get("username")
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
+ 
+    client_id = get_client_id(username)
+    if client_id is None:
+        return jsonify({"error": "User not found"}), 404
+ 
+    status = fetch_user_status(client_id)  # Fetch status from the database
+    #print(f"User {username} is {'online' if status else 'offline'}")
+    return jsonify({"status": status}), 200
 
 @app.route('/getChannelMessages', methods=['GET'])
 @login_required
@@ -274,38 +336,14 @@ def get_channel_messages():
 
     return jsonify(messages)
 
-
 @app.route('/logout')
 @login_required
 def logout():
+    username = session.get('user')
+    update_user_status(get_client_id(username), 0)
+    socketIO.emit("statusUpdate", {"username": username, "status": "Offline"})
     session.pop('user', None)
     return jsonify({"message": "Logged out successfully"}), 200
 
 if __name__ == "__main__":
     socketIO.run(app,debug=True, port=5001)
-
-app = Flask(__name__)
-
-@app.route("/get_group_members", methods=["POST"])
-def get_group_members():
-    # Get guild_id from the request body
-    try:
-        data = request.get_json()  # Get data from the POST body
-        guild_id = data.get("group")  # Assuming the client sends 'group' as the guild ID
-
-        if not guild_id:
-            return jsonify({"error": "Guild ID is required"}), 400
-
-        # Use the function from api.py to fetch members from the database
-        members = get_guild_members(guild_id)  # This is where the function from api.py is called
-        
-        if members:
-            return jsonify(members)  # Return the fetched members as a JSON response
-        else:
-            return jsonify({"message": "No members found"}), 404
-    except Exception as e:
-        print(f"Error in get_group_members route: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
-
-if __name__ == "__main__":
-    app.run(debug=True)
