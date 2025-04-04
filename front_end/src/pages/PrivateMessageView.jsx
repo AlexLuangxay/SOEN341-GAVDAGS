@@ -111,7 +111,7 @@ function App() {
           <MessageBar socket={socket} selectedUser={selectedUser} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">
-          <UserSidebarDM selectedUser={selectedUser}/>
+          <UserSidebarDM selectedUser={selectedUser} socket={socket}/>
         </aside>
       </div>
     </div>

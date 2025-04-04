@@ -56,7 +56,15 @@ def get_group_users():
     if not users:
         return jsonify([])  # Return empty list if no users found
 
-    user_list = [user[0] for user in users]  # Extract usernames
+    user_list = []  
+    for user in users:
+        username = user[0] # Extract usernames
+        client_id = get_client_id(username)
+        status = fetch_user_status(client_id)
+        user_list.append({
+            'username': username,
+            'status': status
+        })
     return jsonify(user_list), 200
 
 @app.route('/fetch_channels', methods=['POST'])
@@ -116,6 +124,8 @@ def signup():
         return jsonify({"error": "Username already exists"}), 400
     else:
         create_client(username, password)
+        update_user_status(get_client_id(username), 1)  # Set user status to online
+        socketIO.emit("statusUpdate", {"username": username, "status": "Online"})  # Emit status update to all clients
         return jsonify({"message": "Account created successfully"}), 201
     
 @app.route('/login', methods=['POST'])
@@ -128,6 +138,7 @@ def login():
         session.permanent = True
         session['user'] = username
         update_user_status(get_client_id(username), 1)  # Set user status to online
+        socketIO.emit("statusUpdate", {"username": username, "status": "Online"})  # Emit status update to all clients
         return jsonify({"message": "Login successful", "redirect": "/groupmessage"}), 200
 
     return jsonify({"message": "Invalid credentials"}), 401
@@ -297,7 +308,9 @@ def get_channel_messages():
 @app.route('/logout')
 @login_required
 def logout():
-    update_user_status(get_client_id(session.get('user')), 0)
+    username = session.get('user')
+    update_user_status(get_client_id(username), 0)
+    socketIO.emit("statusUpdate", {"username": username, "status": "Offline"})
     session.pop('user', None)
     return jsonify({"message": "Logged out successfully"}), 200
 
