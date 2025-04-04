@@ -61,3 +61,47 @@ if (nullClientName == None):
     print("Test case 3.2 passed\n")
 else:
     print("Test case 3.2 failed\n")
+
+print("Test case 4.1: get_guild_id")
+print("Input: DKUQ")
+print("Expected Output: 325")
+id = get_guild_id("DKUQ")
+print("Actual Output: " + str(id))
+if (id == 325):
+    print("Test case 4.1 passed\n")
+else:
+    print("Test case 4.1 failed\n")
+
+print("Test case 4.2: get_guild_id")
+print("Input: DKUQ123")
+print("Expected Output: None")
+nullID = get_guild_id("DKUQ123")
+print("Actual Output: " + str(nullID))
+if (nullID == None):
+    print("Test case 4.2 passed\n")
+else:
+    print("Test case 4.2 failed\n")
+
+print("Test case 5.1: get_guild_name")
+print("Input: 325")
+print("Expected Output: DKUQ")
+guildName = get_guild_name(325)
+print("Actual Output: " + str(guildName))
+if (guildName == "DKUQ"):
+    print("Test case 5.1 passed\n")
+else:
+    print("Test case 5.1 failed\n")
+    
+print("Test case 5.2: get_guild_name")
+print("Input: 123456")
+print("Expected Output: None")
+nullGuildName = get_guild_name(123456)
+print("Actual Output: " + str(nullGuildName))
+if (nullGuildName == None):
+    print("Test case 5.2 passed\n")
+else:
+    print("Test case 5.2 failed\n")
+
+
+channels = getChannelFromGuild(325)
+print(channels)
