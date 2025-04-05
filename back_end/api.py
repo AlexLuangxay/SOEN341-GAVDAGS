@@ -188,6 +188,36 @@ def getChannelFromID(channel_id):
     
     mydb.close()
 
+#Get channel name from its id
+def getIDFromChannel(channel_name):
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
+    val = (channel_name,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    mydb.close()
+    return obj
+  except Exception as e:
+    print('Error Retrieving Channels: ', e)
+    
+    mydb.close()
+
+#Get channel name from its id
+def getIDFromChannel(channel_name):
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
+    val = (channel_name,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    mydb.close()
+    return obj
+  except Exception as e:
+    print('Error Retrieving Channels: ', e)
+
 # Get all users a server has
 def getUserFromGuild (guild_id):
   try:
@@ -216,9 +246,50 @@ def getLetterFromChannel(channel_id):
     val = (channel_id,)
     mycursor.execute(sql,val)
     obj = mycursor.fetchall()
-    
     mydb.close()
-    print(obj)
+    return(obj)
+  except Exception as e:
+    print('Error Retrieving Messages: ', e)
+    mydb.close()
+
+def getMessageFromLetter(letter_id):
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    sql = 'SELECT content FROM PublicLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    mydb.close()
+    return(obj[0])
+  except Exception as e:
+    print('Error Retrieving Messages: ', e)
+    mydb.close()
+
+def getSenderFromLetter(letter_id):
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    sql = 'SELECT sender_id FROM PublicLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    mydb.close()
+    return(obj[0])
+  except Exception as e:
+    print('Error Retrieving Messages: ', e)
+    mydb.close()
+
+def getTimeStampFromLetter(letter_id):
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    sql = 'SELECT created_at FROM PublicLetter WHERE letter_id = (%s)'
+    val = (letter_id,)
+    mycursor.execute(sql,val)
+    obj = mycursor.fetchone()
+    mydb.close()
+    return(obj[0])
   except Exception as e:
     print('Error Retrieving Messages: ', e)
     
@@ -226,7 +297,6 @@ def getLetterFromChannel(channel_id):
 # Test vvv
 #for x in range(10):
 #  getLetterFromChannel(x)
-
 ### CREATE READ UPDATE DELETE
 
 # Create a Client
@@ -684,9 +754,10 @@ def create_public_letter(channel_id, sender_id, content):
     letter_id = mycursor.lastrowid
     
     sql_relation = 'INSERT INTO ChannelHasLetter (channel_id, letter_id) VALUES (%s, %s)'
-    val_relation = (channel_id, letter_id)
+    val_relation = (channel_id[0], letter_id)
+    print(val_relation)
     mycursor.execute(sql_relation, val_relation)
-    
+    mydb.commit()
     mydb.close()
     print('Success Creating Public Letter')
   except Exception as e:
@@ -755,6 +826,44 @@ def create_private_letter(sender_id, receiver_id, content):
     mydb.close()
 # Test vvv
 #create_private_letter(1, 11, 'Random Message For Derek')
+
+#Get ID from channel name
+def getChannelIDFromName(channel_name):
+    try:
+        mydb = mysql.connector.connect(**config)
+        mycursor = mydb.cursor()
+        sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
+        val = (channel_name,)
+        mycursor.execute(sql, val)
+        obj = mycursor.fetchone()  # Use fetchone() since channel names should be unique
+        mydb.close()
+        if obj:
+            return obj[0]  # Return the ID
+        else:
+            return None  # Return None if no matching channel found
+    except Exception as e:
+        print('Error Retrieving Channel ID: ', e)
+        mydb.close()
+        return None
+
+#Get ID from channel name
+def getChannelIDFromName(channel_name):
+    try:
+        mydb = mysql.connector.connect(**config)
+        mycursor = mydb.cursor()
+        sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
+        val = (channel_name,)
+        mycursor.execute(sql, val)
+        obj = mycursor.fetchone()  # Use fetchone() since channel names should be unique
+        mydb.close()
+        if obj:
+            return obj[0]  # Return the ID
+        else:
+            return None  # Return None if no matching channel found
+    except Exception as e:
+        print('Error Retrieving Channel ID: ', e)
+        mydb.close()
+        return None
 
 # Read a Private Letter
 def read_private_letter(letter_id):

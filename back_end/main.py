@@ -83,6 +83,29 @@ def fetch_channels():
 
     return jsonify({"message": "Channel received successfully"}), 200
 
+@app.route('/getchannelmessages', methods=['POST'])
+@login_required
+def fetch_channelmessages():
+    data = request.get_json()
+    channelid = getIDFromChannel(data.get('channel'))
+    print(channelid[0])
+    message_data = getLetterFromChannel(channelid[0])
+    print(message_data)
+
+    letter_data = []
+
+    for item in message_data:
+        letter_data.append({
+            'message': getMessageFromLetter(item[1]), 
+            'user': get_client_name(getSenderFromLetter(item[1])), 
+            'timestamp': getTimeStampFromLetter(item[1]).isoformat(timespec='minutes').replace('T', ' ')})
+
+    if not letter_data:
+        return jsonify([]) 
+    
+    return jsonify(letter_data)
+
+
 @app.route('/users', methods=['GET'])
 @login_required
 def fetch_users():
@@ -205,12 +228,17 @@ def send_private_message(data):
 @socketIO.on("sendMessage")
 def send_message(data):
     room = data.get("room")
+    channel = data.get("channel")
     message = data.get("message")
     username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room}, room=room)
-    print(f"Message sent in {room} from {username}: {message}")
-    #create_public_letter(get_client_id(username), message) FIX THIS WHEN YOU GET METHOD TO RETRIEVE CHANNEL 
+    #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
+    print(f"Message sent in {room}, {channel} from {username}: {message}")
+    channelid = getIDFromChannel(channel)
+    userid = get_client_id(username)
+    create_public_letter(channelid, userid, message)
+    socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room, "channel": channel}, room=room)
+    
 
 @socketIO.on("connect")
 def connect():

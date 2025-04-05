@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChannels1 } ) => {
+const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChannels1, setMessages } ) => {
   const [code, setCode] = useState("") // State for input field 
   const [groups, setGroups] = useState([]);
   const [username, setCurrentUser] = useState(""); // Store logged-in user
@@ -51,8 +51,9 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChann
 
   const switchRoom = (group) => {
     if (currentGroup !== group) {
-      setGroupName(group); // Update group name
+      setGroupName(group); 
       setCurrentGroup(group);
+      setMessages([]); // Clear ChatWindow
       console.log("Switched to room:", group);
     }
         
@@ -75,7 +76,6 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChann
     .catch(error => {
       console.error('Error sending channel name:', error);
     });
-
   };
 
   return (

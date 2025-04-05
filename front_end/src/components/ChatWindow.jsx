@@ -5,7 +5,7 @@ const ChatWindow = ({ messages }) => {
   
   useEffect(() => {
     console.log("Messages updated:", messages);
-  }, [messages]); // Logs every time messages change
+  }, [messages]); 
 
   return (
     <div className="chat-window">
