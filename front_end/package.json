@@ -41,17 +41,14 @@
     "stylelint-config-standard": "^37.0.0",
     "vite": "^6.2.0"
   },
- "stylelint": {
-  "extends": "stylelint-config-standard",
-  "rules": {
-    "selector-class-pattern": null,
-    "no-descending-specificity": null,
-    "no-duplicate-selectors": null,
-    "keyframes-name-pattern": null
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "selector-class-pattern": null,
+      "no-descending-specificity": null,
+      "no-duplicate-selectors": null,
+      "keyframes-name-pattern": null
+    }
   }
-}
 
 }
-
-
-
