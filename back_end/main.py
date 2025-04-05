@@ -232,14 +232,12 @@ def send_message(data):
     message = data.get("message")
     username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room}, {channel} from {username}: {message}")
     channelid = getIDFromChannel(channel)
     userid = get_client_id(username)
     create_public_letter(channelid, userid, message)
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room, "channel": channel}, room=room)
     
-
 @socketIO.on("connect")
 def connect():
     room = session.get("room")

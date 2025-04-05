@@ -72,7 +72,7 @@ function App() {
     return () => {
       socket.off("messageReceived");
     };
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="App">
