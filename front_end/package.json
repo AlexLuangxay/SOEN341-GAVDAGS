@@ -49,7 +49,40 @@
     "no-duplicate-selectors": null,
     "keyframes-name-pattern": null
   }
+},
+
+"eslintConfig": {
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true  
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "plugins": ["react", "react-hooks"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-unused-vars": "off",
+    "no-undef": "off",
+    "react/prop-types": "off",
+    "react/no-unknown-property": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }
+
 }
 
 
