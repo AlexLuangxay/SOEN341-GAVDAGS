@@ -411,6 +411,23 @@ def check_guild(guild_id):
     mydb.close()
     return False
 
+def delete_message2(content, created_at):
+  try:
+    mydb = mysql.connector.connect(**config)
+    mycursor = mydb.cursor()
+    
+    sql = 'DELETE FROM PublicLetter WHERE content = %s AND created_at = %s'
+    val = (content, created_at,)
+    mycursor.execute(sql,val)
+    mydb.commit()
+    mydb.close()
+    return True
+  except Exception as e:
+    print('Error Deleting Message: ', e)
+    
+    mydb.close()
+    return False
+
 def check_admin_status(guild_id, client_id):
   try:
     mydb = mysql.connector.connect(**config)

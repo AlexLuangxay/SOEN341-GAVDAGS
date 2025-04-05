@@ -105,6 +105,17 @@ def fetch_channelmessages():
     
     return jsonify(letter_data)
 
+@app.route('/deleteMessage', methods=['DELETE'])
+def delete_message():
+    data = request.get_json()
+    user = data.get("user")
+    timestamp = data.get("timestamp")
+    message = data.get("message")
+    
+    print(f"Deleting message: {message} by {user} at {timestamp}")
+    delete_message2(message, timestamp)
+    
+    return jsonify({"success": True}), 200
 
 @app.route('/users', methods=['GET'])
 @login_required
