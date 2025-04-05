@@ -20,6 +20,48 @@ const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, curren
     setIsListening(false);
   };
 
+  const compressImage = (file, maxWidth = 300, maxHeight = 300, quality = 0.6) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+  
+      reader.onload = (e) => {
+        img.src = e.target.result;
+      };
+  
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+  
+        // Maintain aspect ratio
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height *= maxWidth / width));
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width *= maxHeight / height));
+            height = maxHeight;
+          }
+        }
+  
+        canvas.width = width;
+        canvas.height = height;
+  
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+  
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve(dataUrl);
+      };
+  
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
+    });
+  };
+
   const toggleListening = () => {
     if (isListening) {
       recognition.stop();
@@ -29,17 +71,7 @@ const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, curren
     setIsListening((prev) => !prev);
   };
 
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };  
-
   const sendMessage = () => {
-    // Use the typed message or the Base64 image string
     const outgoingMessage = message.trim() !== '' ? message : selectedFile;
   
     if (outgoingMessage) {
@@ -50,14 +82,14 @@ const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, curren
           currentUser: currentUser,
           message: outgoingMessage
         });
-        console.log('Sending message (text or image):', outgoingMessage, 'to room:', currentGroup, 'channel:', currentChannel, 'from:', currentUser);
+        //console.log('Sending message (text or image):', outgoingMessage, 'to room:', currentGroup, 'channel:', currentChannel, 'from:', currentUser);
       } else if (selectedUser) {
         socket.emit('sendPrivateMessage', {
           recipient: selectedUser,
           currentUser: currentUser,
           message: outgoingMessage
         });
-        console.log('Sending private message (text or image):', outgoingMessage, 'to:', selectedUser);
+        //console.log('Sending private message (text or image):', outgoingMessage, 'to:', selectedUser);
       }
   
       setMessage('');
@@ -67,16 +99,16 @@ const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, curren
   
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (file && file.type === "image/png") {
+    if (file && file.type.startsWith("image/")) {
       try {
-        const base64 = await convertToBase64(file);
-        setSelectedFile(base64); 
-        console.log('Base64 PNG file ready:', base64.substring(0, 100) + '...');
+        const compressedBase64 = await compressImage(file, 300, 300, 0.6);
+        setSelectedFile(compressedBase64); 
+        //console.log('Compressed Base64 image ready:', compressedBase64.substring(0, 100) + '...');
       } catch (error) {
-        console.error('Failed to convert image to Base64:', error);
+        console.error('Failed to compress image:', error);
       }
     } else {
-      alert('Please select a PNG image.');
+      alert('Please select a valid image file.');
     }
   };
 
