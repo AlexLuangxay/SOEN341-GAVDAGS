@@ -1,10 +1,8 @@
-// Example of a simple React component test using React Testing Library and Jest
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import AddModal from "./src/pages/AddModal.jsx"
+import AddModal from './AddModal';
 
-test('groupChatName', () => {
-  render(<AddModal />);
-  const linkElement = screen.getByText(/Settings/i);
-  expect(linkElement).toBeInTheDocument();
+test('AddModal renders correctly', () => {
+  render(<AddModal isOpen={true} onClose={() => {}} onAddChannel={() => {}} />);
+  const heading = screen.getByText(/Add Channel/i);
+  expect(heading).toBeInTheDocument();
 });
