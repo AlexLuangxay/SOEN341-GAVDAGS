@@ -59,8 +59,10 @@ const LoginForm = () => {
         </form>
         <p className="switch-text">{message}</p>
         <p className="switch-text">
-          Don't have an account? <Link to="/Signup">Sign up</Link>
+          {"Don't have an account? "}
+          <Link to="/Signup">Sign up</Link>
         </p>
+
       </div>
     </div>
   );

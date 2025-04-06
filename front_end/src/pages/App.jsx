@@ -8,7 +8,7 @@ import Signup from './Signup.jsx';
 import Settings from './SettingsModal.jsx'
 function App() {
   return (
-    <div class = "container">
+    <div className = "container">
     <Routes>
       <Route path="/groupmessage" element={<GroupMessageView />} />
       <Route path="/privatemessage" element={<PrivateMessageView />} />
