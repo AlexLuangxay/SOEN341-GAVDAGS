@@ -257,7 +257,25 @@ def send_message(data):
     userid = get_client_id(username)
     create_public_letter(channel_id, userid, message)
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room, "channel": channel}, room=room)
-    
+
+@socketIO.on("deleteMessage")
+def handle_delete_message(data):
+    user = data.get("user")
+    timestamp = data.get("timestamp")
+    message = data.get("message")
+    room = data.get("room")
+    channel = data.get("channel")
+
+    print(f"Socket deleting message from {user} at {timestamp}: {message}")
+
+    socketIO.emit("messageDeleted", {
+        "user": user,
+        "timestamp": timestamp,
+        "message": message,
+        "room": room,
+        "channel": channel
+    }, room=room)
+
 @socketIO.on("connect")
 def connect():
     room = session.get("room")
@@ -272,7 +290,7 @@ def connect():
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1
     print(f"{name} joined room {room}")
-    
+
 @app.route('/getMessages', methods=['GET'])
 @login_required
 def get_messages():

@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DeleteModal from './DeleteModal';
 
-const Message = ({ text, user, timestamp }) => {
+const Message = ({socket, text, user, timestamp, currentGroup, currentChannel }) => {
   const [showModal, setShowModal] = useState(false);
   const [filterIndex, setFilterIndex] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
   const clickCountRef = useRef(0);
   const clickTimerRef = useRef(null);
 
@@ -25,6 +26,20 @@ const Message = ({ text, user, timestamp }) => {
   const currentFilter = filters[filterIndex];
   const isShake = currentFilter === 'shake';
 
+  useEffect(() => {
+    const group = currentGroup || localStorage.getItem("currentGroup") || "default-group";
+
+    fetch("http://localhost:5001/check_admin", {
+      credentials: "include",
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ group })
+    })
+    .then(res => res.json())
+    .then(data => setIsAdmin(data.is_admin))
+    .catch(err => console.error("Error checking admin status:", err));
+  }, [currentGroup]);
+
   const handleClick = () => {
     clickCountRef.current += 1;
 
@@ -34,10 +49,13 @@ const Message = ({ text, user, timestamp }) => {
 
     clickTimerRef.current = setTimeout(() => {
       if (clickCountRef.current === 2) {
-        setShowModal(true); 
+        if (isAdmin) {
+          setShowModal(true);
+        } 
       } else if (clickCountRef.current === 1 && isImage) {
         setFilterIndex((prevIndex) => (prevIndex + 1) % filters.length);
       }
+
       clickCountRef.current = 0;
     }, 300);
   };
@@ -55,10 +73,17 @@ const Message = ({ text, user, timestamp }) => {
           message: text,
         }),
       });
-
+  
       if (response.ok) {
         console.log("Message deleted");
-        // Trigger parent state update if needed
+        socket.emit('deleteMessage', {
+          group: currentGroup,
+          channel: currentChannel,
+          user,
+          timestamp,
+          message: text,
+        });
+  
       } else {
         console.error("Failed to delete message");
       }
