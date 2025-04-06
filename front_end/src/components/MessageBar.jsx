@@ -82,14 +82,12 @@ const MessageBar = ({ socket, currentGroup, currentChannel, selectedUser, curren
           currentUser: currentUser,
           message: outgoingMessage
         });
-        //console.log('Sending message (text or image):', outgoingMessage, 'to room:', currentGroup, 'channel:', currentChannel, 'from:', currentUser);
       } else if (selectedUser) {
         socket.emit('sendPrivateMessage', {
           recipient: selectedUser,
           currentUser: currentUser,
           message: outgoingMessage
         });
-        //console.log('Sending private message (text or image):', outgoingMessage, 'to:', selectedUser);
       }
   
       setMessage('');

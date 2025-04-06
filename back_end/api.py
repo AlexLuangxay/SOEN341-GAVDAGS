@@ -411,6 +411,29 @@ def check_guild(guild_id):
     mydb.close()
     return False
 
+def delete_message2(content, created_at_str):
+    from datetime import datetime, timedelta
+    try:
+        created_at = datetime.strptime(created_at_str, "%Y-%m-%d %H:%M")
+        start_time = created_at
+        end_time = created_at + timedelta(minutes=1)
+
+        mydb = mysql.connector.connect(**config)
+        mycursor = mydb.cursor()
+
+        sql = 'DELETE FROM PublicLetter WHERE content = %s AND created_at >= %s AND created_at < %s'
+        val = (content, start_time, end_time)
+        print('DELETE MESSAGE', val)
+        mycursor.execute(sql, val)
+        mydb.commit()
+        mydb.close()
+        return True
+    
+    except Exception as e:
+        print('Error Deleting Message: ', e)
+        mydb.close()
+        return False
+
 def check_admin_status(guild_id, client_id):
   try:
     mydb = mysql.connector.connect(**config)
