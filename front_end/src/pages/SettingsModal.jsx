@@ -91,7 +91,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="settings-modal">
-      <div className="settingsmodal-content">
+      <div className="settings-modal-content">
         <span className="settings-close" onClick={onClose}>
           &times;
         </span>
