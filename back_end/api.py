@@ -10,11 +10,6 @@ config = {
   'raise_on_warnings': True
 }
 
-# # Connect to the database
-# mydb = mysql.connector.connect(**config)
-# mycursor = mydb.cursor()
-# mydb.commit()
-
 # Get guild id from username
 def get_guild_id(guild_name):
   try:
@@ -54,9 +49,6 @@ def get_guild_name(guild_id):
     
     mydb.close()
 
-# Test vvv 
-#print(get_guild_name(1))
-
 # Get client id from username
 def get_client_id(client_username):
   try:
@@ -76,10 +68,6 @@ def get_client_id(client_username):
     print('Error Retrieving Client ID: ', e)
     
     mydb.close()
-# Test vvv    
-# get_client_id("Anthony")
-# get_client_id("Gur")
-# get_client_id("Simon11123223")
 
 #get client username from ID
 def get_client_name(client_id):
@@ -120,11 +108,6 @@ def addGuildMember(guild_id, client_id, admin_status):
     
     mydb.close()
 
-#addGuildMember(4, 5, 0)
-#addGuildMember(5, 6, 1)
-#addGuildMember(7, 8, 0)
-
-
 # Get all servers a user is in
 def getGuildFromMember(client_id):
   try:
@@ -143,9 +126,6 @@ def getGuildFromMember(client_id):
     print('Error Retrieving Guilds: ', e)
     
     mydb.close()
-# Test vvv
-#for x in range(10):
-#  getGuildFromMember(x)
 
 # Get all channels a server has
 def getChannelFromGuild(guild_id):
@@ -165,9 +145,6 @@ def getChannelFromGuild(guild_id):
     print('Error Retrieving Channels: ', e)
     
     mydb.close()
-# Test vvv
-#for x in range(10):
-#  getChannelFromGuild(x)
 
 #Get channel name from its id
 def getChannelFromID(channel_id):
@@ -203,20 +180,6 @@ def getIDFromChannel(channel_name):
     print('Error Retrieving Channels: ', e)
     
     mydb.close()
-
-#Get channel name from its id
-def getIDFromChannel(channel_name):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
-    val = (channel_name,)
-    mycursor.execute(sql,val)
-    obj = mycursor.fetchone()
-    mydb.close()
-    return obj
-  except Exception as e:
-    print('Error Retrieving Channels: ', e)
 
 # Get all users a server has
 def getUserFromGuild (guild_id):
@@ -294,10 +257,6 @@ def getTimeStampFromLetter(letter_id):
     print('Error Retrieving Messages: ', e)
     
     mydb.close()
-# Test vvv
-#for x in range(10):
-#  getLetterFromChannel(x)
-### CREATE READ UPDATE DELETE
 
 # Create a Client
 def create_client(client_username, client_password):
@@ -316,8 +275,6 @@ def create_client(client_username, client_password):
     print('Error Creating Client: ', e)
     
     mydb.close()
-# Test vvv
-# create_client('Bob', 'password')
 
 # Read a Client
 def read_client(client_id):
@@ -336,9 +293,6 @@ def read_client(client_id):
     print('Error Reading Client: ', e)
     
     mydb.close()
-# Test vvv
-#for x in range(10):
-#  read_client(x)
 
 # Read a Client (boolean for log in / sign up)
 def read_client_username(client_username):
@@ -385,14 +339,6 @@ def check_client_credentials(client_username, client_password):
     
     mydb.close()
     return False
-"""
-check_client_credentials('Anthony', 'anthony')
-check_client_credentials('Anthony', 'bob')
-check_client_credentials('Gur', 'anthony')
-check_client_credentials('Gur', 'gur')
-check_client_credentials('Derek', 'gur')
-check_client_credentials('Derek', 'derek')"
-"""
 
 # Create a Guild
 def create_guild(guild_name):
@@ -414,32 +360,6 @@ def create_guild(guild_name):
     
     mydb.close()
     return False
-# Test vvv
-# create_guild('New Guild')
-
-# Read a Guild
-def read_guild(guild_id):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    
-    sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
-    val = (guild_id,)
-    mycursor.execute(sql,val)
-    guild_obj = mycursor.fetchone()
-    
-    mydb.close()
-    if (guild_obj == None):
-      print("Guild does not exist")
-    else:
-      print(guild_obj)
-  except Exception as e:
-    print('Error Reading Guild: ', e)
-    
-    mydb.close()
-# Test vvv
-# for x in range(10):
-#   read_guild(x)
 
 # Create a Channel
 def create_channel(guild_id, channel_name):
@@ -465,48 +385,6 @@ def create_channel(guild_id, channel_name):
     print('Error Creating Channel: ', e)
     
     mydb.close()
-# Test vvv
-# create_channel(1, 'Anju')
-# create_channel(3, 'XYZ')
-
-# Read a Guild
-def read_guild(guild_id):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    
-    sql = 'SELECT * FROM Guild WHERE Guild_id = (%s)'
-    val = (guild_id,)
-    mycursor.execute(sql,val)
-    guild_obj = mycursor.fetchone()
-    
-    mydb.close()
-    print(guild_obj)
-  except Exception as e:
-    print('Error Reading Guild: ', e)
-    
-    mydb.close()
-# Test vvv
-#for x in range(7):
-# read_guild(x)
-#See all guilds
-def read_all_guild():
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    
-    sql = 'SELECT * FROM Guild'
-    mycursor.execute(sql)
-    guild_obj = mycursor.fetchall()
-    
-    mydb.close()
-    print('all: ', guild_obj)
-  except Exception as e:
-    print('Error Reading Guild: ', e)
-    
-    mydb.close()
-
-#read_all_guild()
 
 # Verify if guild exists 
 def check_guild(guild_id):
@@ -532,46 +410,29 @@ def check_guild(guild_id):
     
     mydb.close()
     return False
-#for x in range(20):
-# check_guild(x)
 
-# Update Guild Name
-def update_guild(guild_id, guild_name):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    
-    sql = 'UPDATE Guild SET guild_name = (%s) WHERE guild_id = (%s)'
-    val = (guild_name, guild_id)
-    mycursor.execute(sql,val)
-    obj = mycursor.fetchone()
-    
-    mydb.close()
-    print(obj)
-  except Exception as e:
-    print('Error Updating Guild Name: ', e)
-    
-    mydb.close()
+def delete_message2(content, created_at_str):
+    from datetime import datetime, timedelta
+    try:
+        created_at = datetime.strptime(created_at_str, "%Y-%m-%d %H:%M")
+        start_time = created_at
+        end_time = created_at + timedelta(minutes=1)
 
-# Add new messages to user DM
+        mydb = mysql.connector.connect(**config)
+        mycursor = mydb.cursor()
 
-# Update Guild Admin Status
-def update_guild(guild_id, client_id, admin_status):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
+        sql = 'DELETE FROM PublicLetter WHERE content = %s AND created_at >= %s AND created_at < %s'
+        val = (content, start_time, end_time)
+        print('DELETE MESSAGE', val)
+        mycursor.execute(sql, val)
+        mydb.commit()
+        mydb.close()
+        return True
     
-    sql = 'UPDATE GuildHasMember SET admin_status = (%s) WHERE guild_id = (%s) AND client_id = (%s)'
-    val = (admin_status, guild_id, client_id)
-    mycursor.execute(sql,val)
-    obj = mycursor.fetchone()
-    
-    mydb.close()
-    print(obj)
-  except Exception as e:
-    print('Error Updating Guild Member Admin Status: ', e)
-    
-    mydb.close()
+    except Exception as e:
+        print('Error Deleting Message: ', e)
+        mydb.close()
+        return False
 
 def check_admin_status(guild_id, client_id):
   try:
@@ -595,25 +456,6 @@ def check_admin_status(guild_id, client_id):
     
     mydb.close()
     return False
-# TESTT
-check_admin_status(1,1)
-
-# Delete Guild Member
-def delete_guild_member(guild_id, client_id):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    
-    sql = 'DELETE FROM GuildHasMember WHERE guild_id = (%s) AND client_id = (%s)'
-    val = (guild_id, client_id)
-    mycursor.execute(sql,val)
-    mydb.commit()
-    
-    mydb.close()
-  except Exception as e:
-    print('Error Updating Guild Member Admin Status: ', e)
-    
-    mydb.close()
 
 # Create a Whisper
 def create_whisper(client_1, client_2):
@@ -642,29 +484,6 @@ def create_whisper(client_1, client_2):
     print('Error Creating Whisper: ', e)
     
     mydb.close()
-# Test vvv
-# create_whisper(1, 5)
-#create_whisper(1, 11)
-
-# Read a Whisper
-def read_whisper(client_1, client_2):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    
-    sql = 'SELECT * FROM Whisper WHERE client_1 = (%s) AND client_2 = (%s)'
-    val = (client_1, client_2)
-    mycursor.execute(sql,val)
-    whisper_obj = mycursor.fetchone()
-    
-    mydb.close()
-    print(whisper_obj)
-  except Exception as e:
-    print('Error Reading Whisper: ', e)
-    
-    mydb.close()
-# Test vvv
-#read_whisper(1, 3)
 
 # Get a Whisper
 def get_whisper(client_1, client_2):
@@ -698,10 +517,6 @@ def get_whisper(client_1, client_2):
     print('Error : ', e)
     
     mydb.close()
-#get_whisper(1,2)
-#get_whisper(1,3)
-#get_whisper(2,3)
-#get_whisper(1,5)
 
 # Get all messages between two users
 def get_whisperhasletter(client_1, client_2):
@@ -735,10 +550,6 @@ def get_whisperhasletter(client_1, client_2):
     print('Error : ', e)
     
     mydb.close()
-#get_whisperhasletter(1,2)
-#get_whisperhasletter(1,3)
-#get_whisperhasletter(2,3)
-#get_whisperhasletter(1,5)
 
 # Create a Public Letter
 def create_public_letter(channel_id, sender_id, content):
@@ -764,29 +575,6 @@ def create_public_letter(channel_id, sender_id, content):
     print('Error Creating Public Letter: ', e)
     
     mydb.close()
-# Test vvv
-# create_public_letter(1, 2, 'Test Channel Letter 3')
-
-# Read a Public Letter
-def read_public_letter(letter_id):
-  try:
-    mydb = mysql.connector.connect(**config)
-    mycursor = mydb.cursor()
-    
-    sql = 'SELECT * FROM PublicLetter WHERE letter_id = (%s)'
-    val = (letter_id,)
-    mycursor.execute(sql,val)
-    public_letter_obj = mycursor.fetchone()
-    
-    mydb.close()
-    print(public_letter_obj)
-  except Exception as e:
-    print('Error Reading Public Letter: ', e)
-    
-    mydb.close()
-# Test vvv
-#for x in range(20):
-#  read_public_letter(x)
 
 # Create a Private Letter
 # In case of Error Creating Private Letter:  1452 (23000): Cannot add or update a child row:
@@ -824,27 +612,6 @@ def create_private_letter(sender_id, receiver_id, content):
     print('Error Creating Private Letter: ', e)
     
     mydb.close()
-# Test vvv
-#create_private_letter(1, 11, 'Random Message For Derek')
-
-#Get ID from channel name
-def getChannelIDFromName(channel_name):
-    try:
-        mydb = mysql.connector.connect(**config)
-        mycursor = mydb.cursor()
-        sql = 'SELECT channel_id FROM Channel WHERE channel_name = (%s)'
-        val = (channel_name,)
-        mycursor.execute(sql, val)
-        obj = mycursor.fetchone()  # Use fetchone() since channel names should be unique
-        mydb.close()
-        if obj:
-            return obj[0]  # Return the ID
-        else:
-            return None  # Return None if no matching channel found
-    except Exception as e:
-        print('Error Retrieving Channel ID: ', e)
-        mydb.close()
-        return None
 
 #Get ID from channel name
 def getChannelIDFromName(channel_name):
@@ -884,10 +651,8 @@ def read_private_letter(letter_id):
     
     mydb.close()
     return None
-# Test vvv
-#for x in range(20):
-#  read_private_letter(x)
 
+# Get all users
 def get_all_users():
   try:
     mydb = mysql.connector.connect(**config)
@@ -904,6 +669,7 @@ def get_all_users():
     
     mydb.close()
 
+# Update user status 
 def update_user_status(client_id, status):
   try:
     mydb = mysql.connector.connect(**config)

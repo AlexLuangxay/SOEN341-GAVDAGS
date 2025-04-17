@@ -72,7 +72,7 @@ function App() {
     return () => {
       socket.off("messageReceived");
     };
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="App">
@@ -87,7 +87,7 @@ function App() {
           {currentGroup && <Channels onSelectChannel={handleSelectChannel} currentGroup={currentGroup} channels1={channels1} setMessages={setMessages}/>}
         </aside>
         <main className="chat-container">
-          <ChatWindow messages={messages}/>
+          <ChatWindow socket={socket} messages={messages} setMessages={setMessages} currentGroup={currentGroup} currentChannel={selectedChannel}/>
           <MessageBar socket={socket} currentGroup={currentGroup} currentChannel={selectedChannel} currentUser={currentUser}/>
         </main>
         <aside className="right-sidebar">

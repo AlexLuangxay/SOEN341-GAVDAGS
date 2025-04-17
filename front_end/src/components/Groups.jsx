@@ -55,6 +55,9 @@ const Groups = ( { socket, setGroupName, setCurrentGroup, currentGroup, setChann
       setCurrentGroup(group);
       setMessages([]); // Clear ChatWindow
       console.log("Switched to room:", group);
+
+      // Emit a join signal so that user listens to socket
+      socket.emit("joinSignalGRP", { code: group, username });
     }
         
     fetch("http://localhost:5001/channels", {

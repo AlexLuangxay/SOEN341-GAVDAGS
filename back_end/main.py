@@ -87,9 +87,9 @@ def fetch_channels():
 @login_required
 def fetch_channelmessages():
     data = request.get_json()
-    channelid = getIDFromChannel(data.get('channel'))
-    print(channelid[0])
-    message_data = getLetterFromChannel(channelid[0])
+    channel_id = getIDFromChannel(data.get('channel'))
+    print(channel_id[0])
+    message_data = getLetterFromChannel(channel_id[0])
     print(message_data)
 
     letter_data = []
@@ -105,6 +105,17 @@ def fetch_channelmessages():
     
     return jsonify(letter_data)
 
+@app.route('/deleteMessage', methods=['DELETE'])
+def delete_message():
+    data = request.get_json()
+    user = data.get("user")
+    timestamp = data.get("timestamp")
+    message = data.get("message")
+    
+    print(f"Deleting message: {message} by {user} at {timestamp}")
+    delete_message2(message, timestamp)
+    
+    return jsonify({"success": True}), 200
 
 @app.route('/users', methods=['GET'])
 @login_required
@@ -207,12 +218,21 @@ def join_group(data):
     if not check_guild(get_guild_id(group_name)):
         print(f"Group {(group_name)} not found")
         return 
-    
+        
     join_room(group_name) # Some socket thing, have to look into whether we really need this or not 
     addGuildMember(get_guild_id(group_name),get_client_id(username),0)
     session["room"] = group_name # Store the room in the session
     session["user"] = username
     socketIO.emit("newRoomCode", {"group_name": group_name})
+
+@socketIO.on("joinSignalGRP")
+def join_group(data):
+    group_name = data["code"]
+    username = data["username"]
+
+    join_room(group_name) # Some socket thing, have to look into whether we really need this or not 
+    session["room"] = group_name # Store the room in the session
+    session["user"] = username
 
 @socketIO.on("sendPrivateMessage")
 def send_private_message(data):
@@ -232,13 +252,29 @@ def send_message(data):
     message = data.get("message")
     username = data.get("currentUser")
     timestamp = datetime.now().strftime('%Y-%m-%d %I:%M %p')
-    #rooms[room]["messages"].append({"user": username, "message": message, "timestamp": timestamp, "room": room})
     print(f"Message sent in {room}, {channel} from {username}: {message}")
-    channelid = getIDFromChannel(channel)
+    channel_id = getIDFromChannel(channel)
     userid = get_client_id(username)
-    create_public_letter(channelid, userid, message)
+    create_public_letter(channel_id, userid, message)
     socketIO.emit("messageReceived", {"user": username, "message": message, "timestamp": timestamp, "room": room, "channel": channel}, room=room)
-    
+
+@socketIO.on("deleteMessage")
+def handle_delete_message(data):
+    user = data.get("user")
+    timestamp = data.get("timestamp")
+    message = data.get("message")
+    room = data.get("room")
+    channel = data.get("channel")
+
+    print(f"Socket deleting message from {user} at {timestamp}: {message}")
+
+    socketIO.emit("messageDeleted", {
+        "user": user,
+        "timestamp": timestamp,
+        "message": message,
+        "room": room,
+        "channel": channel
+    }, room=room)
 
 @socketIO.on("connect")
 def connect():
@@ -254,20 +290,6 @@ def connect():
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1
     print(f"{name} joined room {room}")
-    
-# @socketIO.on("disconnect")
-# def disconnect():
-#     room = session.get("room")
-#     name = session.get("name")
-#     leave_room(room)
-#     if room in rooms:
-#         rooms[room]["members"] -= 1
-#         rooms[room]["users"] = [user for user in rooms[room]["users"] if user["name"] != name] # Remove user from room
-#         if rooms[room]["members"] <= 0:
-#             del rooms[room]
-
-#     send({"name": name, "message": "has left the room"}, to=room)
-#     print(f"{name} has left room {room}")
 
 @app.route('/getMessages', methods=['GET'])
 @login_required

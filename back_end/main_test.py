@@ -87,7 +87,7 @@ else:
 
 # Step 2: Actual DB call using imported function
 try:
-    members = get_guild_members(group_id)
+    members = getUserFromGuild(group_id)
     print(f"Step 2 - Members fetched from DB: {members}")
 
     # Step 3: Check and format response
