@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react';
-const audio = new Audio('audio.mp3');
+import React, { useState, useEffect } from "react";
+const audio = new Audio("audio.mp3");
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const [darkMode, setDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    return savedMode === 'true';
+    const savedMode = localStorage.getItem("darkMode");
+    return savedMode === "true";
   });
   const [isShaking, setIsShaking] = useState(() => {
-    const savedShakeMode = localStorage.getItem('shakeMode');
-    return savedShakeMode === 'true';
+    const savedShakeMode = localStorage.getItem("shakeMode");
+    return savedShakeMode === "true";
   });
   const [isAudio, setIsAudio] = useState(() => {
-    const savedAudioMode = localStorage.getItem('AudioMode');
-    return savedAudioMode === 'true';
+    const savedAudioMode = localStorage.getItem("AudioMode");
+    return savedAudioMode === "true";
   });
   const [isReverse, setIsReverse] = useState(() => {
-    const savedReverseMode = localStorage.getItem('reverseMode');
-    return savedReverseMode === 'true';
+    const savedReverseMode = localStorage.getItem("reverseMode");
+    return savedReverseMode === "true";
   });
-
 
   const handleToggleDarkMode = () => {
     setDarkMode((prevMode) => {
       const newMode = !prevMode;
-      localStorage.setItem('darkMode', newMode);
+      localStorage.setItem("darkMode", newMode);
       return newMode;
     });
   };
@@ -31,7 +30,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
   const handleToggleShakeMode = () => {
     setIsShaking((prevShaking) => {
       const newShakeMode = !prevShaking;
-      localStorage.setItem('shakeMode', newShakeMode);
+      localStorage.setItem("shakeMode", newShakeMode);
       return newShakeMode;
     });
   };
@@ -39,7 +38,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
   const handleToggleAudioMode = () => {
     setIsAudio((prevAudio) => {
       const newAudioMode = !prevAudio;
-      localStorage.setItem('AudioMode', newAudioMode);
+      localStorage.setItem("AudioMode", newAudioMode);
       return newAudioMode;
     });
   };
@@ -47,32 +46,32 @@ const SettingsModal = ({ isOpen, onClose }) => {
   const handleToggleReverseMode = () => {
     setIsReverse((prevReverse) => {
       const newReverseMode = !prevReverse;
-      localStorage.setItem('reverseMode', newReverseMode);
+      localStorage.setItem("reverseMode", newReverseMode);
       return newReverseMode;
     });
   };
 
   useEffect(() => {
     if (darkMode) {
-      document.body.classList.add('dark');
+      document.body.classList.add("dark");
     } else {
-      document.body.classList.remove('dark');
+      document.body.classList.remove("dark");
     }
   }, [darkMode]);
 
   useEffect(() => {
     if (isReverse) {
-      document.body.classList.add('reverse');
+      document.body.classList.add("reverse");
     } else {
-      document.body.classList.remove('reverse');
+      document.body.classList.remove("reverse");
     }
   }, [isReverse]);
 
   useEffect(() => {
     if (isShaking) {
-      document.body.classList.add('shake');
+      document.body.classList.add("shake");
     } else {
-      document.body.classList.remove('shake');
+      document.body.classList.remove("shake");
     }
   }, [isShaking]);
 
@@ -91,9 +90,11 @@ const SettingsModal = ({ isOpen, onClose }) => {
   }
 
   return (
-    <div className="Settingsmodal">
-      <div className="Settingsmodal-content">
-        <span className="Settingsclose" onClick={onClose}>&times;</span>
+    <div className="settings-modal">
+      <div className="settings-modal-content">
+        <span className="settings-close" onClick={onClose}>
+          &times;
+        </span>
         <h2>Settings</h2>
         <div>
           <label>
